@@ -26,7 +26,7 @@ class ContaoQgisBundle extends AbstractBundle
     public function loadExtension(
         array                 $config,
         ContainerConfigurator $container,
-        ContainerBuilder      $containerBuilder,
+        ContainerBuilder      $builder,
     ): void
     {
         $container->import('../config/services.yaml');
