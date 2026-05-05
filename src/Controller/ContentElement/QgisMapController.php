@@ -1,0 +1,81 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of the Contao Sources Bundle.
+ *
+ * (c) Christian Mette
+ *
+ * @license LGPL-3.0-or-later
+ */
+
+namespace Cmette\ContaoQgisBundle\Controller\ContentElement;
+
+use Contao\ContentModel;
+use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\Image\Studio\Studio;
+use Contao\CoreBundle\Twig\FragmentTemplate;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+#[AsContentElement(type: 'qgis_map', category: 'open_layers')]
+class QgisMapController extends AbstractContentElementController
+{
+    // this code comes from:
+    // vendor/contao/core-bundle/src/Controller/ContentElement/TextController.php
+
+    public function __construct(
+        private readonly Studio $studio,
+    )
+    {
+        dump(__FUNCTION__);
+        dump($GLOBALS['TL_DCA']['tl_content']);
+    }
+
+    protected function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
+    {
+        dump(__FUNCTION__);
+        #$source     = SourcesEntityModel::findOneBy(['id = ?',"published = '1'"],[$model->sources_entity]);
+        #$settings   = SourcesSettingModel::findOneBy("published = '1'", [1]);
+
+        $settings   = [];
+
+        $map        = new \StdClass();
+        $map->floating = 'above';
+
+        $template->set('settings',  $settings);
+        $template->set('map',       $map);
+
+        if($map) {
+            // map found
+            /*
+            $figure = !$source->addImage ? null : $this->studio
+                ->createFigureBuilder()
+                ->fromUuid($source->singleSRC ?: '')
+                ->setSize($source->size)
+                ->setOverwriteMetadata($source->getOverwriteMetaFromSource())
+                ->enableLightbox($source->fullsize)
+                //->setLinkAttribute('title', 'neuer Titel')
+                ->buildIfResourceExists();
+            */
+            $figure = null;
+            $template->set('layout', $map->floating);
+
+        } else {
+            // source not available
+            $figure = null;
+            $template->set('layout', 'above');
+        }
+
+        $template->set('image', $figure);
+
+        // handle Backend Request
+        if ($this->isBackendScope($request)) {
+            return $template->getResponse();
+        }
+
+        return $map ? $template->getResponse() : new Response();
+    }
+}

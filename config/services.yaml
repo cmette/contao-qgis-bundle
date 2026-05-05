@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Cmette\ContaoQgisBundle\:
+    resource: '../src/*'
+    exclude: '../src/{ContaoManager,DependencyInjection,ContaoQgisBundle.php}'

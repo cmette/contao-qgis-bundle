@@ -1,0 +1,50 @@
+<?php
+
+use Cmette\ContaoQgisBundle\Models\QgisMapModel;
+
+use Contao\ArrayUtil;
+use Contao\System;
+
+use Symfony\Component\HttpFoundation\Request;
+
+$currentRequest     = System::getContainer()->get('request_stack')->getCurrentRequest();
+$scopeMatcher       = System::getContainer()->get('contao.routing.scope_matcher');
+$isBackendRequest   = $scopeMatcher->isBackendRequest($currentRequest ?? Request::create(''));
+$isFrontendRequest  = $scopeMatcher->isFrontendRequest($currentRequest ?? Request::create(''));
+
+$assetsDir          = "bundles/contaoqgisbundle";
+
+$moduleQgis = [
+    'qgis' => [
+        'qgis_maps' => [
+            'tables'        => ['tl_qgis_map'],
+            'stylesheet'    => ["$assetsDir/scss/qgis.css"],
+            //'javascript'    => ["$assetsDir/js/resumable/resumable.js", "$assetsDir/js/SupervisorResumableWidget.js.twig"],
+
+            // permission checks are always executed
+            //'disablePermissionChecks' => false
+            // module is always shown in the navigation.
+        ],
+    ],
+];
+
+ArrayUtil::arrayInsert($GLOBALS['BE_MOD'],0, $moduleQgis);
+
+// Front end modules
+#$GLOBALS['FE_MOD']['qgis'] = array
+#(
+#	'pedigree_module'   => SupervisorFrontendModuleController::class
+#);
+
+// Add permissions
+$GLOBALS['TL_PERMISSIONS'][] = 'ped_conf';
+$GLOBALS['TL_PERMISSIONS'][] = 'ped_tree';
+
+// register backend widgets
+//$GLOBALS['BE_FFL']['widget']   = SupervisorImageWidget::class;
+
+// register model classes
+$GLOBALS['TL_MODELS']['tl_qgis_map'] = QgisMapModel::class;
+
+// Style sheet
+$GLOBALS['TL_CSS'][] = "$assetsDir/scss/qgis.css";

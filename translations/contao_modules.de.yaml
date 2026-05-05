@@ -1,0 +1,8 @@
+#
+# Backend modules
+#
+MOD:
+  qgis: QGis-Bridge
+  qgis_maps:
+    - Karten
+    - Register der verfügbaren Karten

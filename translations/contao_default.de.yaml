@@ -1,0 +1,5 @@
+CTE:
+  open_layers: OpenLayers
+  qgis_map:
+    - Karte
+    - Inhaltselement repräsentiert eine Open-Layers Karte.
