@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Contao Sources Bundle.
+ * This file is part of the Contao QGis Bundle.
  *
  * (c) Christian Mette
  *
@@ -26,9 +26,7 @@ class QgisMapController extends AbstractContentElementController
     // this code comes from:
     // vendor/contao/core-bundle/src/Controller/ContentElement/TextController.php
 
-    public function __construct(
-        private readonly Studio $studio,
-    )
+    public function __construct(private readonly Studio $studio)
     {
         dump(__FUNCTION__);
         dump($GLOBALS['TL_DCA']['tl_content']);
@@ -36,20 +34,19 @@ class QgisMapController extends AbstractContentElementController
 
     protected function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
     {
-        dump(__FUNCTION__);
-        #$source     = SourcesEntityModel::findOneBy(['id = ?',"published = '1'"],[$model->sources_entity]);
-        #$settings   = SourcesSettingModel::findOneBy("published = '1'", [1]);
+        // $source     = SourcesEntityModel::findOneBy(['id = ?',"published = '1'"],[$model->sources_entity]);
+        // $settings   = SourcesSettingModel::findOneBy("published = '1'", [1]);
 
-        $settings   = [];
+        $settings = [];
 
-        $map        = new \StdClass();
+        $map = new \stdClass();
         $map->floating = 'above';
 
-        $template->set('settings',  $settings);
-        $template->set('map',       $map);
+        $template->set('settings', $settings);
+        $template->set('map', $map);
 
-        if($map) {
-            // map found
+        if ($map) {
+            //  map found
             /*
             $figure = !$source->addImage ? null : $this->studio
                 ->createFigureBuilder()
@@ -57,12 +54,11 @@ class QgisMapController extends AbstractContentElementController
                 ->setSize($source->size)
                 ->setOverwriteMetadata($source->getOverwriteMetaFromSource())
                 ->enableLightbox($source->fullsize)
-                //->setLinkAttribute('title', 'neuer Titel')
+                ->setLinkAttribute('title', 'neuer Titel')
                 ->buildIfResourceExists();
             */
             $figure = null;
             $template->set('layout', $map->floating);
-
         } else {
             // source not available
             $figure = null;

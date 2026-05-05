@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Contao Sources Bundle.
+ * This file is part of the Contao QGis Bundle.
  *
  * (c) Christian Mette
  *
@@ -22,7 +22,7 @@ use Contao\Model\Collection;
  * @property int $id
  * @property int $tstamp
  *
- * @method static QgisMapModel|null                                    findById($id, array $opt=array())
+ * @method static QgisMapModel|null                                findById($id, array $opt=array())
  * @method static Collection|array<QgisMapModel>|QgisMapModel|null findByPid($val, array $opt = [])
  */
 class QgisMapModel extends Model

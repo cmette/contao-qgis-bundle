@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Contao Sources Bundle.
+ * This file is part of the Contao QGis Bundle.
  *
  * (c) Christian Mette
  *

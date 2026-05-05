@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the Contao Sources Bundle.
+ * This file is part of the Contao QGis Bundle.
  *
  * (c) Christian Mette
  *
@@ -23,11 +23,7 @@ class ContaoQgisBundle extends AbstractBundle
         return \dirname(__DIR__);
     }
 
-    public function loadExtension(
-        array                 $config,
-        ContainerConfigurator $container,
-        ContainerBuilder      $builder,
-    ): void
+    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder,): void
     {
         $container->import('../config/services.yaml');
     }
