@@ -24,11 +24,11 @@ class ContaoQgisBundle extends AbstractBundle
     }
 
     public function loadExtension(
-        array $config,
-        ContainerConfigurator $containerConfigurator,
-        ContainerBuilder $containerBuilder,
+        array                 $config,
+        ContainerConfigurator $container,
+        ContainerBuilder      $containerBuilder,
     ): void
     {
-        $containerConfigurator->import('../config/services.yaml');
+        $container->import('../config/services.yaml');
     }
 }
