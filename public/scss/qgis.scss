@@ -1,0 +1,27 @@
+/*
+ *  global
+ */
+#tl_navigation {
+  a.group-qgis {
+    background: url("../img/map.svg") 3px 2px no-repeat;
+    background-size: 13px 13px;
+  }
+}
+
+/***********************************************************************************/
+
+// Test zum formatieren ganzer Tabellenzeilen mit Elementen mit Status 'used'
+tr.hover-row:has(span.used) {
+  //background-color: rgb(255 206 216) !important;
+}
+
+/*--------------------------------------------------------------------------
+  map
+ --------------------------------------------------------------------------*/
+.map-wrapper {
+  display:flex;
+  gap:1rem;
+  width:100%;
+  margin-bottom:1rem;
+  aspect-ratio:1/1;
+}

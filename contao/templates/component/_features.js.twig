@@ -1,0 +1,12 @@
+{% trans_default_domain "tl_qgis_map" %}
+{#
+    lädt alle features eines layers
+#}
+
+{% block features_component %}
+    //-- features -----------------------------------------------
+    {%  set features = layer.getAllFeatures('json_'~layer.type~'_'~layer.id)|raw %};
+    var json_{{ layer.type }}_{{ layer.id }} = {{ features|raw }};
+    var features_{{ layer.type }}_{{ layer.id }} = format_{{ layer.type }}_{{ layer.id }}.readFeatures(json_{{ layer.type }}_{{ layer.id }}, {dataProjection: '{{ layer.data_projection|raw }}',featureProjection: '{{ layer.feature_projection|raw }}'});
+    //-- end features -----------------------------------------------
+{% endblock %}

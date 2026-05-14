@@ -1,4 +1,10 @@
 {% extends '@Contao/content_element/_base.html.twig' %}
+{% use '@Contao/component/_map.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- link rel="stylesheet" href="{{ asset('bundles/contaoqgisbundle/css/qgis.css') }}" -->
+{% endblock %}
 
 {% set content_layout_attributes = attrs()
     .addClass('media media--' ~ layout, layout and image)
@@ -9,8 +15,9 @@
     By default we add the layout attributes to the wrapper element. If you want to
     disable this behavior, set "default_content_layout" to false.
 #}
-{% set attributes = attrs(attributes|default)
-    .set('id', "ol-" ~ (source ? source.id : 0))
+{% set map_attributes = attrs(attributes|default)
+    .set('id', "olmap-" ~ (map ? map.id : 0))
+    .addClass('map')
     .mergeWith(content_layout_attributes, default_content_layout is not defined or default_content_layout)
 %}
 
@@ -27,15 +34,32 @@
     {% endif %}
 
     {% block text %}
+        <style>
+            .map-wrapper {
+                display:flex;
+                gap:1rem;
+                width:100%;
+                margin-bottom:1rem;
+                aspect-ratio:1/1;
+            }
+        </style>
         {% if map %}
-            <div>Hier Karte</div>
-{#            {{- block('authors_component') -}}#}
-{#            {{- block('year_component') -}}#}
-{#            {{- block('titles_component') -}}#}
-{#            {{- block('series_component') -}}#}
-{#            {{- block('publisher_component') -}}#}
-{#            {{- block('metadata_component') -}}#}
-{#            {{- block('occurrences_component') -}}#}
+            <p>Drücken Sie Shift + Alt, um die Karte mit der Maus zu drehen. {#   {page::alias} #}</p>
+            <div class="map-wrapper">
+                <div{{- map_attributes -}} style="flex:1 1 75%;border:3px solid #e0e0e0;border-radius:0.5rem;">
+                    <div id="popup" class="ol-popup">
+                        <!-- a href="#" id="popup-closer" class="ol-popup-closer"></a -->
+                        <div id="popup-content"></div>
+                    </div>
+                </div>
+                <div id="hs-list">
+                    <h4>Hofstellen</h4>
+                    <!-- div class="external layerSwitcher">Hofstellen</div -->
+                </div>
+            </div>
+            <script type="text/javascript">
+                {{- block('map_component') -}}
+            </script>
         {% else %}
             <div>{{- 'tl_sources_entity.source_not_found'|trans([], 'contao_tl_sources_entity') -}}</div>
         {% endif %}
@@ -44,4 +68,5 @@
     {% if layout == 'below' %}
         {{ block('text_media') }}
     {% endif %}
+
 {% endblock %}

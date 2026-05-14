@@ -4,5 +4,8 @@
 MOD:
   qgis: QGis-Bridge
   qgis_maps:
-    - Karten
+    - Karten (Maps)
     - Register der verfügbaren Karten
+  qgis_layers:
+    - Ebenen (Layers)
+    - Register der verfügbaren Ebenen

@@ -1,0 +1,362 @@
+<?php
+
+use Cmette\ContaoQgisBundle\Models\QgisLayerModel;
+use Cmette\ContaoQgisBundle\Utils\DcaUtils;
+use Contao\DataContainer;
+use Contao\DC_Table;
+use Contao\System;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+
+$strTable = 'tl_qgis_layer';
+
+System::loadLanguageFile($strTable);
+
+$GLOBALS['TL_DCA'][$strTable] = [
+	'config' =>  [
+		'dataContainer'     => DC_Table::class,
+        'switchToEdit'      => true,
+		'enableVersioning'  => true,
+        'sql' => [
+            'keys' => [
+                'id'        => 'primary',
+                'tstamp'    => 'index',
+            ],
+        ],
+	],
+	'list' => [
+		'sorting' =>  [
+            'mode'                  => DataContainer::MODE_SORTED,
+			'fields'                => ['title'],
+			'headerFields'          => ['title'],
+			'panelLayout'           => 'filter;sort,search,limit',
+            'defaultSearchField'    => 'title',
+            #'renderAsGrid'  => true,
+			#'limitHeight'   => 160
+
+            # requires special bundle oneup/contao-backend-sortable-list-views
+            'sortableListView' => true,
+		],
+		'label' =>  [
+			'fields' =>  ['title'],
+            // If true Contao will generate a table header with column names (e.g. back end member list)
+            // If the DCA uses showColumns then the return value of the list.label.label-Callback
+            // must be an array of strings. Otherwise just the label as a string.
+            'showColumns' => false,
+			#'format' => '%s',
+		],
+		'operations' =>  [
+            'edit',
+            'activate',
+            '!delete',
+            'toggle',
+        ],
+	],
+
+	// Palettes
+	'palettes' =>  [
+		'__selector__'  =>  ['type'],
+		'default'   =>
+            '{title_legend},title;' .
+            '{type_legend},type;' .
+            '',
+        'Tile' =>
+            '{title_legend},title;' .
+            '{type_legend},type;' .
+            '{source_legend},source,attribution,format;' .
+            '',
+        'Vector' =>
+            '{title_legend},title;' .
+            '{type_legend},type;' .
+            '{source_legend},source,attribution,format;' .
+            '{features_legend},source_type,source_name,data_projection,feature_projection;features;' .
+            '',
+	],
+
+	// Subpalettes
+	'subpalettes' =>  [
+    ],
+
+	// Fields
+	'fields' => [
+        /**********************************************************************
+         * without legend
+         **********************************************************************/
+        'id'        => ['sql' => "int(10) unsigned NOT NULL auto_increment"],
+        'tstamp'    => ['sql' => "int(10) unsigned NOT NULL default 0",],
+        'published' => DcaUtils::buildPublishedField(),
+        # requires special bundle oneup/contao-backend-sortable-list-views
+        #'sorting'=> ['sql' => "int(10) unsigned NOT NULL default 0",],
+        /**********************************************************************
+         * title_legend
+         **********************************************************************/
+        // layer.title
+        'title' => [
+            'inputType'     => 'text',
+            'eval'          => [
+                'mandatory' => true,
+                'unique'    => true,
+                'tl_class'  =>'w50'
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 255,
+                'fixed'     => true,
+                'default'   => '',
+            ]
+        ],
+        /**********************************************************************
+         * type_legend
+         **********************************************************************/
+        // layer.type = nur QGis intern
+        'type' => [
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'inputType' => 'select',
+            'options'   => QgisLayerModel::getLayerTypes(),
+            'reference' => &$GLOBALS['TL_LANG'][$strTable]['type_options'],
+            'eval'          => [
+                'mandatory' => true,
+                'unique'    => false,
+                'tl_class'  =>'w25'
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => 'OSM',
+            ]
+        ],
+        /**********************************************************************
+         * config_legend
+         **********************************************************************/
+        // Transparenz 0 ... 1
+        'opacity' => [
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'inputType'     => 'text',
+            'eval'          => [
+                'mandatory' => true,
+                'unique'    => false,
+                'tl_class'  =>'w16'
+            ],
+            'sql'       => [
+                'type'      => 'decimal',
+                'notnull'   => true,
+                'precision' => 16,
+                'scale'     => 6,
+                'unsigned'  => false,
+                'default'   => '1.000000',
+                'comment'   => ''
+            ]
+        ],
+        # Datenquelle des Layers, jedes Layer hat nur eine Datenquelle
+        'source' => [
+            'inputType' => 'select',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'options'   => QgisLayerModel::getSourceTypes(),
+            'eval'      => [
+                'mandatory' => true,
+                'includeBlankOption'=> false,
+                'tl_class' => 'w25',
+                'multiple' => false,
+                'chosen' => true,
+                'submitOnChange'=>true,
+            ],
+            'sql' => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => '',
+            ]
+        ],
+        # jede Datenquelle hat eine attribution
+        'attribution' => [
+            'inputType' => 'text',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'eval'      => [
+                'mandatory' => false,
+                'tl_class' => 'w25',
+            ],
+            'sql' => [
+                'type'      => 'string',
+                'length'    => 50,
+                'fixed'     => true,
+                'default'   => '',
+            ]
+        ],
+        /**********************************************************************
+         * format_legend
+         **********************************************************************/
+        # Format der Quelle
+        'format' => [
+            'inputType' => 'select',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'options'   => QgisLayerModel::getFormatTypes(),
+            #'foreignKey' => 'tl_qgis_source.title',
+            #'relation'  => [
+            #    'type'  => 'hasOne',
+            #    'load'  => 'lazy'
+            #],
+            'eval'      => [
+                // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                'mandatory' => true,
+                'includeBlankOption'=> false,
+                #'blankOptionLabel'  => 'kein/unbekannt',
+                'tl_class' => 'w25',
+                'multiple' => false,
+                'chosen' => true,
+                'submitOnChange' => true,
+            ],
+            'sql' => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => 'OSM',
+            ]
+        ],
+        # dataprojection für readFeatures()
+        'data_projection' => [
+            'inputType' => 'select',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'options'   => QgisLayerModel::getDataProjections(),
+            'eval'      => [
+                // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                'mandatory' => true,
+                'tl_class' => 'w25',
+                'multiple' => false,
+                'chosen' => true,
+            ],
+            'sql' => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => 'EPSG:4326',
+            ]
+        ],
+        # dataprojection für readFeatures()
+        'feature_projection' => [
+            'inputType' => 'select',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'options'   => QgisLayerModel::getFeatureProjections(),
+            'eval'      => [
+                // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                'mandatory' => true,
+                'tl_class' => 'w25',
+                'multiple' => false,
+                'chosen' => true,
+            ],
+            'sql' => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => 'EPSG:4326',
+            ]
+        ],
+
+        /**********************************************************************
+         * JSON_legend
+         **********************************************************************/
+        #
+        'source_type' => [
+            'search'    => true,
+            'inputType' => 'select',
+            'options'   => ['Feature','FeatureCollection'],
+            'eval'      => [
+                'includeBlankOption'=> false,
+                'tl_class' => 'w25',
+                'multiple' => false,
+            ],
+            'sql' => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => 'OSM',
+            ]
+        ],
+        'source_name' => [
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'w25'
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 255,
+                'fixed'     => true,
+                'default'   => '',
+            ]
+        ],
+
+
+        # speichert ein feature
+        'features' => [
+            'inputType' => 'rowWizard',
+            'fields' => [
+                'type' => [
+                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['type'],
+                    'inputType' => 'select',
+                    'options'   => ['Feature','t2'],
+                    'eval'      => [
+                        'includeBlankOption'=> false,
+                        'tl_class' => 'w50',
+                        'multiple' => false,
+                    ],
+                ],
+                'properties' => [
+                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['properties'],
+                    'search'    => true,
+                    'inputType' => 'text',
+                    'eval'      => [
+                        'tl_class' => 'w25'
+                    ],
+                ],
+                'geometry_type' => [
+                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['geometry_type'],
+                    'search'    => true,
+                    'inputType' => 'select',
+                    'options'   => ['Point','MultiPoint','LineString','MultiLineString','Polygon','MultiPolygon','GeometryCollection'],
+                    'eval'      => [
+                        'mandatory' => true,
+                        'tl_class' => 'w25 clr'
+                    ],
+                ],
+                'geometry_coordinates' => [
+                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['geometry_coordinates'],
+                    'inputType'     => 'textarea',
+                    'eval'          => [
+                        'tl_class'  =>''
+                    ],
+                ],
+            ],
+            'eval' => [
+                'tl_class' => 'clr',
+                'actions' => [
+                    'copy',
+                    'delete',
+                    'enable',
+                ],
+                'min' => 1,         // minimum rows
+                'max' => 20,        // maximum rows
+                'sortable' => true, // disable the sorting, defaults to true
+            ],
+            'sql' => [
+                'type' => 'text',
+                'length' => MySQLPlatform::LENGTH_LIMIT_BLOB,
+                'notnull' => false
+            ],
+        ],
+    ],
+];

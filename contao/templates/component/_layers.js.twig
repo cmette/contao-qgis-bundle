@@ -1,0 +1,46 @@
+{% trans_default_domain "tl_qgis_map" %}
+{% use '@Contao/component/_features.js.twig' %}
+{#
+    baut die layersList zusammen
+#}
+
+{% block layers_component %}
+//var wms_layers = [];
+    var ol_layers_{{- map.id -}} = [];
+
+{% set layers = map.getLayers() %}
+{% for layer in layers %}
+    //-- Layer.{{ layer.type }}.{{ layer.format }} -----------------------------------------------
+
+    var source_{{ layer.type }}_{{ layer.id }} = new ol.source.{{ layer.source }}({attributions: '{{ layer.attribution|raw }}',});
+    {% if layer.type == 'Vector' %}
+        var format_{{ layer.type }}_{{ layer.id }} = new ol.format.{{ layer.format }}();
+
+        {% if layer.format == 'GeoJSON' %}
+            {{ block('features_component') }}
+            source_{{ layer.type }}_{{ layer.id }}.addFeatures(features_{{ layer.type }}_{{ layer.id }});
+        {% endif %}
+
+    {% elseif layer.type == 'Tile' %}
+    source_{{ layer.type }}_{{ layer.id }}.setUrl('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    {% endif %}
+
+    var layer_{{ layer.id }} = new ol.layer.{{- layer.type -}}({
+        title: '{{ layer.title|raw }}',
+        type: 'base',
+        opacity: {{ layer.opacity }},
+        source: source_{{ layer.type }}_{{ layer.id }},
+        {% if layer.format == 'GeoJSON' %}
+        declutter: false,
+        style: styleFn,
+        popuplayertitle: '{{ layer.title }}',
+        interactive: true,
+        title: '<img src="files/content-arnsdorf/hoyk/styles/legend/VektorLayer_1.png" /> Vektor-Layer',
+        {% else %}
+        {% endif %}
+    });
+
+    layer_{{ layer.id }}.setVisible({{ layer.published?'true':'false' }});
+    ol_layers_{{- map.id -}}.push(layer_{{ layer.id }});
+    {% endfor %}
+{% endblock %}

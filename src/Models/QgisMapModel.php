@@ -14,6 +14,7 @@ namespace Cmette\ContaoQgisBundle\Models;
 
 use Contao\Model;
 use Contao\Model\Collection;
+use Contao\StringUtil;
 
 /**
  * Reads and writes source entities. This refers to abstract sources such as
@@ -27,10 +28,38 @@ use Contao\Model\Collection;
  */
 class QgisMapModel extends Model
 {
+    use ModelHelperTrait;
+
     /**
      * Table name.
      *
      * @var string
      */
     protected static $strTable = 'tl_qgis_map';
+
+    public function getLayers():Collection|null
+    {
+        $arrLayers  = StringUtil::deserialize($this->layers, true);
+        $collLayers = [];
+
+        if (!empty($arrLayers)) {
+            foreach ($arrLayers as $itemLayer) {
+                if($objLayer = QgisLayerModel::findById($itemLayer['layer'])) {
+                    if($this->isFrontendRequest() && $itemLayer['enable'] === '1' && $objLayer->published) {
+                        $collLayers[] = $objLayer;
+                    } elseif ($this->isBackendRequest()) {
+                        $collLayers[] = $objLayer;
+                    } else {
+                        // no answer
+                    }
+                } else {
+                    // layer deleted or not defined
+                }
+            }
+        } else {
+            // no layers defined for this map
+        }
+
+        return new Collection($collLayers, self::$strTable);
+    }
 }

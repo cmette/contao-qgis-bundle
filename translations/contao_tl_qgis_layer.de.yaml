@@ -1,0 +1,37 @@
+tl_qgis_layer:
+  deletion_disabled: Löschen nicht möglich. Der Datensatz wird verwendet.
+
+  title_legend: Benennung der Ebene
+  title:
+    - Titel der Ebene
+    - Geben Sie hier einen Titel für die Ebene ein.
+  type_legend: Typ der Ebene
+  type:
+    - Typ der Ebene
+    - Wählen Sie hier den Typ der Ebene Definition.
+  layers_legend: Ebenen (Layers)
+  layers:
+    - Ebenen
+    - Wählen Sie hier die Ebenen, die auf der Karte dargestellt werden sollen. Sie müssen die Ebenen zuvor unter dem gleichnamigen Menüpunkt definiert haben.
+  layer_fields:
+    layer:
+      - Ebene
+      - Wählen Sie hier die gewünschte Ebene.
+    opacity:
+      - Transparenz
+
+  source_legend: Datenquelle
+  source_type:
+    - Source-Type
+    - Art der Quelle.
+  source_name:
+    - Source-Name
+    - Name der Quelle.
+  features:
+    - Eigenschaften
+    - Geben Sie hier die Liste der Eigenschaften ein.
+  features_fields:
+    type: Typ
+    properties: "Eigenschaften (JSON)"
+    geometry_type: Geometrie
+    geometry_coordinates: "Koordinaten (Array)"

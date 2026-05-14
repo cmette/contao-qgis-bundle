@@ -2,7 +2,8 @@
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['qgis_map'] =
     '{type_legend},type,headline,title;' .
-    '{map_legend},map;' .
+    '{map_legend},qgis_map;' .
+    '{text_legend},text;' .
     '{template_legend:hide},customTpl;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},cssID;' .
@@ -11,14 +12,14 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['qgis_map'] =
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
 [
-    'inputType' => 'test',
+    'inputType' => 'select',
     'search'    => true,
     'filter'    => true,
     'sorting' => true,
     'eval'      => [
         'mandatory' => true,
         'includeBlankOption'=> false,
-        'tl_class' => '',
+        'tl_class' => 'w50',
         'multiple' => false,
         'chosen' => true
     ],

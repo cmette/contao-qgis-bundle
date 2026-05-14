@@ -1,0 +1,118 @@
+{#
+    rendert das map-Element der Karte
+#}
+{% trans_default_domain "tl_qgis_map" %}
+{% use '@Contao/component/_layers.html.twig' %}
+
+{%- block map_component -%}
+
+//var size = 0;
+//var placement = 'point';
+
+// Funktionen
+
+function mm2px(m) {
+    const _map = map_{{- map.id -}};
+
+    var centerLatLng = _map.getView().getCenter();
+    var pointC = _map.getPixelFromCoordinate(centerLatLng);
+    var pointX = [pointC[0] + 100, pointC[1]];
+    var latLngC = _map.getCoordinateFromPixel(pointC);
+    var latLngX = _map.getCoordinateFromPixel(pointX);
+    var lineX = new ol.geom.LineString([latLngC, latLngX]);
+    var distanceX = lineX.getLength() / 100;
+    reciprocal = 1 / distanceX;
+    px = Math.ceil(reciprocal);
+    return px;
+}
+
+const createTS = function(feature, resolution, labelText, labelFont,labelFill, placement, bufferColor,bufferWidth)
+{
+    if (feature.hide || !labelText) {
+        return;
+    }
+
+    if (bufferWidth == 0) {
+        var bufferStyle = null;
+    } else {
+        var bufferStyle = new ol.style.Stroke({
+            color: bufferColor,
+            width: bufferWidth
+        })
+    }
+
+    var textStyle = new ol.style.Text({
+        font: labelFont,
+        text: labelText,
+        textBaseline: "middle",
+        textAlign: "left",
+        offsetX: 8,
+        offsetY: 3,
+        placement: placement,
+        maxAngle: 0,
+        fill: new ol.style.Fill({
+            color: labelFill
+        }),
+        stroke: bufferStyle
+    });
+
+    return textStyle;
+};
+
+const styleFn = function(feature, resolution) {
+    var context = {
+        feature: feature,
+        variables: {}
+    };
+
+    var labelText = "";
+    var value = feature.get("");
+    var labelFont = "13.0px \'Open Sans\', sans-serif";
+    var labelFill = "#323232";
+    var bufferColor = "";
+    var bufferWidth = 0;
+    var textAlign = "left";
+    var offsetX = 0;
+    var offsetY = 0;
+    var placement = 'point';
+    if (feature.get("label") !== null) {
+        labelText = String(feature.get("label"));
+    }
+    var style = [
+        new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'rgba(255,127,0,1.0)',
+                lineDash: null,
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                width: mm2px(1.26)
+            }),
+            text: createTS(feature, resolution, labelText, labelFont, labelFill, placement, bufferColor, bufferWidth)
+        })
+    ];
+
+    return style;
+}
+
+    {# konstruiert die layers #}
+    {{ block('layers_component') }}
+
+    const map_{{- map.id -}} = new ol.Map({
+        target: 'olmap-{{- map.id -}}',
+        layers: ol_layers_{{- map.id -}},
+        renderer: 'canvas',
+
+        view: new ol.View({
+            zoom: 16,
+            //minZoom: 13,
+            //maxZoom: 19,
+            //center: [51.42844665110317, 13.858214471317353],
+        })
+    });
+
+    //initial view - epsg:3857 coordinates if not "Match project CRS"
+    map_{{- map.id -}}.getView().fit([1542151.208901, 6696831.973394, 1543390.308651, 6698068.387861], map_{{- map.id -}}.getSize());
+
+    //full zooms only
+    //map_{{- map.id -}}.getView().setProperties({constrainResolution: true});
+{%- endblock -%}

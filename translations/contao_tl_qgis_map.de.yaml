@@ -1,0 +1,17 @@
+tl_qgis_map:
+  deletion_disabled: Löschen nicht möglich. Der Datensatz wird verwendet.
+
+  type_legend: Benennung der Karte
+  title:
+    - Titel der Karte
+    - Geben Sie hier einen Titel für die Karten-Definition ein.
+  layers_legend: Ebenen (Layers)
+  layers:
+    - Ebenen
+    - Wählen Sie hier die Ebenen, die auf der Karte dargestellt werden sollen. Sie müssen die Ebenen zuvor unter dem gleichnamigen Menüpunkt definiert haben.
+  layer_fields:
+    layer:
+      - Ebene
+      - Wählen Sie hier die gewünschte Ebene.
+    opacity:
+      - Transparenz

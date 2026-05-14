@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Cmette\ContaoQgisBundle\Controller\ContentElement;
 
+use Cmette\ContaoQgisBundle\Models\QgisMapModel;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
@@ -28,22 +29,13 @@ class QgisMapController extends AbstractContentElementController
 
     public function __construct(private readonly Studio $studio)
     {
-        dump(__FUNCTION__);
-        dump($GLOBALS['TL_DCA']['tl_content']);
     }
 
     protected function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
     {
-        // $source     = SourcesEntityModel::findOneBy(['id = ?',"published = '1'"],[$model->sources_entity]);
+        $map    = QgisMapModel::findOneBy(['id = ?',"published = '1'"],[$model->qgis_map]);
         // $settings   = SourcesSettingModel::findOneBy("published = '1'", [1]);
-
         $settings = [];
-
-        $map = new \stdClass();
-        $map->floating = 'above';
-
-        $template->set('settings', $settings);
-        $template->set('map', $map);
 
         if ($map) {
             //  map found
@@ -57,6 +49,16 @@ class QgisMapController extends AbstractContentElementController
                 ->setLinkAttribute('title', 'neuer Titel')
                 ->buildIfResourceExists();
             */
+            /*
+                <link rel="stylesheet" href="files/libs/openlayers/dist/10.8.0/ol.css">
+                <script src="files/libs/olext/dist/4.0.38/ol-ext.js"></script>
+                <link rel="stylesheet" href="files/libs/olext/dist/4.0.38/ol-ext.css">
+                <script src="files/libs/autolinker/dist/4.1.5/Autolinker.js"></script>
+            */
+            $GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/openlayers/dist/10.8.0/ol.js';
+            $GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/olext/dist/4.0.38/ol-ext.js';
+            $GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/autolinker/dist/4.1.5/Autolinker.js';
+
             $figure = null;
             $template->set('layout', $map->floating);
         } else {
@@ -65,6 +67,8 @@ class QgisMapController extends AbstractContentElementController
             $template->set('layout', 'above');
         }
 
+        $template->set('settings', $settings);
+        $template->set('map', $map);
         $template->set('image', $figure);
 
         // handle Backend Request
