@@ -1,0 +1,22 @@
+tl_qgis_feature:
+  deletion_disabled: Löschen nicht möglich. Der Datensatz wird verwendet.
+
+  name_legend: Name des Features
+  name:
+    - Name des Features
+    - Geben Sie hier einen Namen für das Feature ein. Der Name ist von OpenLayers unabhängig und dient nur der internen Darstellung in Contao.
+  properties_legend: Eigenschaften (Properties)
+  properties:
+    - Eigenschaften (Properties)
+    - "Geben Sie hier einen String im Javascript Objekt-Literal-Format ein. z.B. {\"id\": \"10\", \"label\": \"Stadtpark\"}"
+  geometry_legend: Geometrie-Objekt (geometry:)
+  geometry:
+    - Geometrie (geometry:)
+    - Das Geometrie-Objekt besteht aus einer Typ-Angabe und den zugehörigen Koordinaten.
+  geometry_fields:
+    type:
+      - Geometrie-Typ
+      #- Wählen Sie hier einen Typ für Ihre Koordinaten.
+    coordinates:
+      - Koordinaten
+      #- Geben Sie hier die Koorindaten mit eckigen Klammern ein!

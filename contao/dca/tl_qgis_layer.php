@@ -55,7 +55,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
 
 	// Palettes
 	'palettes' =>  [
-		'__selector__'  =>  ['type'],
+		'__selector__'  =>  ['type','source_type'],
 		'default'   =>
             '{title_legend},title;' .
             '{type_legend},type;' .
@@ -69,12 +69,14 @@ $GLOBALS['TL_DCA'][$strTable] = [
             '{title_legend},title;' .
             '{type_legend},type;' .
             '{source_legend},source,attribution,format;' .
-            '{features_legend},source_type,source_name,data_projection,feature_projection;features;' .
+            '{features_legend},source_name,data_projection,feature_projection;source_type;' .
             '',
 	],
 
 	// Subpalettes
 	'subpalettes' =>  [
+        'source_type_FeatureCollection' => 'features',
+        'source_type_Feature' => 'feature',
     ],
 
 	// Fields
@@ -305,44 +307,31 @@ $GLOBALS['TL_DCA'][$strTable] = [
         'features' => [
             'inputType' => 'rowWizard',
             'fields' => [
-                'type' => [
-                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['type'],
+                'feature' => [
+                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['feature'],
                     'inputType' => 'select',
-                    'options'   => ['Feature','t2'],
-                    'eval'      => [
-                        'includeBlankOption'=> false,
-                        'tl_class' => 'w50',
-                        'multiple' => false,
+                    'foreignKey' => 'tl_qgis_feature.name',
+                    'relation'  => [
+                        'type'  => 'hasOne',
+                        'load'  => 'lazy'
                     ],
-                ],
-                'properties' => [
-                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['properties'],
-                    'search'    => true,
-                    'inputType' => 'text',
                     'eval'      => [
-                        'tl_class' => 'w25'
-                    ],
-                ],
-                'geometry_type' => [
-                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['geometry_type'],
-                    'search'    => true,
-                    'inputType' => 'select',
-                    'options'   => ['Point','MultiPoint','LineString','MultiLineString','Polygon','MultiPolygon','GeometryCollection'],
-                    'eval'      => [
+                        // wenn addSeries true, dann muss eine Reihe angegeben werden!
                         'mandatory' => true,
-                        'tl_class' => 'w25 clr'
+                        'includeBlankOption'=> false,
+                        #'blankOptionLabel'  => 'kein/unbekannt',
+                        'multiple' => false,
+                        'chosen' => true
                     ],
                 ],
-                'geometry_coordinates' => [
-                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['geometry_coordinates'],
-                    'inputType'     => 'textarea',
-                    'eval'          => [
-                        'tl_class'  =>''
+                'style' => [
+                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['text'],
+                    'inputType' => 'text',
                     ],
                 ],
-            ],
             'eval' => [
                 'tl_class' => 'clr',
+
                 'actions' => [
                     'copy',
                     'delete',

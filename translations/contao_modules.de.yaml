@@ -9,3 +9,6 @@ MOD:
   qgis_layers:
     - Ebenen (Layers)
     - Register der verfügbaren Ebenen
+  qgis_features:
+    - Features
+    - Register der verfügbaren Features

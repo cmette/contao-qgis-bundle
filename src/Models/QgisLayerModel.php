@@ -123,17 +123,23 @@ class QgisLayerModel extends Model
         $strFeatures = '';
 
         foreach ($arrFeatures as $feature) {
-            $properties = html_entity_decode($feature['properties']);
+            if ($feature['enable'] === '1') {
+                if($objFeature = QgisFeatureModel::findById($feature['feature'])) {
+                    $properties = html_entity_decode($objFeature->properties);
 
-            $strFeatures .= "{
-            \"type\": \"{$feature['type']}\",
+                    $strFeatures .= "{
+            \"type\": \"Feature\",
             \"name\": \"$name\",
             \"properties\": {$properties},
             \"geometry\": {
-                \"type\": \"{$feature['geometry_type']}\",
-                \"coordinates\": {$feature['geometry_coordinates']}
+                \"type\": \"{$objFeature->geometry_type}\",
+                \"coordinates\": {$objFeature->geometry_coordinates}
             }
     },";
+                } else {
+                    // Feature not found
+                }
+            }
         }
 
         $literalJSONObject = <<< EOJ
@@ -143,7 +149,7 @@ class QgisLayerModel extends Model
     "features": [$strFeatures]
 }
 EOJ;
-
+dump($literalJSONObject);
         return $literalJSONObject;
     }
 

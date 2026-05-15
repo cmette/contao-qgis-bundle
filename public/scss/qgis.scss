@@ -25,3 +25,68 @@ tr.hover-row:has(span.used) {
   margin-bottom:1rem;
   aspect-ratio:1/1;
 }
+
+/*--------------------------------------------------------------------------
+  edit mode tl_qgis_layer
+ --------------------------------------------------------------------------*/
+form#tl_qgis_layer {
+
+  // tips ändern
+  .tl_tip {
+    color: #2f9f00;
+    margin-top: 0.5rem;
+  }
+
+  // rowWizard features
+  table#ctrl_features {
+    //border: 1px solid var(--form-border);
+    //border-radius: 1rem;
+
+    tbody {
+      vertical-align: top;
+
+      tr {
+      }
+    }
+
+    *[id^="ctrl_feature"],
+    *[id^="ctrl_style"] {
+      border: none;
+      background-color: #F6F6F8;
+    }
+
+    td:has(>[id*="[feature]"])  { width: 50%; select  { background-color: #ecf4ff; }}
+    td:has(>[id*="[style]"])    { width: 50%; input   { background-color: #ffecec; }}
+  }
+}
+
+
+/*--------------------------------------------------------------------------
+  edit mode tl_qgis_feature
+ --------------------------------------------------------------------------*/
+form#tl_qgis_feature {
+
+  // tips ändern
+  .tl_tip {
+    color: #2f9f00;
+    margin-top: 0.5rem;
+  }
+
+  // rowWizard geometry
+  table#ctrl_geometry {
+    //border: 1px solid var(--form-border);
+    //border-radius: 1rem;
+    tbody {
+      vertical-align: top;
+    }
+
+    *[id^="ctrl_type"],
+    *[id^="ctrl_coordinates"] {
+      border: none;
+      background-color: #F6F6F8;
+    }
+
+    td:has(>[id$="[type]"])         { width: 15%; select    { background-color: #ecf4ff; }}
+    td:has(>[id$="[coordinates]"])  { width: 85%; textarea  { background-color: #ffecec; }}
+  }
+}
