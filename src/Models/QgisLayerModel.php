@@ -12,11 +12,9 @@ declare(strict_types=1);
 
 namespace Cmette\ContaoQgisBundle\Models;
 
-use Cmette\ContaoSourcesBundle\Models\SourcesEntityModel;
 use Contao\Model;
 use Contao\Model\Collection;
 use Contao\StringUtil;
-use Symplify\EasyCodingStandard\Console\Output\JsonOutputFormatter;
 
 /**
  * Reads and writes source entities. This refers to abstract sources such as
@@ -107,7 +105,7 @@ class QgisLayerModel extends Model
         return self::FEATURE_PROJECTIONS;
     }
 
-    public function getAllFeatures(string $name):string
+    public function getAllFeatures(string|null $name = null):string
     {
         /**
          * type MultiPolygon:
@@ -126,10 +124,11 @@ class QgisLayerModel extends Model
             if ($feature['enable'] === '1') {
                 if($objFeature = QgisFeatureModel::findById($feature['feature'])) {
                     $properties = html_entity_decode($objFeature->properties);
+                    $_name = empty($name) ? $objFeature->name : $name;
 
                     $strFeatures .= "{
             \"type\": \"Feature\",
-            \"name\": \"$name\",
+            \"name\": \"$_name\",
             \"properties\": {$properties},
             \"geometry\": {
                 \"type\": \"{$objFeature->geometry_type}\",
@@ -137,8 +136,10 @@ class QgisLayerModel extends Model
             }
     },";
                 } else {
-                    // Feature not found
+                    // Feature not found ToDo: ?
                 }
+            } else {
+                // Feature ist deaktiviert auf dieser Ebene ToDo: ?
             }
         }
 

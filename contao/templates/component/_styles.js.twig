@@ -1,0 +1,93 @@
+{% trans_default_domain "tl_qgis_map" %}
+{#
+    lädt alle Styles einer Karte und die von ihnen verwendeten Code-Teile
+#}
+
+{% block styles_component %}
+//-- olmap-{{ map.id }} Styles -----------------------------------------------
+//-- Code --
+function mm2px(m) {
+    const _map = map_{{- map.id -}};
+
+    var centerLatLng = _map.getView().getCenter();
+    var pointC = _map.getPixelFromCoordinate(centerLatLng);
+    var pointX = [pointC[0] + 100, pointC[1]];
+    var latLngC = _map.getCoordinateFromPixel(pointC);
+    var latLngX = _map.getCoordinateFromPixel(pointX);
+    var lineX = new ol.geom.LineString([latLngC, latLngX]);
+    var distanceX = lineX.getLength() / 100;
+    reciprocal = 1 / distanceX;
+    px = Math.ceil(reciprocal);
+    return px;
+}
+
+const createTS = function(feature, resolution, labelText, labelFont,labelFill, placement, bufferColor,bufferWidth)
+{
+    if (feature.hide || !labelText) {
+        return;
+    }
+
+    if (bufferWidth == 0) {
+        var bufferStyle = null;
+    } else {
+        var bufferStyle = new ol.style.Stroke({
+            color: bufferColor,
+            width: bufferWidth
+        })
+    }
+
+    var textStyle = new ol.style.Text({
+        font: labelFont,
+        text: labelText,
+        textBaseline: "middle",
+        textAlign: "left",
+        offsetX: 8,
+        offsetY: 3,
+        placement: placement,
+        maxAngle: 0,
+        fill: new ol.style.Fill({
+            color: labelFill
+        }),
+        stroke: bufferStyle
+    });
+
+    return textStyle;
+};
+
+//-- styleFunctions --
+
+const styleFn = function(feature, resolution) {
+    var context = {
+        feature: feature,
+        variables: {}
+    };
+
+    var labelText = "";
+    var value = feature.get("");
+    var labelFont = "13.0px \'Open Sans\', sans-serif";
+    var labelFill = "#323232";
+    var bufferColor = "";
+    var bufferWidth = 0;
+    var textAlign = "left";
+    var offsetX = 0;
+    var offsetY = 0;
+    var placement = 'point';
+    if (feature.get("label") !== null) {
+        labelText = String(feature.get("label"));
+    }
+    var style = [
+        new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'rgba(255,127,0,1.0)',
+                lineDash: null,
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                width: mm2px(1.26)
+            }),
+            text: createTS(feature, resolution, labelText, labelFont, labelFill, placement, bufferColor, bufferWidth)
+        })
+    ];
+
+    return style;
+}
+{% endblock %}

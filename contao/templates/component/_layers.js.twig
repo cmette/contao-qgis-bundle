@@ -10,7 +10,7 @@
 
 {% set layers = map.getLayers() %}
 {% for layer in layers %}
-    //-- Layer.{{ layer.type }}.{{ layer.format }} -----------------------------------------------
+//-- Layer.{{ layer.type }}.{{ layer.format }} -----------------------------------------------
 
     var source_{{ layer.type }}_{{ layer.id }} = new ol.source.{{ layer.source }}({attributions: '{{ layer.attribution|raw }}',});
     {% if layer.type == 'Vector' %}
@@ -35,7 +35,7 @@
         style: styleFn,
         popuplayertitle: '{{ layer.title }}',
         interactive: true,
-        title: '<img src="files/content-arnsdorf/hoyk/styles/legend/VektorLayer_1.png" /> Vektor-Layer',
+        title: '<img src="files/styles/legend/VektorLayer_1.png" /> Vektor-Layer',
         {% else %}
         {% endif %}
     });

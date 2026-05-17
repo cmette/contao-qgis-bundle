@@ -61,7 +61,7 @@ class QgisFeatureListener
         $title  = $row['name'];
         $type   = $row['geometry_type'];
 
-        return $this->buildLabelWithCounter($row, "{$title}{$type}");
+        return $this->buildLabelWithCounter($row, "{$title} [{$type}}");
     }
 
     /**
