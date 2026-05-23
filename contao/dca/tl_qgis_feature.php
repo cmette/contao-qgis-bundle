@@ -85,6 +85,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
 		'default'       =>
             '{name_legend},name;' .
             '{properties_legend},properties;' .
+            '{style_legend},style;' .
             '{geometry_legend},geometry_type,geometry_coordinates;' .
             '',
 	],
@@ -142,6 +143,36 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'length' => MySQLPlatform::LENGTH_LIMIT_BLOB,
                 'notnull' => false
             ],
+        ],
+        /**********************************************************************
+         * style_legend
+         **********************************************************************/
+        # ein Style für dieses Feature - Feature Styles haben Vorrang vor Layer-Styles!
+        'style' => [
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'inputType' => 'select',
+            'foreignKey' => "tl_qgis_style.name",
+            'relation'  => [
+                'type'  => 'hasOne',
+                'load'  => 'lazy'
+            ],
+            'eval'      => [
+                // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                'mandatory' => false,
+                'includeBlankOption'=> true,
+                #'blankOptionLabel'  => 'kein/unbekannt',
+                'tl_class' => 'w25',
+                'multiple' => false,
+                'chosen' => true
+            ],
+            'sql' => [
+                'type'      => 'integer',
+                'unsigned'  => true,
+                'notnull'   => true,
+                'default'   => 0,
+            ]
         ],
         /**********************************************************************
          * geometry_legend

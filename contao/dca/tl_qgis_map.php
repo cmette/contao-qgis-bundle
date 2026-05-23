@@ -114,20 +114,22 @@ $GLOBALS['TL_DCA'][$strTable] = [
                         'tl_class'  => 'w25'
                     ],
                 ],
-                'opacity' => [
-                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['layer_fields']['opacity'],
-                    'inputType' => 'text',
-                    'eval'      => [
-                        'mandatory' => false,
-                        'unique'    => false,
-                        'tl_class'  =>'w16'
+                'style' => [
+                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['layer_fields']['style'],
+                    'inputType' => 'select',
+                    'foreignKey' => "tl_qgis_style.name",
+                    'relation'  => [
+                        'type'  => 'hasOne',
+                        'load'  => 'lazy'
                     ],
-                    'sql'       => [
-                        'type'      => 'text',
-                        'length'    => 50,
-                        'fixed'     => true,
-                        'default'   => '',
-                    ]
+                    'eval'      => [
+                        // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                        'mandatory' => false,
+                        'includeBlankOption'=> true,
+                        #'blankOptionLabel'  => 'kein/unbekannt',
+                        'multiple' => false,
+                        'chosen' => true
+                    ],
                 ],
             ],
             'eval' => [

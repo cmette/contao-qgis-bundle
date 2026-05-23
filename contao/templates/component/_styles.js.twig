@@ -5,20 +5,20 @@
 
 {% block styles_component %}
 //-- olmap-{{ map.id }} Styles -----------------------------------------------
-//-- Code --
 function mm2px(m) {
+    // mittlerer Pixelabstand berechnen (units pro Pixel)
     const _map = map_{{- map.id -}};
 
-    var centerLatLng = _map.getView().getCenter();
-    var pointC = _map.getPixelFromCoordinate(centerLatLng);
-    var pointX = [pointC[0] + 100, pointC[1]];
-    var latLngC = _map.getCoordinateFromPixel(pointC);
-    var latLngX = _map.getCoordinateFromPixel(pointX);
-    var lineX = new ol.geom.LineString([latLngC, latLngX]);
-    var distanceX = lineX.getLength() / 100;
-    reciprocal = 1 / distanceX;
-    px = Math.ceil(reciprocal);
-    return px;
+    const centerCoord = _map.getView().getCenter();
+    const centerPx = _map.getPixelFromCoordinate(centerCoord);
+    const rightPx = [centerPx[0] + 100, centerPx[1]]; // 100 px Abstand
+    const coordC = _map.getCoordinateFromPixel(centerPx);
+    const coordR = _map.getCoordinateFromPixel(rightPx);
+    const line = new ol.geom.LineString([coordC, coordR]);
+    const unitsPer100px = line.getLength(); // Länge in Karten-Einheiten für 100 px
+    if (!unitsPer100px || unitsPer100px === 0) return 0;
+    const unitsPerPx = unitsPer100px / 100;
+    return Math.ceil(m / unitsPerPx); // px für m Einheiten
 }
 
 const createTS = function(feature, resolution, labelText, labelFont,labelFill, placement, bufferColor,bufferWidth)
@@ -54,9 +54,58 @@ const createTS = function(feature, resolution, labelText, labelFont,labelFill, p
     return textStyle;
 };
 
-//-- styleFunctions --
+//-- StyleCache -----
+const styleCache = {
+    default:    new ol.style.Style({
+        stroke: new ol.style.Stroke({ color: '#3399CC', width: 1 }),
+        fill:   new ol.style.Fill({ color: 'rgba(51,153,204,0.2)' }),
+        image:  new ol.style.Circle({ radius: 5, fill: new ol.style.Fill({ color: '#3399CC' }) })
+    }),
 
-const styleFn = function(feature, resolution) {
+    {% set usedstyles = map.getAllStyles() %}
+    {%- for id,style in usedstyles -%}
+//-- {{ style.name|raw }} --
+    style_{{ style.id }}: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color:    '{{ style.getRgba('stroke')|raw }}',
+            lineDash: {{ style.lineDash|raw }},
+            lineCap:  '{{ style.lineCap|raw }}',
+            lineJoin: '{{ style.lineJoin|raw }}',   // ToDo: sicher umwandeln zu []
+            //width: mm2px(1.26), ToDo: funktioniert nicht wg. Refernzfehler zur Laufzeit
+            width: {{ style.width }},
+        }),
+        fill:   new ol.style.Fill({ color: '{{ style.getRgba('fill')|raw }}' }),
+        image:  new ol.style.Circle({ radius: 6, fill: new ol.style.Fill({ color: '#ff0' }) })
+    }),
+    {% endfor -%}
+
+    highlight:  new ol.style.Style({
+        stroke: new ol.style.Stroke({ color: '#ff0', width: 1 }),
+        fill:   new ol.style.Fill({ color: 'rgba(255,255,0,0.2)' }),
+        image:  new ol.style.Circle({ radius: 6, fill: new ol.style.Fill({ color: '#ff0' }) })
+    }),
+};
+
+
+//-- styleFunction --
+const styleFunction = (feature, resolution) => {
+    // Zugriff auf Feature-Attribute
+    const feature_id = feature.get('id');
+    const style_id = feature.get('styleId');
+
+    // Auflösung an Zoomstufen anpassen
+    if (resolution > 1000) {
+        return null; // bei sehr geringer Zoomstufe nichts zeichnen
+    }
+
+console.log(style_id);
+    // Rückgabe: Style-Instanz, Array von Styles oder null
+    if (style_id > 0) return styleCache[`style_${style_id}`];
+
+    return styleCache['default'];
+};
+
+const styleFunction1 = function(feature, resolution) {
     var context = {
         feature: feature,
         variables: {}

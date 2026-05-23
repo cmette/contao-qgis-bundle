@@ -1,6 +1,7 @@
 <?php
 
 use Cmette\ContaoQgisBundle\Models\QgisFeatureModel;
+use Cmette\ContaoQgisBundle\Models\QgisStyleModel;
 use Cmette\ContaoQgisBundle\Models\QgisLayerModel;
 use Cmette\ContaoQgisBundle\Models\QgisMapModel;
 
@@ -30,20 +31,14 @@ $moduleQgis = [
         'qgis_layers' => [
             'tables'        => ['tl_qgis_layer'],
             'stylesheet'    => ["$assetsDir/scss/qgis.css"],
-            //'javascript'    => ["$assetsDir/js/resumable/resumable.js", "$assetsDir/js/SupervisorResumableWidget.js.twig"],
-
-            // permission checks are always executed
-            //'disablePermissionChecks' => false
-            // module is always shown in the navigation.
         ],
         'qgis_features' => [
             'tables'        => ['tl_qgis_feature'],
             'stylesheet'    => ["$assetsDir/scss/qgis.css"],
-            //'javascript'    => ["$assetsDir/js/resumable/resumable.js", "$assetsDir/js/SupervisorResumableWidget.js.twig"],
-
-            // permission checks are always executed
-            //'disablePermissionChecks' => false
-            // module is always shown in the navigation.
+        ],
+        'qgis_styles' => [
+            'tables'        => ['tl_qgis_style'],
+            'stylesheet'    => ["$assetsDir/scss/qgis.css"],
         ],
     ],
 ];
@@ -67,6 +62,7 @@ $GLOBALS['TL_PERMISSIONS'][] = 'ped_tree';
 $GLOBALS['TL_MODELS']['tl_qgis_map']     = QgisMapModel::class;
 $GLOBALS['TL_MODELS']['tl_qgis_layer']   = QgisLayerModel::class;
 $GLOBALS['TL_MODELS']['tl_qgis_feature'] = QgisFeatureModel::class;
+$GLOBALS['TL_MODELS']['tl_qgis_style']   = QgisStyleModel::class;
 
 // Style sheet
 $GLOBALS['TL_CSS'][] = "$assetsDir/scss/qgis.css";

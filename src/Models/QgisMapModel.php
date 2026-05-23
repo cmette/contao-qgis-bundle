@@ -62,4 +62,30 @@ class QgisMapModel extends Model
 
         return new Collection($collLayers, self::$strTable);
     }
+
+    public function getAllStyles():Collection|null
+    {
+        $arrStyles = [];
+
+        // aggregate all map layers
+        if($layers = $this->getLayers()) {
+            /* @var QgisLayerModel $layer*/
+            foreach ($layers as $layer) {
+                // get the layer style
+                if($layer->style > 0 && ($style = QgisStyleModel::findById($layer->style))) $arrStyles[$style->id] = $style;
+                // aggregate all feature styles
+                if($layerFeatures = $layer->getAllFeaturesAsCollection())
+                    foreach ($layerFeatures as $layerFeature) {
+                        // get the feature style
+                        if($style = QgisStyleModel::findById($layerFeature->style)) {
+                            $arrStyles[$style->id] = $style;
+                        };
+                    };
+            }
+        };
+
+        $styleCollection = new Collection($arrStyles, 'tl_qgis_style');
+
+        return $styleCollection;
+    }
 }

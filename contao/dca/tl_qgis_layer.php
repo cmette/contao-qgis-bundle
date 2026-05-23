@@ -57,16 +57,16 @@ $GLOBALS['TL_DCA'][$strTable] = [
 	'palettes' =>  [
 		'__selector__'  =>  ['type','source_type'],
 		'default'   =>
-            '{title_legend},title;' .
+            '{title_legend},title,style;' .
             '{type_legend},type;' .
             '',
         'Tile' =>
-            '{title_legend},title;' .
+            '{title_legend},title,style;' .
             '{type_legend},type;' .
             '{source_legend},source,attribution,format;' .
             '',
         'Vector' =>
-            '{title_legend},title;' .
+            '{title_legend},title,style;' .
             '{type_legend},type;' .
             '{source_legend},source,attribution,format;' .
             '{features_legend},source_name,data_projection,feature_projection;source_type;' .
@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
         /**********************************************************************
          * type_legend
          **********************************************************************/
-        // layer.type = nur QGis intern
+        # layer.type = nur QGis intern
         'type' => [
             'search'    => true,
             'filter'    => false,
@@ -128,6 +128,33 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'length'    => 20,
                 'fixed'     => true,
                 'default'   => 'OSM',
+            ]
+        ],
+        # ein Style für die gesamte Ebene - Feature Styles haben Vorrang!
+        'style' => [
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'inputType' => 'select',
+            'foreignKey' => "tl_qgis_style.name",
+            'relation'  => [
+                'type'  => 'hasOne',
+                'load'  => 'lazy'
+            ],
+            'eval'      => [
+                // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                'mandatory' => false,
+                'includeBlankOption'=> true,
+                #'blankOptionLabel'  => 'kein/unbekannt',
+                'tl_class' => 'w25',
+                'multiple' => false,
+                'chosen' => true
+            ],
+            'sql' => [
+                'type'      => 'integer',
+                'unsigned'  => true,
+                'notnull'   => true,
+                'default'   => 0,
             ]
         ],
         /**********************************************************************
@@ -325,10 +352,23 @@ $GLOBALS['TL_DCA'][$strTable] = [
                     ],
                 ],
                 'style' => [
-                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['text'],
-                    'inputType' => 'text',
+                    'label'     => &$GLOBALS['TL_LANG'][$strTable]['features_fields']['style'],
+                    'inputType' => 'select',
+                    'foreignKey' => "tl_qgis_style.name",
+                    'relation'  => [
+                        'type'  => 'hasOne',
+                        'load'  => 'lazy'
+                    ],
+                    'eval'      => [
+                        // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                        'mandatory' => false,
+                        'includeBlankOption'=> true,
+                        #'blankOptionLabel'  => 'kein/unbekannt',
+                        'multiple' => false,
+                        'chosen' => true
                     ],
                 ],
+            ],  # fields
             'eval' => [
                 'tl_class' => 'clr',
 

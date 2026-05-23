@@ -1,0 +1,50 @@
+tl_qgis_style:
+  deletion_disabled: Löschen nicht möglich. Der Datensatz wird verwendet.
+
+  name_legend: Name des Zeichen-Stils
+  name:
+    - Name des Stils
+    - Geben Sie hier einen Namen für den Zeichen-Stil ein. Der Name ist von OpenLayers unabhängig und dient nur der internen Darstellung in Contao.
+
+  stroke_legend: Umriss
+  stroke_color:
+    - Farbe (Hex ohne #)
+    - Wählen Sie hier die Farbe mit dem Picker oder geben Sie einen hexdezimalwert ohne führende Raute ein! (z.B. b05534)
+  stroke_alpha:
+    - Alpha-Kanal (0..1)
+    - Geben Sie hier einen Wert für den Alpha-Kanal ein.
+  width:
+    - Breite (in Pixeln)
+    - Geben Sie hier die Breite des Umrisses in Pixeln ein.
+  lineCap:
+    - Ende
+    - Wählen Sie hier die Art der Darstellung eines Linienendes.
+  lineCap_options:
+    butt: bündig
+    round: rund
+    square: quadratisch
+  lineJoin:
+    - Ecken
+    - Wählen Sie hier eine Art der Darstellung der Ecken.
+  lineJoin_options:
+    miter: spitz
+    round: rund
+    bevel: abgeschrägt
+  miterLimit:
+    - Spitzen-Grenzwert (nur bei Ecken:spitz)
+    - Der Wert definiert einen Grenzwert durch das Verhältnis zwischen Überstand der scharfen Ecken zur Linienbreite. Standard 2-4.
+  lineDash:
+    - Strichmuster (Array aus Pixel-Werten)
+    - "Das Strichmuster wird als Array [p1,p2,p3,...] angegeben. Ist es leer, so wird eine durchgezogene Linie gerendert. Andernfalls wird das array wie folgt interpretiert: p1 = Anzahl Pixel gesetzt, p2 = Anzahl Pixel nicht gesetzt, p3 = Anzahl Pixel gesetzt und so fort."
+  lineDash_rgxp_error: "Bitte geben Sie ein Array aus Werten der Form [p1,p2,p1,...] ein oder stattdessen ein leeres Array []."
+  lineDashOffset:
+    - Strichmuster-Versatz (in Pixeln)
+    - Der angegebene Wert verschiebt den Startpunkt des Strichmusters positiv oder negativ um die angegebenen Pixel.
+
+  fill_legend: Füllung
+  fill_color:
+    - Füllfarbe (ohne #)
+    - Wählen Sie hier die Farbe mit dem Picker oder geben Sie einen hexdezimalwert ohne führende Raute ein! (z.B. b05534)
+  fill_alpha:
+    - Alpha-Kanal (0..1)
+    - Geben Sie hier einen Wert für den Alpha-Kanal ein.

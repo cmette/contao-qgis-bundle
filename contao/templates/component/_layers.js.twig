@@ -5,7 +5,7 @@
 #}
 
 {% block layers_component %}
-//var wms_layers = [];
+    //var wms_layers = [];
     var ol_layers_{{- map.id -}} = [];
 
 {% set layers = map.getLayers() %}
@@ -32,7 +32,7 @@
         source: source_{{ layer.type }}_{{ layer.id }},
         {% if layer.format == 'GeoJSON' %}
         declutter: false,
-        style: styleFn,
+        style: styleFunction,
         popuplayertitle: '{{ layer.title }}',
         interactive: true,
         title: '<img src="files/styles/legend/VektorLayer_1.png" /> Vektor-Layer',

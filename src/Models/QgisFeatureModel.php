@@ -14,7 +14,6 @@ namespace Cmette\ContaoQgisBundle\Models;
 
 use Contao\Model;
 use Contao\Model\Collection;
-use Contao\StringUtil;
 
 /**
  * Reads and writes ol/Features.

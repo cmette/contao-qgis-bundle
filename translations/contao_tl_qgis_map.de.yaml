@@ -12,6 +12,5 @@ tl_qgis_map:
   layer_fields:
     layer:
       - Ebene
-      - Wählen Sie hier die gewünschte Ebene.
-    opacity:
-      - Transparenz
+    style:
+      - Style

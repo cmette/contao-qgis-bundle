@@ -14,9 +14,10 @@ trait QgisListenerHelperTrait
      */
     public function buildLabelWithCounter(array $row, string $label): array|string
     {
+
         $model = Model::getClassFromTable(self::STR_TABLE)::findById($row['id']);
 
-        return ($model && (int)($count = $model->countUsage() > 0)) ?
+        return ($model && (int)(($count = $model->countUsage()) > 0)) ?
             "<span class='used'>$label ($count)</span>" :
             "<span class='unused'>$label</span>";
     }
@@ -27,12 +28,13 @@ trait QgisListenerHelperTrait
      */
     public function handleDeleteButton(DataContainerOperation $operation): void
     {
-        $class = Model::getClassFromTable(self::STR_TABLE);
-        $author = $class::findById($operation->getRecord()['id']);
+        $class  = Model::getClassFromTable(self::STR_TABLE);
+        $record = $operation->getRecord();
+        $model  = $class::findById($record['id']);
 
+        $usage = $model->countUsage();
         // Show the icon only but no link if the user cannot edit
-        #if (!$this->authorizationChecker->isGranted('contao_user.example.can_edit', $operation->getRecord()['id'])) {
-        if (!is_null($author) && 0 !== $author->countUsage()) {
+        if ($usage > 0) {
             $operation['label'] = $GLOBALS['TL_LANG'][self::STR_TABLE]['deletion_disabled'];
             $operation['title'] = $GLOBALS['TL_LANG'][self::STR_TABLE]['deletion_disabled'];
             $operation['icon'] = 'delete--disabled.svg';

@@ -5,7 +5,7 @@
 
 {% block features_component %}
     //-- features -----------------------------------------------
-    {%  set features = layer.getAllFeatures()|raw %}
+    {%  set features = layer.getAllFeaturesAsJson()|raw %}
     var json_{{ layer.type }}_{{ layer.id }} = {{ features|raw }};
     var features_{{ layer.type }}_{{ layer.id }} = format_{{ layer.type }}_{{ layer.id }}.readFeatures(json_{{ layer.type }}_{{ layer.id }}, {dataProjection: '{{ layer.data_projection|raw }}',featureProjection: '{{ layer.feature_projection|raw }}'});
     //-- end features -----------------------------------------------

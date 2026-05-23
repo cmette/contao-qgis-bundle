@@ -5,19 +5,19 @@
 {% use '@Contao/component/_layers.html.twig' %}
 {% use '@Contao/component/_styles.html.twig' %}
 
-{%- block map_component -%}
+{% block map_component %}
     //-- Map target: olmap-{{ map.id }} const: map_{{ map.id }} -----------------------------------------------
 
     //var size = 0;
     //var placement = 'point';
 
-    {# konstruiert Style-Objekte und lädt nötige Code-Teile #}
+    {# konstruiert alle Style-Objekte der Map und fügt nötige Code-Teile hinzu #}
     {{ block('styles_component') }}
 
     {# konstruiert Layers #}
     {{ block('layers_component') }}
 
-    const map_{{- map.id -}} = new ol.Map({
+    const map_{{ map.id }} = new ol.Map({
         target: 'olmap-{{- map.id -}}',
         layers: ol_layers_{{- map.id -}},
         renderer: 'canvas',
@@ -35,6 +35,5 @@
 
     //full zooms only
     //map_{{- map.id -}}.getView().setProperties({constrainResolution: true});
-
     //-- end Map -------------------------------------------------------------------------
-{%- endblock -%}
+{% endblock %}

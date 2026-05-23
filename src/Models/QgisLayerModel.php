@@ -105,7 +105,7 @@ class QgisLayerModel extends Model
         return self::FEATURE_PROJECTIONS;
     }
 
-    public function getAllFeatures(string|null $name = null):string
+    public function getAllFeaturesAsJson(string|null $name = null):string
     {
         /**
          * type MultiPolygon:
@@ -124,11 +124,15 @@ class QgisLayerModel extends Model
             if ($feature['enable'] === '1') {
                 if($objFeature = QgisFeatureModel::findById($feature['feature'])) {
                     $properties = html_entity_decode($objFeature->properties);
-                    $_name = empty($name) ? $objFeature->name : $name;
+                    $_name      = empty($name) ? $objFeature->name : $name;
+                    # get feature.style
+                    $objStyle = $objFeature->getRelated('style');
+                    $_styleId   = ($objStyle) ? $objStyle->id : 'null';
 
                     $strFeatures .= "{
             \"type\": \"Feature\",
             \"name\": \"$_name\",
+            \"styleId\": \"$_styleId\",
             \"properties\": {$properties},
             \"geometry\": {
                 \"type\": \"{$objFeature->geometry_type}\",
@@ -139,7 +143,7 @@ class QgisLayerModel extends Model
                     // Feature not found ToDo: ?
                 }
             } else {
-                // Feature ist deaktiviert auf dieser Ebene ToDo: ?
+                // Feature ist 'unpublished' auf dieser Ebene ToDo: ?
             }
         }
 
@@ -150,17 +154,52 @@ class QgisLayerModel extends Model
     "features": [$strFeatures]
 }
 EOJ;
-dump($literalJSONObject);
+
         return $literalJSONObject;
     }
 
-    public function getFeatures(): array
+    /**
+     * @return array
+     */
+    public function getAllFeaturesAsCollection(): Collection
     {
-        $arrFeatures = (StringUtil::deserialize($this->features, true));
+        $arrFeatures = [];
+        $features = (StringUtil::deserialize($this->features, true));
 
-        return $arrFeatures;
+        if(count($features) > 0)
+            foreach ($features as $feature) {
+                if($objFeature = QgisFeatureModel::findById($feature['feature'])) {
+                    $arrFeatures[] = $objFeature;
+                };
+            }
+
+        return new Collection($arrFeatures, 'tl_qgis_feature');
     }
 
+    /**
+     * muss ein Array aus den Namen aller zuvor durch das Style-System definierten
+     * Javascript-Funktion zurückgeben.
+     *
+     * @return string
+     */
+    public function getAllStylesAsArray(): string
+    {
+        return '[styleFn]';
+        return $objLayerStyle = $this->getRelated('style');
+
+        if($objLayerStyle = $this->getRelated('style')) {
+            $functionName = $objLayerStyle->function_name;
+        } else {
+            $functionName   = 'styleFn';
+        }
+
+
+        return $functionName;
+    }
+
+    /**
+     * @return int
+     */
     public function countUsage(): int
     {
         $id = $this->id;
