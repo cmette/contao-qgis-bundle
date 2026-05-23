@@ -120,16 +120,21 @@ class QgisLayerModel extends Model
         $arrFeatures = (StringUtil::deserialize($this->features, true));
         $strFeatures = '';
 
-        foreach ($arrFeatures as $feature) {
-            if ($feature['enable'] === '1') {
-                if($objFeature = QgisFeatureModel::findById($feature['feature'])) {
-                    $properties = html_entity_decode($objFeature->properties);
-                    $_name      = empty($name) ? $objFeature->name : $name;
-                    # get feature.style
-                    $objStyle = $objFeature->getRelated('style');
-                    $_styleId   = ($objStyle) ? $objStyle->id : 'null';
+        foreach ($arrFeatures as $feature)
+        {
+            if ($feature['enable'] === '1')
+            {
+                if($objFeature = QgisFeatureModel::findById($feature['feature']))
+                {
+                    if($objFeature->published)
+                    {
+                        $properties = html_entity_decode($objFeature->properties);
+                        $_name = empty($name) ? $objFeature->name : $name;
 
-                    $strFeatures .= "{
+                        $objStyle = $objFeature->getRelated('style');
+                        $_styleId = ($objStyle) ? $objStyle->id : 0;
+
+                        $strFeatures .= "{
             \"type\": \"Feature\",
             \"name\": \"$_name\",
             \"styleId\": \"$_styleId\",
@@ -139,11 +144,14 @@ class QgisLayerModel extends Model
                 \"coordinates\": {$objFeature->geometry_coordinates}
             }
     },";
+                    } else {
+                        // Feature Datensatz ist unpublished
+                    }
                 } else {
                     // Feature not found ToDo: ?
                 }
             } else {
-                // Feature ist 'unpublished' auf dieser Ebene ToDo: ?
+                // Feature ist 'disabled' auf dieser Ebene ToDo: ?
             }
         }
 
@@ -182,7 +190,7 @@ EOJ;
      *
      * @return string
      */
-    public function getAllStylesAsArray(): string
+    public function getAllStylesAsArrayDelete(): string
     {
         return '[styleFn]';
         return $objLayerStyle = $this->getRelated('style');

@@ -1,5 +1,6 @@
 {% extends '@Contao/content_element/_base.html.twig' %}
 {% use '@Contao/component/_map.html.twig' %}
+{% use '@Contao/component/_olext.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -95,6 +96,7 @@
             </div>
             <script type="text/javascript">
                 {{- block('map_component') -}}
+                {{- block('olext_component') -}}
             </script>
         {% else %}
             <div>{{- 'tl_sources_entity.source_not_found'|trans([], 'contao_tl_sources_entity') -}}</div>

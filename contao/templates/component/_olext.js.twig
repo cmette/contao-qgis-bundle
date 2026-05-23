@@ -1,0 +1,39 @@
+{% trans_default_domain "tl_qgis_map" %}
+{#
+    maganged das Laden von ol-ext Komponenten
+#}
+
+{% block olext_component %}
+    //-- begin ol-ext ---------------------------------------------
+{% if(map.useCompass) %}
+var compass, compassBottom;
+
+function setCompass() {
+    if (compass) map.removeControl(compass);
+    if (compassBottom) map.removeControl(compassBottom);
+
+    //if ($("#top").prop("checked")) {
+    if (true) {
+        compass = new ol.control.Compass ({
+            className: "top",
+            src: $("#image").val(),
+            src: 'compact',
+            // rotateWithView: $("#rotate").prop("checked"),
+            style: new ol.style.Stroke ({ color: $("#color").val(), width: ($("#line").prop("checked") ? 1 : 0) })
+        });
+        map_{{ map.id }}.addControl(compass);
+    }
+    else compass = false;
+    compassBottom = new ol.control.Compass ({
+        className: "bottom",
+        //src: $("#image").val(),
+        src: 'compact',
+        rotateWithView: $("#rotate").prop("checked"),
+        style: new ol.style.Stroke ({ color: $("#color").val(), width: ($("#line").prop("checked") ? 1 : 0) })
+    });
+    map_{{ map.id }}.addControl(compassBottom);
+}
+setCompass();
+{% endif %}
+    //-- end ol-ext -----------------------------------------------
+{% endblock %}

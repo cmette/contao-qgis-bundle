@@ -1,5 +1,6 @@
 <?php
 
+use Cmette\ContaoQgisBundle\Utils\DcaUtils;
 use Contao\DataContainer;
 use Contao\DC_Table;
 use Contao\System;
@@ -53,16 +54,18 @@ $GLOBALS['TL_DCA'][$strTable] = [
 
 	// Palettes
 	'palettes' =>  [
-		'__selector__'  =>  [],
+		'__selector__'  =>  ['addOpenLayers','addOpenLayersExt'],
 		'default'       =>
             '{type_legend},title;' .
+            '{mapconfig_legend},addOpenLayers;addOpenLayersExt;' .
             '{layers_legend},layers;' .
             '',
 	],
 
 	// Subpalettes
 	'subpalettes' =>  [
-        //'addDigitalCopy'    => 'link_digitalcopy,extent_digitalcopy',
+        'addOpenLayers'     => 'olDistVersion,loadOpenLayersJs,laodOpenLayersCss',
+        'addOpenLayersExt'  => 'loadOpenLayersExtJs,laodOpenLayersExtCss;useCompass;',
     ],
 
 	// Fields
@@ -72,9 +75,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
          **********************************************************************/
         'id'        => ['sql' => "int(10) unsigned NOT NULL auto_increment"],
         'tstamp'    => ['sql' => "int(10) unsigned NOT NULL default 0",],
-        'published' => ['toggle' => true,'inputType' => 'checkbox','sql' => ['type' => 'boolean', 'default' => false],],
-        # requires special bundle oneup/contao-backend-sortable-list-views
-        #'sorting'=> ['sql' => "int(10) unsigned NOT NULL default 0",],
+        'published' => DcaUtils::buildPublishedField(),
         /**********************************************************************
          * type_legend
          **********************************************************************/
@@ -91,6 +92,88 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'fixed'     => true,
                 'default'   => '',
             ]
+        ],
+        /**********************************************************************
+         * globalconfig_legend
+         **********************************************************************/
+        // switch add open layers
+        'addOpenLayers'     => DcaUtils::buildAddField(true),
+        // select between versions
+        'olDistVersion'   => [
+            'inputType' => 'select',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'options'   => ['10.8.0','10.9.0'],
+            #'reference' => &$GLOBALS['TL_LANG'][$strTable]['lineCap_options'],
+            'eval'          => [
+                'mandatory' => false,
+                'unique'    => false,
+                'tl_class'  =>'w16'
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 6,
+                'fixed'     => true,
+                'default'   => '10.8.0',
+            ]
+        ],
+        // load open layers js
+        'loadOpenLayersJs' => [
+            'inputType'     => 'checkbox',
+            'eval'          => [
+                'tl_class'  => 'w16'
+            ],
+            'sql'   => [
+                'type'      => 'boolean',
+                'default'   => true
+            ],
+        ],
+        // load open layers css
+        'laodOpenLayersCss' => [
+            'inputType'     => 'checkbox',
+            'eval'          => [
+                'tl_class'  => 'w16'
+            ],
+            'sql'   => [
+                'type'      => 'boolean',
+                'default'   => true
+            ],
+        ],
+        // load ol-ext library
+        'addOpenLayersExt'  => DcaUtils::buildAddField(true),
+        // load open layers extensions js
+        'loadOpenLayersExtJs' => [
+            'inputType'     => 'checkbox',
+            'eval'          => [
+                'tl_class'  => 'w50'
+            ],
+            'sql'   => [
+                'type'      => 'boolean',
+                'default'   => true
+            ],
+        ],
+        // load open layers extensions css
+        'loadOpenLayersExtCss' => [
+            'inputType'     => 'checkbox',
+            'eval'          => [
+                'tl_class'  => 'w50'
+            ],
+            'sql'   => [
+                'type'      => 'boolean',
+                'default'   => true
+            ],
+        ],
+        // load open layers extensions css
+        'useCompass' => [
+            'inputType'     => 'checkbox',
+            'eval'          => [
+                'tl_class'  => 'w50'
+            ],
+            'sql'   => [
+                'type'      => 'boolean',
+                'default'   => false
+            ],
         ],
         /**********************************************************************
          * layers_legend

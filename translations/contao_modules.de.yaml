@@ -4,11 +4,14 @@
 MOD:
   qgis: QGis-Bridge
   qgis_maps:
-    - Karten (Maps)
-    - Register der verfügbaren Karten
+    - Karten (ol.Maps)
+    - Register der definierten Karten
   qgis_layers:
-    - Ebenen (Layers)
-    - Register der verfügbaren Ebenen
+    - Ebenen (ol.Layers)
+    - Register der definierten Ebenen
   qgis_features:
-    - Features
-    - Register der verfügbaren Features
+    - Eigenschaften (ol.Features)
+    - Register der definierten Eigenschaften
+  qgis_styles:
+    - Stile (ol.Styles)
+    - Register der definierten Stile

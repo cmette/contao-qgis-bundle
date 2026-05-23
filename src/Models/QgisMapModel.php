@@ -71,10 +71,11 @@ class QgisMapModel extends Model
         if($layers = $this->getLayers()) {
             /* @var QgisLayerModel $layer*/
             foreach ($layers as $layer) {
-                // get the layer style
+                // 1. get the layer style
                 if($layer->style > 0 && ($style = QgisStyleModel::findById($layer->style))) $arrStyles[$style->id] = $style;
-                // aggregate all feature styles
+                // 2. get all layer features
                 if($layerFeatures = $layer->getAllFeaturesAsCollection())
+                    // aggregate all feature styles
                     foreach ($layerFeatures as $layerFeature) {
                         // get the feature style
                         if($style = QgisStyleModel::findById($layerFeature->style)) {
@@ -83,6 +84,8 @@ class QgisMapModel extends Model
                     };
             }
         };
+
+        ksort($arrStyles);
 
         $styleCollection = new Collection($arrStyles, 'tl_qgis_style');
 

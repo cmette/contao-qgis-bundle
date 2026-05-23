@@ -4,9 +4,18 @@
 #}
 
 {% block features_component %}
-    //-- features -----------------------------------------------
+    //-- begin features ---------------------------------------------
     {%  set features = layer.getAllFeaturesAsJson()|raw %}
     var json_{{ layer.type }}_{{ layer.id }} = {{ features|raw }};
-    var features_{{ layer.type }}_{{ layer.id }} = format_{{ layer.type }}_{{ layer.id }}.readFeatures(json_{{ layer.type }}_{{ layer.id }}, {dataProjection: '{{ layer.data_projection|raw }}',featureProjection: '{{ layer.feature_projection|raw }}'});
+    {#  iteriere über jedes einzelne feature. Nur dieses Vorgehen ermöglicht das nachträgliche Modifizieren des features mit set() #}
+    json_{{ layer.type }}_{{ layer.id }}.features.forEach(gj => {
+        {# lies das feature aus gj ein #}
+        const feature = format_{{ layer.type }}_{{ layer.id }}.readFeature(gj, {dataProjection: '{{ layer.data_projection|raw }}',featureProjection: '{{ layer.feature_projection|raw }}'});
+        {# füge fremdes property hinzu #}
+        feature.set('styleId', gj.styleId);
+        feature.set('name', gj.name);
+        {# füge feature zur source hinzu #}
+        source_{{ layer.type }}_{{ layer.id }}.addFeature(feature);
+    });
     //-- end features -----------------------------------------------
 {% endblock %}

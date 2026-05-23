@@ -18,15 +18,11 @@ declare(strict_types=1);
 
 namespace Cmette\ContaoQgisBundle\EventListener\DataContainer;
 
-use Contao\Controller;
+use Cmette\ContaoQgisBundle\Models\QgisStyleModel;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\DataContainer\DataContainerOperation;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
-use Contao\Image;
-use Contao\Model;
-use Contao\StringUtil;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class QgisFeatureListener
 {
@@ -61,7 +57,9 @@ class QgisFeatureListener
         $title  = $row['name'];
         $type   = $row['geometry_type'];
 
-        return $this->buildLabelWithCounter($row, "{$title} [{$type}}");
+        $style  = QgisStyleModel::getStyleBox($row['style']);
+
+        return $this->buildLabelWithCounter($row, "{$title} [{$type}]", $style);
     }
 
     /**

@@ -54,89 +54,65 @@ const createTS = function(feature, resolution, labelText, labelFont,labelFill, p
     return textStyle;
 };
 
-//-- StyleCache -----
+/**
+ * Der styleCache aggregiert alle auf der Karte verwendeten
+ * Styles für einen schnelleren Zugriff.
+ */
 const styleCache = {
-    default:    new ol.style.Style({
-        stroke: new ol.style.Stroke({ color: '#3399CC', width: 1 }),
-        fill:   new ol.style.Fill({ color: 'rgba(51,153,204,0.2)' }),
-        image:  new ol.style.Circle({ radius: 5, fill: new ol.style.Fill({ color: '#3399CC' }) })
-    }),
-
     {% set usedstyles = map.getAllStyles() %}
     {%- for id,style in usedstyles -%}
 //-- {{ style.name|raw }} --
-    style_{{ style.id }}: new ol.style.Style({
+    //style_{{ style.id }}: new ol.style.Style({
+    style_{{ style.id }}: (feature) => new ol.style.Style({
         stroke: new ol.style.Stroke({
             color:    '{{ style.getRgba('stroke')|raw }}',
             lineDash: {{ style.lineDash|raw }},
             lineCap:  '{{ style.lineCap|raw }}',
-            lineJoin: '{{ style.lineJoin|raw }}',   // ToDo: sicher umwandeln zu []
+            lineJoin: '{{ style.lineJoin|raw }}',
             //width: mm2px(1.26), ToDo: funktioniert nicht wg. Refernzfehler zur Laufzeit
             width: {{ style.width }},
         }),
         fill:   new ol.style.Fill({ color: '{{ style.getRgba('fill')|raw }}' }),
-        image:  new ol.style.Circle({ radius: 6, fill: new ol.style.Fill({ color: '#ff0' }) })
+        image:  new ol.style.Circle({ radius: 6, fill: new ol.style.Fill({ color: '#ff0' }) }),
+        text:   new ol.style.Text({
+            font: '12px Calibri,sans-serif',// string, CSS font string, z.B. '12px Calibri,sans-serif'
+            text: feature.get('name'),      // string, zu zeichnender Text
+            textAlign: 'center',            // 'left' | 'right' | 'center' | 'start' | 'end',
+            textBaseline: 'top',            // 'top' | 'middle' | 'bottom' | 'alphabetic' | 'hanging' | 'ideographic',
+            offsetX: 0,                     // number, Pixel-Verschiebung in X
+            offsetY: 0,                     // number, Pixel-Verschiebung in Y
+            rotation: 0,                    // number, Rotation in Radiant
+            //scale: 5,                       // number, Skalierung (number) — alternativ use scale/size in newer OL?
+            //fill: null,                     // ol.style.Fill({}) oder null
+            //stroke: null,                   // ol.style.Stroke({}) oder null
+            //backgroundFill: null,           // ol.style.Fill({}) Hintergrundfüllung für Text
+            //backgroundStroke: null,         // ol.style.Stroke({}) Hintergrund-Stroke für Text
+            //padding: [],                    // array [top, right, bottom, left] in px
+            placement: 'point',               // 'point' | 'line',// 'line' für entlang Linien (nur bei ol/style/Text)
+            //maxAngle: 0,                    // number, max Winkel (rad) für placement 'line'
+            //overflow: false,                // boolean, Text auch außerhalb Geometry rendern (default false)
+            //rotateWithView: true,           // boolean, ob Text mit View rotiert (true/false)
+        }),
     }),
     {% endfor -%}
-
-    highlight:  new ol.style.Style({
-        stroke: new ol.style.Stroke({ color: '#ff0', width: 1 }),
-        fill:   new ol.style.Fill({ color: 'rgba(255,255,0,0.2)' }),
-        image:  new ol.style.Circle({ radius: 6, fill: new ol.style.Fill({ color: '#ff0' }) })
-    }),
 };
 
-
-//-- styleFunction --
+/**
+ *
+ * @param feature
+ * @param resolution
+ * @returns {*|null}
+ */
 const styleFunction = (feature, resolution) => {
     // Zugriff auf Feature-Attribute
-    const feature_id = feature.get('id');
     const style_id = feature.get('styleId');
 
     // Auflösung an Zoomstufen anpassen
-    if (resolution > 1000) {
+    if (resolution > 100) {
         return null; // bei sehr geringer Zoomstufe nichts zeichnen
     }
 
-console.log(style_id);
     // Rückgabe: Style-Instanz, Array von Styles oder null
-    if (style_id > 0) return styleCache[`style_${style_id}`];
-
-    return styleCache['default'];
+    return styleCache[`style_${style_id}`](feature);
 };
-
-const styleFunction1 = function(feature, resolution) {
-    var context = {
-        feature: feature,
-        variables: {}
-    };
-
-    var labelText = "";
-    var value = feature.get("");
-    var labelFont = "13.0px \'Open Sans\', sans-serif";
-    var labelFill = "#323232";
-    var bufferColor = "";
-    var bufferWidth = 0;
-    var textAlign = "left";
-    var offsetX = 0;
-    var offsetY = 0;
-    var placement = 'point';
-    if (feature.get("label") !== null) {
-        labelText = String(feature.get("label"));
-    }
-    var style = [
-        new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: 'rgba(255,127,0,1.0)',
-                lineDash: null,
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                width: mm2px(1.26)
-            }),
-            text: createTS(feature, resolution, labelText, labelFont, labelFill, placement, bufferColor, bufferWidth)
-        })
-    ];
-
-    return style;
-}
 {% endblock %}

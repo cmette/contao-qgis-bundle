@@ -55,8 +55,19 @@ class QgisMapController extends AbstractContentElementController
                 <link rel="stylesheet" href="files/libs/olext/dist/4.0.38/ol-ext.css">
                 <script src="files/libs/autolinker/dist/4.1.5/Autolinker.js"></script>
             */
-            $GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/openlayers/dist/10.8.0/ol.js';
-            $GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/olext/dist/4.0.38/ol-ext.js';
+            if($map->addOpenLayers) {
+                if ($map->loadOpenLayersJs)     $GLOBALS['TL_JAVASCRIPT'][] = "files/libs/openlayers/dist/{$map->olDistVersion}/ol.js";
+                if ($map->loadOpenLayersCss)    $GLOBALS['TL_CSS'][] = "files/libs/openlayers/dist/{$map->olDistVersion}/ol.css";
+            }
+            if($map->addOpenLayers) {
+                if ($map->loadOpenLayersExtJs)  $GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/olext/dist/4.0.38/ol-ext.js';
+                if ($map->loadOpenLayersExtCss) $GLOBALS['TL_CSS'][] = "files/libs/olext/dist/4.0.38/ol-ext.css";
+
+                if ($map->useCompass) $GLOBALS['TL_CSS'][] = "bundles/contaoqgis/css/ol-ext-custom/compass.css|static";
+                // <link rel="stylesheet" href="files/content-arnsdorf/hoyk/ol-ext_popup.css">
+                // <link rel="stylesheet" href="files/content-arnsdorf/hoyk/ol-ext_layerswitcher.css">
+            }
+
             $GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/autolinker/dist/4.1.5/Autolinker.js';
 
             $figure = null;

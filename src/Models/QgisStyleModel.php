@@ -15,9 +15,18 @@ namespace Cmette\ContaoQgisBundle\Models;
 use Contao\Model;
 use Contao\Model\Collection;
 use Contao\StringUtil;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
- * Reads and writes ol/Features.
+ * ol.Style hat folgende Constructor-Optionen
+ *
+ *      geometry: undefined | ol.geom.Geometry | string | function(feature): ol.geom.Geometry,
+ *      fill: undefined | ol.style.Fill,
+ *      image: undefined | ol.style.Image,       // z.B. ol.style.Icon, ol.style.Circle
+ *      stroke: undefined | ol.style.Stroke,
+ *      text: undefined | ol.style.Text,
+ *      zIndex: undefined | number,
+ *      renderer: undefined | function(coordinates, state) // custom renderer
  *
  * @property int $id
  * @property int $tstamp
@@ -54,6 +63,22 @@ class QgisStyleModel extends Model
         [$r,$g,$b] = sscanf("#$color", "#%02x%02x%02x");
 
         return "rgba($r,$g,$b,$alpha)";
+    }
+
+    /**
+     * gibt ein span-Tag zurück, dass das Style-Objekt farblich darstellt
+     * ToDo: hier fehlt noch einiges!
+     *
+     * @param int $id
+     * @return string
+     */
+    public static function getStyleBox(int $id): string
+    {
+        $s = QgisStyleModel::findById($id);
+
+        return is_null($s) ?
+            '' :
+            "<span style='margin-left:1rem;background-color: {$s->getRgba('fill')};border: {$s->width}px solid {$s->getRgba('stroke')};border-radius:6px;padding:2px 1rem;'>Stil ID:{$id} {$s->name}</span>";
     }
 
 

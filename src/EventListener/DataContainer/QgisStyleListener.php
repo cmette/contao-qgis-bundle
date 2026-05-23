@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Cmette\ContaoQgisBundle\EventListener\DataContainer;
 
+use Cmette\ContaoQgisBundle\Models\QgisStyleModel;
 use Contao\Controller;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\DataContainer\DataContainerOperation;
@@ -60,7 +61,9 @@ class QgisStyleListener
     {
         $name = $row['name'];
 
-        return $this->buildLabelWithCounter($row, "{$name}");
+        $style  = QgisStyleModel::getStyleBox($row['id']);
+
+        return $this->buildLabelWithCounter($row, "{$name}", $style);
     }
 
     /**

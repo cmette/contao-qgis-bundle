@@ -11,15 +11,13 @@
 {% set layers = map.getLayers() %}
 {% for layer in layers %}
 //-- Layer.{{ layer.type }}.{{ layer.format }} -----------------------------------------------
-
     var source_{{ layer.type }}_{{ layer.id }} = new ol.source.{{ layer.source }}({attributions: '{{ layer.attribution|raw }}',});
     {% if layer.type == 'Vector' %}
-        var format_{{ layer.type }}_{{ layer.id }} = new ol.format.{{ layer.format }}();
+var format_{{ layer.type }}_{{ layer.id }} = new ol.format.{{ layer.format }}();
 
-        {% if layer.format == 'GeoJSON' %}
-            {{ block('features_component') }}
-            source_{{ layer.type }}_{{ layer.id }}.addFeatures(features_{{ layer.type }}_{{ layer.id }});
-        {% endif %}
+    {% if layer.format == 'GeoJSON' %}
+    {{ block('features_component') }}
+    {% endif %}
 
     {% elseif layer.type == 'Tile' %}
     source_{{ layer.type }}_{{ layer.id }}.setUrl('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
@@ -30,11 +28,11 @@
         type: 'base',
         opacity: {{ layer.opacity }},
         source: source_{{ layer.type }}_{{ layer.id }},
+        interactive: true,
         {% if layer.format == 'GeoJSON' %}
         declutter: false,
         style: styleFunction,
         popuplayertitle: '{{ layer.title }}',
-        interactive: true,
         title: '<img src="files/styles/legend/VektorLayer_1.png" /> Vektor-Layer',
         {% else %}
         {% endif %}

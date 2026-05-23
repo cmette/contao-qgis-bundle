@@ -32,7 +32,7 @@ class DcaUtils
         ];
     }
 
-    public static function buildAddField(): array
+    public static function buildAddField(bool $default = false): array
     {
         return [
             'inputType' => 'checkbox',
@@ -44,7 +44,7 @@ class DcaUtils
             ],
             'sql' => [
                 'type' => 'boolean',
-                'default' => false,
+                'default' => $default,
             ],
         ];
     }

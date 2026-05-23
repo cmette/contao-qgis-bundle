@@ -161,8 +161,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             'eval'      => [
                 // wenn addSeries true, dann muss eine Reihe angegeben werden!
                 'mandatory' => false,
-                'includeBlankOption'=> true,
-                #'blankOptionLabel'  => 'kein/unbekannt',
+                'includeBlankOption'=> false,
                 'tl_class' => 'w25',
                 'multiple' => false,
                 'chosen' => true
