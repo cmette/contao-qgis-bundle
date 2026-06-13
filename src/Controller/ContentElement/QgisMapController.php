@@ -18,6 +18,7 @@ use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController
 use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\CoreBundle\Image\Studio\Studio;
 use Contao\CoreBundle\Twig\FragmentTemplate;
+use Contao\StringUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -81,11 +82,13 @@ class QgisMapController extends AbstractContentElementController
         $template->set('settings', $settings);
         $template->set('map', $map);
         $template->set('image', $figure);
+        $arrListHeadline = StringUtil::deserialize($model->listHeadline, true);
+        $template->set('listHeadline', count($arrListHeadline) > 0 ? "<{$arrListHeadline['unit']}>{$arrListHeadline['value']}</{$arrListHeadline['unit']}>" :"");
 
         // handle Backend Request
-        if ($this->isBackendScope($request)) {
-            return $template->getResponse();
-        }
+        //if ($this->isBackendScope($request)) return $template->getResponse();
+
+        $template->set('scope', $this->isBackendScope($request));
 
         return $map ? $template->getResponse() : new Response();
     }

@@ -17,7 +17,7 @@
     {# konstruiert Layers #}
     {{ block('layers_component') }}
 
-    const map_{{ map.id }} = new ol.Map({
+    map_{{ map.id }} = new ol.Map({
         target: 'olmap-{{- map.id -}}',
         layers: ol_layers_{{- map.id -}},
         renderer: 'canvas',
@@ -34,11 +34,10 @@
         })
     });
 
-
     //initial view - epsg:3857 coordinates if not "Match project CRS"
-    //map_{{- map.id -}}.getView().fit([1542151.208901, 6696831.973394, 1543390.308651, 6698068.387861], map_{{- map.id -}}.getSize());
+    //map_{#  {- map.id -} #}.getView().fit([1542151.208901, 6696831.973394, 1543390.308651, 6698068.387861], map_{{- map.id -}}.getSize());
 
     //full zooms only
-    //map_{{- map.id -}}.getView().setProperties({constrainResolution: true});
+    //map_{# {- map.id -} #}.getView().setProperties({constrainResolution: true});
     //-- end Map -------------------------------------------------------------------------
 {% endblock %}

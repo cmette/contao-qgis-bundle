@@ -21,44 +21,11 @@ function mm2px(m) {
     return Math.ceil(m / unitsPerPx); // px für m Einheiten
 }
 
-const createTS = function(feature, resolution, labelText, labelFont,labelFill, placement, bufferColor,bufferWidth)
-{
-    if (feature.hide || !labelText) {
-        return;
-    }
-
-    if (bufferWidth == 0) {
-        var bufferStyle = null;
-    } else {
-        var bufferStyle = new ol.style.Stroke({
-            color: bufferColor,
-            width: bufferWidth
-        })
-    }
-
-    var textStyle = new ol.style.Text({
-        font: labelFont,
-        text: labelText,
-        textBaseline: "middle",
-        textAlign: "left",
-        offsetX: 8,
-        offsetY: 3,
-        placement: placement,
-        maxAngle: 0,
-        fill: new ol.style.Fill({
-            color: labelFill
-        }),
-        stroke: bufferStyle
-    });
-
-    return textStyle;
-};
-
 /**
  * Der styleCache aggregiert alle auf der Karte verwendeten
  * Styles für einen schnelleren Zugriff.
  */
-const styleCache = {
+map_{{- map.id -}}_styleCache = {
     {% set usedstyles = map.getAllStyles() %}
     {%- for id,style in usedstyles -%}
 //-- {{ style.name|raw }} --
@@ -103,7 +70,7 @@ const styleCache = {
  * @param resolution
  * @returns {*|null}
  */
-const styleFunction = (feature, resolution) => {
+map_{{- map.id -}}_styleFunction = (feature, resolution) => {
     // Zugriff auf Feature-Attribute
     const style_id = feature.get('styleId');
 
@@ -113,6 +80,6 @@ const styleFunction = (feature, resolution) => {
     }
 
     // Rückgabe: Style-Instanz, Array von Styles oder null
-    return styleCache[`style_${style_id}`](feature);
+    return map_{{- map.id -}}_styleCache[`style_${style_id}`](feature);
 };
 {% endblock %}

@@ -31,7 +31,7 @@ var format_{{ layer.type }}_{{ layer.id }} = new ol.format.{{ layer.format }}();
         interactive: true,
         {% if layer.format == 'GeoJSON' %}
         declutter: false,
-        style: styleFunction,
+        style: map_{{- map.id -}}_styleFunction,
         popuplayertitle: '{{ layer.title }}',
         title: 'Vektor-Layer',
         {% else %}

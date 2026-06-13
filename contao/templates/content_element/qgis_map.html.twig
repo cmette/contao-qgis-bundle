@@ -42,20 +42,14 @@
                 width:100%;
                 margin-bottom:1rem;
             }
-            .map {
-                aspect-ratio: 1;
-                width: 75%;
-                border:3px solid #e0e0e0;
-                border-radius:0.5rem;
-            }
-            #hs-list {
+            [id^="map-feature-list-"] {
                 width: 25%;
                 border: 3px solid #e0e0e0;
                 border-radius:0.5rem;
                 overflow: scroll;
                 padding: 1rem;
             }
-            #hs-list > div {
+            [id^="map-feature-list-"] > div {
                 font-size: 0.8rem;
             }
             .ol-control.ol-layerswitcher {
@@ -85,10 +79,23 @@
                 display: none !important;
             }
             {% if map %}
+            .map {
+                position: relative;
+                aspect-ratio: 1;
+                width: 75%;
+                border:3px solid #e0e0e0;
+                border-radius:0.5rem;
+            }
             #map_{{ map.id }}_coords {
                 position: absolute;
                 top: 1rem;
                 left: 1rem;
+                z-index: 1;
+            }
+            #map_{{ map.id }}_scope {
+                position: absolute;
+                top: 1rem;
+                right: 6rem;
                 z-index: 1;
             }
             {% endif %}
@@ -98,16 +105,19 @@
             <div class="map-wrapper">
                 <div{{- map_attributes -}}>
                     <div id="map_{{ map.id }}_coords"></div>
+                    <div id="map_{{ map.id }}_scope">[{{ scope ? 'backend':'frontend' }}]</div>
+
                     {# {- block('popup_component') -} #}
                     <div id="popup" class="ol-popup">
                         <!-- a href="#" id="popup-closer" class="ol-popup-closer"></a -->
                         <div id="popup-content"></div>
                     </div>
                 </div>
-                <div id="hs-list">
-                    <h4>Hofstellen</h4>
-                    <!-- div class="external layerSwitcher">Hofstellen</div -->
+                {% if data.addFeatureList %}
+                <div id="map-feature-list-{{ map.id }}">
+                    {{ listHeadline|raw }}
                 </div>
+                {% endif %}
             </div>
             <script type="text/javascript">
                 {{ block('map_component') }}

@@ -298,6 +298,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
         'zoom' => [
             'inputType'     => 'text',
             'eval'          => [
+                'wizard'    => true,
                 'mandatory' => true,
                 'rgxp'      => 'digit',
                 'unique'    => false,

@@ -1,14 +1,22 @@
 {% trans_default_domain "tl_qgis_map" %}
 {#
     lädt alle handler einer map
+    unterscheidet dabei zwischen Handlern für das Back- und Fronend
+    der Aufrufer muss für das Backend scope = true setzen
 #}
 
 {% block handler_component %}
-    //-- begin handler ---------------------------------------------
-    {# set handler = layer.getAllFeaturesAsJson()|raw #}
+//-- begin handler scope: {{ scope ? 'backend':'frontend' }} ---------------------------------------------
+{# set handler = layer.getAllFeaturesAsJson()|raw #}
 
-    const map_{{ map.id }}_coordsEl = document.getElementById('map_{{ map.id }}_coords');
+{% if(scope) %}
+    {#- code für backend #}
+    //document.addEventListener('DOMContentLoaded', function () {});
+    map_{{ map.id }}_coords = document.getElementById('map_{{ map.id }}_coords');
 
+    /**
+     *
+     */
     map_{{ map.id }}.on('pointermove', function(evt) {
         if (!evt.dragging) {
             const mapCoord = evt.coordinate; // [x, y] in Kartenprojektion (z.B. EPSG:3857)
@@ -18,9 +26,62 @@
             const fmtMap = mapCoord.map(c => c.toFixed(2)).join(', ');
             const fmtLonLat = lonLat.map(c => c.toFixed(5)).join(', ');
 
-            map_{{ map.id }}_coordsEl.innerText = `Map: [${fmtMap}]  LonLat: [${fmtLonLat}]`;
+            map_{{ map.id }}_coords.innerText = `Map: [${fmtMap}]  LonLat: [${fmtLonLat}]`;
         }
     });
+    /**
+     * / Handler: Koordinate in Kartenprojektion (map view proj) und als Lon/Lat (EPSG:4326)
+     */
+    map_{{ map.id }}.on('singleclick', function(evt) {
+        const ctrl_center = document.getElementById('ctrl_center');
+
+        // evt.coordinate ist in der View-Projektion (meist EPSG:3857)
+        const coord = evt.coordinate;
+        console.log('map-proj coordinate:', coord);
+        if (ctrl_center) ctrl_center.value = `[${coord.join(', ')}]`;
+
+        // in Lon/Lat (EPSG:4326) verwandeln
+        const lonLat = ol.proj.toLonLat(coord); // Default: source view projection -> EPSG:4326
+        //console.log('lon/lat:', lonLat);
+
+        // falls du Pixel brauchst:
+        const pixel = evt.pixel;
+        //console.log('pixel:', pixel);
+        // Beispiel: Anzeige Popup mit Koordinaten
+        // popupElement.innerText = `Lon: ${lonLat[0].toFixed(6)}, Lat: ${lonLat[1].toFixed(6)}`;
+    });
+    /**
+     *  diese Funktion kann vorest nur am Backend im Edit-Mode verwendet werden
+     *  sie ist nicht für die Anzeige mehrerer Karten auf einer Seite optimiert
+     */
+    function updateParameters(_map) {
+        const ctrl_center = document.getElementById('ctrl_center');
+        const ctrl_extent = document.getElementById('ctrl_extent');
+        const ctrl_zoom   = document.getElementById('ctrl_zoom');
+
+        const view = _map.getView();
+        //const center = ol.proj.toLonLat(view.getCenter());
+        const center = view.getCenter();
+        // extent = [minX, minY, maxX, maxY] in der View-Projektion (standardmäßig EPSG:3857)
+        const extent = _map.getView().calculateExtent(_map.getSize());
+        const zoom   = view.getZoom();
+
+        if(ctrl_center) ctrl_center.value = `[${center[0].toFixed(5)}, ${center[1].toFixed(5)}]`;
+        if(ctrl_extent) ctrl_extent.value = `[${extent[0].toFixed(5)}, ${extent[1].toFixed(5)},${extent[2].toFixed(5)}, ${extent[3].toFixed(5)}]`;
+        if(ctrl_zoom)   ctrl_zoom.value   = `${zoom.toFixed(5)}`;
+
+        //lonEl.textContent = center[0].toFixed(5);
+        //latEl.textContent = center[1].toFixed(5);
+        //zoomEl.textContent = zoom.toFixed(2);
+    }
+    map_{{ map.id }}.on('pointerdrag', () => updateParameters(map_{{ map.id }}));
+    map_{{ map.id }}.getView().on('change:resolution', () => updateParameters(map_{{ map.id }}));
+    map_{{ map.id }}.on('moveend', () => updateParameters(map_{{ map.id }}));
+
+{% else %}
+    {#- code für frontend scope #}
+
+{% endif %}
 
     //-- end handler -----------------------------------------------
 {% endblock %}

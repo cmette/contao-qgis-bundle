@@ -5,6 +5,7 @@ tl_qgis_map:
   title:
     - Titel der Karte
     - Geben Sie hier einen Titel für die Karten-Definition ein.
+
   layers_legend: Ebenen (Layers)
   layers:
     - Ebenen
@@ -14,3 +15,12 @@ tl_qgis_map:
       - Ebene
     style:
       - Style
+
+  parameters_legend: Karten-Parameter
+  map:
+    - Kartenansicht
+    - Verwernden Sie die Karte, um die Parameter automatisch zu setzen.
+  extent:
+    - Umfang
+    - Das Umfangsquadrat über alle Kartenelemente.
+    - Zoom to Extent

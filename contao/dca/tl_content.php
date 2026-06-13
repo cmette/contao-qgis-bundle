@@ -1,14 +1,18 @@
 <?php
 
+use Cmette\ContaoQgisBundle\Utils\DcaUtils;
+
 $GLOBALS['TL_DCA']['tl_content']['palettes']['qgis_map'] =
     '{type_legend},type,headline,title;' .
-    '{map_legend},qgis_map;' .
+    '{map_legend},qgis_map,addFeatureList;' .
     '{text_legend},text;' .
     '{template_legend:hide},customTpl;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},cssID;' .
     '{invisible_legend:hide},invisible,start,stop;'
 ;
+$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addFeatureList';
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addFeatureList'] = 'listHeadline,isActiveList';
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
 [
@@ -29,4 +33,32 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
         'notnull'   => true,
         'default'   => 0,
     ]
+];
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['addFeatureList'] = DcaUtils::buildAddField(false);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['listHeadline'] =
+[
+    'search'    => true,
+    'inputType' => 'inputUnit',
+    'options'   => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    'eval'      => ['maxlength'=>200, 'basicEntities'=>true, 'tl_class'=>'w50 clr'],
+    'sql'       => [
+        'type'      => 'string',
+        'length'    => 255,
+        'fixed'     => true,
+        'default'   => 'a:2:{s:5:\"value\";s:0:\"\";s:4:\"unit\";s:2:\"h2\";}',
+    ]
+];
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['isActiveList'] =
+[
+    'inputType'     => 'checkbox',
+    'eval'          => [
+        'tl_class'  => 'w16'
+    ],
+    'sql'   => [
+        'type'      => 'boolean',
+        'default'   => true
+    ],
 ];

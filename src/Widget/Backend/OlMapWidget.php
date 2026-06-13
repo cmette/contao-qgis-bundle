@@ -3,7 +3,6 @@
 namespace Cmette\ContaoQgisBundle\Widget\Backend;
 
 use Cmette\ContaoQgisBundle\Models\QgisMapModel;
-use Contao\System;
 use Contao\Widget;
 
 class OlMapWidget extends Widget
@@ -20,6 +19,8 @@ class OlMapWidget extends Widget
         $GLOBALS['TL_CSS'][] = "files/libs/openlayers/dist/10.8.0/ol.css";
 
         $this->record = QgisMapModel::findById($this->objDca->id) ?: new QgisMapModel();
+        // scope ist am Backend immer true
+        $this->scope  = true;
     }
 
     public function generate(): string

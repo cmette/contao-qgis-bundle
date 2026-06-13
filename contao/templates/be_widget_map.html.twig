@@ -1,4 +1,5 @@
 {% use '@Contao/component/_map.js.twig' %}
+{% use '@Contao/component/_handler.js.twig' %}
 
 {% set label = generateLabel.invoke() %}
 
@@ -8,42 +9,27 @@
 
 {#  { dump(this.record) } #}
 
-{% set widget = this %}
-{% set map = this.record %}
-{% set olMapId = "ctrl_#{widget.id}_olmap" %}
+{% set widget   = this %}
+{% set map      = this.record %}
+{% if scope is not defined %}
+    {% set scope    = this.scope %}
+{% endif %}
 {% set olMapId = "olmap-#{widget.record.id}" %}
 
 {#   { dump(widget.center) } #}
 
 <div id="ctrl_{{ this.id }}" name="{{ this.name }}" class="olmap_widget{{ this.class }}">
-    <div id="{{ olMapId }}"></div>
+    <div id="{{ olMapId }}">
+        <div id="map_{{ map.id }}_coords"></div>
+        <div id="map_{{ map.id }}_scope">[{{ this.scope ? 'backend':'frontend' }}]</div>
+    </div>
 </div>
 <p class='tl_help tl_tip' data-contao--tooltips-target='tooltip'>{{ this.label }}</p>
 
 <script type="text/javascript">
-{% block map_component %}
-    {{ parent() }}
-    // Handler: Koordinate in Kartenprojektion (map view proj) und als Lon/Lat (EPSG:4326)
-    //ctrl_{{ this.id }}.on('singleclick', function(evt) {
-    map_{{ map.id }}.on('singleclick', function(evt) {
-    const ctrl_center = document.getElementById('ctrl_center');
-
-    // evt.coordinate ist in der View-Projektion (meist EPSG:3857)
-    const coord = evt.coordinate;
-    console.log('map-proj coordinate:', coord);
-    if (ctrl_center) ctrl_center.value = `[${coord.join(', ')}]`;
-
-    // in Lon/Lat (EPSG:4326) verwandeln
-    const lonLat = ol.proj.toLonLat(coord); // Default: source view projection -> EPSG:4326
-    //console.log('lon/lat:', lonLat);
-
-    // falls du Pixel brauchst:
-    const pixel = evt.pixel;
-    //console.log('pixel:', pixel);
-    // Beispiel: Anzeige Popup mit Koordinaten
-    // popupElement.innerText = `Lon: ${lonLat[0].toFixed(6)}, Lat: ${lonLat[1].toFixed(6)}`;
-    });
-{% endblock %}
+    {{ block('map_component') }}
+    {{ block('handler_component') }}
+    {#  { block('olext_component') } #}
 </script>
 
 {# { generateWithError.invoke(true)|raw } #}
