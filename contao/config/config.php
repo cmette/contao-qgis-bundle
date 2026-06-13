@@ -5,6 +5,7 @@ use Cmette\ContaoQgisBundle\Models\QgisStyleModel;
 use Cmette\ContaoQgisBundle\Models\QgisLayerModel;
 use Cmette\ContaoQgisBundle\Models\QgisMapModel;
 
+use Cmette\ContaoQgisBundle\Widget\Backend\OlMapWidget;
 use Contao\ArrayUtil;
 use Contao\System;
 
@@ -56,7 +57,7 @@ $GLOBALS['TL_PERMISSIONS'][] = 'ped_conf';
 $GLOBALS['TL_PERMISSIONS'][] = 'ped_tree';
 
 // register backend widgets
-//$GLOBALS['BE_FFL']['widget']   = SupervisorImageWidget::class;
+$GLOBALS['BE_FFL']['olmap']   = OlMapWidget::class;
 
 // register model classes
 $GLOBALS['TL_MODELS']['tl_qgis_map']     = QgisMapModel::class;

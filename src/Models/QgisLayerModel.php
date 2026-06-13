@@ -185,27 +185,6 @@ EOJ;
     }
 
     /**
-     * muss ein Array aus den Namen aller zuvor durch das Style-System definierten
-     * Javascript-Funktion zurückgeben.
-     *
-     * @return string
-     */
-    public function getAllStylesAsArrayDelete(): string
-    {
-        return '[styleFn]';
-        return $objLayerStyle = $this->getRelated('style');
-
-        if($objLayerStyle = $this->getRelated('style')) {
-            $functionName = $objLayerStyle->function_name;
-        } else {
-            $functionName   = 'styleFn';
-        }
-
-
-        return $functionName;
-    }
-
-    /**
      * @return int
      */
     public function countUsage(): int

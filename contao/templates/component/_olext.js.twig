@@ -6,34 +6,26 @@
 {% block olext_component %}
     //-- begin ol-ext ---------------------------------------------
 {% if(map.useCompass) %}
-var compass, compassBottom;
+var map_{{- map.id -}}_compass;
 
-function setCompass() {
-    if (compass) map.removeControl(compass);
-    if (compassBottom) map.removeControl(compassBottom);
+function setCompass(c) {
+    if (c) map_{{ map.id }}.removeControl(c);
 
     //if ($("#top").prop("checked")) {
     if (true) {
-        compass = new ol.control.Compass ({
-            className: "top",
-            src: $("#image").val(),
+        c = new ol.control.Compass ({
+            className: "top",           // string — CSS-Klasse für den Control-Container.
+            visible: true,              // boolean — Sichtbarkeit (default: true).
+            //visible:                  // boolean — Sichtbarkeit (default: true).
+            //src: $("#image").val(),     // string — Bild-URL oder 'default' | 'compact' (wird verwendet falls image nicht gesetzt).
             src: 'compact',
-            // rotateWithView: $("#rotate").prop("checked"),
-            style: new ol.style.Stroke ({ color: $("#color").val(), width: ($("#line").prop("checked") ? 1 : 0) })
+            // rotateWithView:          // boolean — die Kompassgrafik mit der View rotieren (default: true).
+            style: new ol.style.Stroke ({ color: '#3399cc', width: 0 }) // ol.style.Stroke — Style zum Zeichnen der Linien (wird für Text-/Linienzeichnung benutzt); standardmäßig werden keine Linien gezeichnet.
         });
-        map_{{ map.id }}.addControl(compass);
+        map_{{ map.id }}.addControl(c);
     }
-    else compass = false;
-    compassBottom = new ol.control.Compass ({
-        className: "bottom",
-        //src: $("#image").val(),
-        src: 'compact',
-        rotateWithView: $("#rotate").prop("checked"),
-        style: new ol.style.Stroke ({ color: $("#color").val(), width: ($("#line").prop("checked") ? 1 : 0) })
-    });
-    map_{{ map.id }}.addControl(compassBottom);
 }
-setCompass();
+setCompass(map_{{- map.id -}}_compass);
 {% endif %}
     //-- end ol-ext -----------------------------------------------
 {% endblock %}

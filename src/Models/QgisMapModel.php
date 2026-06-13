@@ -37,6 +37,16 @@ class QgisMapModel extends Model
      */
     protected static $strTable = 'tl_qgis_map';
 
+    public function getCenter()
+    {
+        return ($this->tstamp && !empty($this->center)) ? (string)$this->center : '[0.0, 0.0]'; // ToDo: configurable center
+    }
+
+    public function getZoom()
+    {
+        return ($this->tstamp && !empty($this->zoom)) ? $this->zoom : '13.0'; // ToDo: configurable zoom
+    }
+
     public function getLayers():Collection|null
     {
         $arrLayers  = StringUtil::deserialize($this->layers, true);

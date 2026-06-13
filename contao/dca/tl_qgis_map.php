@@ -1,5 +1,6 @@
 <?php
 
+use Cmette\ContaoQgisBundle\Models\QgisLayerModel;
 use Cmette\ContaoQgisBundle\Utils\DcaUtils;
 use Contao\DataContainer;
 use Contao\DC_Table;
@@ -57,15 +58,16 @@ $GLOBALS['TL_DCA'][$strTable] = [
 		'__selector__'  =>  ['addOpenLayers','addOpenLayersExt'],
 		'default'       =>
             '{type_legend},title;' .
-            '{mapconfig_legend},addOpenLayers;addOpenLayersExt;' .
+            '{mapconfig_legend},addOpenLayers,addOpenLayersExt;' .
             '{layers_legend},layers;' .
+            '{parameters_legend},map,center,extent,zoom,mapCrs;' .
             '',
 	],
 
 	// Subpalettes
 	'subpalettes' =>  [
         'addOpenLayers'     => 'olDistVersion,loadOpenLayersJs,laodOpenLayersCss',
-        'addOpenLayersExt'  => 'loadOpenLayersExtJs,laodOpenLayersExtCss;useCompass;',
+        'addOpenLayersExt'  => 'olExtDistVersion,loadOpenLayersExtJs,loadOpenLayersExtCss,useCompass;',
     ],
 
 	// Fields
@@ -98,7 +100,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
          **********************************************************************/
         // switch add open layers
         'addOpenLayers'     => DcaUtils::buildAddField(true),
-        // select between versions
+        // select open layers versions
         'olDistVersion'   => [
             'inputType' => 'select',
             'search'    => true,
@@ -142,11 +144,31 @@ $GLOBALS['TL_DCA'][$strTable] = [
         ],
         // load ol-ext library
         'addOpenLayersExt'  => DcaUtils::buildAddField(true),
+        // select between versions
+        'olExtDistVersion'   => [
+            'inputType' => 'select',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'options'   => ['4.0.38'],
+            #'reference' => &$GLOBALS['TL_LANG'][$strTable]['lineCap_options'],
+            'eval'          => [
+                'mandatory' => false,
+                'unique'    => false,
+                'tl_class'  =>'w16'
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 6,
+                'fixed'     => true,
+                'default'   => '4.0.38',
+            ]
+        ],
         // load open layers extensions js
         'loadOpenLayersExtJs' => [
             'inputType'     => 'checkbox',
             'eval'          => [
-                'tl_class'  => 'w50'
+                'tl_class'  => 'w16'
             ],
             'sql'   => [
                 'type'      => 'boolean',
@@ -157,7 +179,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
         'loadOpenLayersExtCss' => [
             'inputType'     => 'checkbox',
             'eval'          => [
-                'tl_class'  => 'w50'
+                'tl_class'  => 'w16'
             ],
             'sql'   => [
                 'type'      => 'boolean',
@@ -168,7 +190,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
         'useCompass' => [
             'inputType'     => 'checkbox',
             'eval'          => [
-                'tl_class'  => 'w50'
+                'tl_class'  => 'w16 clr'
             ],
             'sql'   => [
                 'type'      => 'boolean',
@@ -231,9 +253,86 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'length' => MySQLPlatform::LENGTH_LIMIT_BLOB,
                 'notnull' => false
             ],
-            /**********************************************************************
-             * **_legend
-             **********************************************************************/
+        ],
+        /**********************************************************************
+         * parameters_legend
+         **********************************************************************/
+        # Kartenansicht zur Übernahme von Parametern
+        'map'   => [
+            'inputType'     => 'olmap',
+            'eval'          => [
+                'tl_class'  =>'w50'
+            ],
+        ],
+        # Mittelpunkt der Karte, hier string: [x,y]
+        'center' => [
+            'inputType'     => 'text',
+            'eval'          => [
+                'mandatory' => true,
+                'unique'    => false,
+                'tl_class' => 'w50',
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 255,
+                'fixed'     => true,
+                'default'   => '',
+            ]
+        ],
+        # Mittelpunkt der Karte, hier string: [[x,y],[x,y]]
+        'extent' => [
+            'inputType'     => 'text',
+            'eval'          => [
+                'mandatory' => true,
+                'unique'    => false,
+                'tl_class' => 'w50',
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 255,
+                'fixed'     => true,
+                'default'   => '[]',
+            ]
+        ],
+        # Mittelpunkt der Karte, hier [x,y]
+        'zoom' => [
+            'inputType'     => 'text',
+            'eval'          => [
+                'mandatory' => true,
+                'rgxp'      => 'digit',
+                'unique'    => false,
+                'tl_class'  => 'w25',
+            ],
+            'sql' => [
+                'type'      => 'decimal',
+                'notnull'   => true,
+                'precision' => 17,
+                'scale'     => 15,
+                'unsigned'  => false,
+                'default'   => '12.000000000000000',
+                'comment'   => ''
+            ],
+        ],
+        # Koordinatensystem, in das center_ponit transferiert werden soll
+        'mapCrs' => [
+            'inputType' => 'select',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'options'   => QgisLayerModel::getFeatureProjections(),
+            'eval'      => [
+                // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                'mandatory' => true,
+                'tl_class' => 'w50',
+                'multiple' => false,
+                'chosen' => true,
+            ],
+            'sql' => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => 'EPSG:3857',
+            ]
         ],
 	],
 ];

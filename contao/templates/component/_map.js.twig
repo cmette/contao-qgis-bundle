@@ -2,8 +2,8 @@
     rendert das map-Element der Karte
 #}
 {% trans_default_domain "tl_qgis_map" %}
-{% use '@Contao/component/_layers.html.twig' %}
-{% use '@Contao/component/_styles.html.twig' %}
+{% use '@Contao/component/_layers.js.twig' %}
+{% use '@Contao/component/_styles.js.twig' %}
 
 {% block map_component %}
     //-- Map target: olmap-{{ map.id }} const: map_{{ map.id }} -----------------------------------------------
@@ -21,17 +21,22 @@
         target: 'olmap-{{- map.id -}}',
         layers: ol_layers_{{- map.id -}},
         renderer: 'canvas',
+        //controls: ol.control.default({ attribution: false, zoom: false, rotate: false }).extent([
+        //    new ol.control.ScaleLine()
+        //]),
 
         view: new ol.View({
-            zoom: 16,
+            zoom: {{ map.getZoom()|raw }},
             //minZoom: 13,
             //maxZoom: 19,
             //center: [51.42844665110317, 13.858214471317353],
+            center: {{ map.getCenter()|raw }},   // epsg:3857
         })
     });
 
+
     //initial view - epsg:3857 coordinates if not "Match project CRS"
-    map_{{- map.id -}}.getView().fit([1542151.208901, 6696831.973394, 1543390.308651, 6698068.387861], map_{{- map.id -}}.getSize());
+    //map_{{- map.id -}}.getView().fit([1542151.208901, 6696831.973394, 1543390.308651, 6698068.387861], map_{{- map.id -}}.getSize());
 
     //full zooms only
     //map_{{- map.id -}}.getView().setProperties({constrainResolution: true});

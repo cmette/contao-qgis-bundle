@@ -1,0 +1,49 @@
+{% use '@Contao/component/_map.js.twig' %}
+
+{% set label = generateLabel.invoke() %}
+
+{% if label|default %}
+    <h3>{{ label|raw }}{{ this.xlabel|default|raw }}</h3>
+{% endif %}
+
+{#  { dump(this.record) } #}
+
+{% set widget = this %}
+{% set map = this.record %}
+{% set olMapId = "ctrl_#{widget.id}_olmap" %}
+{% set olMapId = "olmap-#{widget.record.id}" %}
+
+{#   { dump(widget.center) } #}
+
+<div id="ctrl_{{ this.id }}" name="{{ this.name }}" class="olmap_widget{{ this.class }}">
+    <div id="{{ olMapId }}"></div>
+</div>
+<p class='tl_help tl_tip' data-contao--tooltips-target='tooltip'>{{ this.label }}</p>
+
+<script type="text/javascript">
+{% block map_component %}
+    {{ parent() }}
+    // Handler: Koordinate in Kartenprojektion (map view proj) und als Lon/Lat (EPSG:4326)
+    //ctrl_{{ this.id }}.on('singleclick', function(evt) {
+    map_{{ map.id }}.on('singleclick', function(evt) {
+    const ctrl_center = document.getElementById('ctrl_center');
+
+    // evt.coordinate ist in der View-Projektion (meist EPSG:3857)
+    const coord = evt.coordinate;
+    console.log('map-proj coordinate:', coord);
+    if (ctrl_center) ctrl_center.value = `[${coord.join(', ')}]`;
+
+    // in Lon/Lat (EPSG:4326) verwandeln
+    const lonLat = ol.proj.toLonLat(coord); // Default: source view projection -> EPSG:4326
+    //console.log('lon/lat:', lonLat);
+
+    // falls du Pixel brauchst:
+    const pixel = evt.pixel;
+    //console.log('pixel:', pixel);
+    // Beispiel: Anzeige Popup mit Koordinaten
+    // popupElement.innerText = `Lon: ${lonLat[0].toFixed(6)}, Lat: ${lonLat[1].toFixed(6)}`;
+    });
+{% endblock %}
+</script>
+
+{# { generateWithError.invoke(true)|raw } #}

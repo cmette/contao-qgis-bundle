@@ -150,7 +150,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
         # ein Style für dieses Feature - Feature Styles haben Vorrang vor Layer-Styles!
         'style' => [
             'search'    => true,
-            'filter'    => false,
+            'filter'    => true,
             'sorting'   => true,
             'inputType' => 'select',
             'foreignKey' => "tl_qgis_style.name",
@@ -180,7 +180,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
         'geometry_type' => [
             'label'     => &$GLOBALS['TL_LANG'][$strTable]['geometry_fields']['type'],
             'search'    => true,
-            'filter'    => false,
+            'filter'    => true,
             'sorting'   => true,
             'inputType' => 'select',
             'options'   => ['Point','MultiPoint','LineString','MultiLineString','Polygon','MultiPolygon','GeometryCollection'],

@@ -59,11 +59,11 @@ class QgisMapController extends AbstractContentElementController
                 if ($map->loadOpenLayersJs)     $GLOBALS['TL_JAVASCRIPT'][] = "files/libs/openlayers/dist/{$map->olDistVersion}/ol.js";
                 if ($map->loadOpenLayersCss)    $GLOBALS['TL_CSS'][] = "files/libs/openlayers/dist/{$map->olDistVersion}/ol.css";
             }
-            if($map->addOpenLayers) {
-                if ($map->loadOpenLayersExtJs)  $GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/olext/dist/4.0.38/ol-ext.js';
-                if ($map->loadOpenLayersExtCss) $GLOBALS['TL_CSS'][] = "files/libs/olext/dist/4.0.38/ol-ext.css";
+            if($map->addOpenLayersExt) {
+                if ($map->loadOpenLayersExtJs)  $GLOBALS['TL_JAVASCRIPT'][] = "files/libs/olext/dist/{$map->olExtDistVersion}/ol-ext.js";
+                if ($map->loadOpenLayersExtCss) $GLOBALS['TL_CSS'][] = "files/libs/olext/dist/{$map->olExtDistVersion}/ol-ext.css";
 
-                if ($map->useCompass) $GLOBALS['TL_CSS'][] = "bundles/contaoqgis/css/ol-ext-custom/compass.css|static";
+                if ($map->useCompass) $GLOBALS['TL_CSS'][] = "files/libs/olext/custom/compass.css|static";
                 // <link rel="stylesheet" href="files/content-arnsdorf/hoyk/ol-ext_popup.css">
                 // <link rel="stylesheet" href="files/content-arnsdorf/hoyk/ol-ext_layerswitcher.css">
             }

@@ -1,0 +1,26 @@
+{% trans_default_domain "tl_qgis_map" %}
+{#
+    lädt alle handler einer map
+#}
+
+{% block handler_component %}
+    //-- begin handler ---------------------------------------------
+    {# set handler = layer.getAllFeaturesAsJson()|raw #}
+
+    const map_{{ map.id }}_coordsEl = document.getElementById('map_{{ map.id }}_coords');
+
+    map_{{ map.id }}.on('pointermove', function(evt) {
+        if (!evt.dragging) {
+            const mapCoord = evt.coordinate; // [x, y] in Kartenprojektion (z.B. EPSG:3857)
+            const lonLat = ol.proj.toLonLat(mapCoord); // [lon, lat] in Grad (EPSG:4326)
+
+            // Formatierung (z. B. 5 Dezimalstellen)
+            const fmtMap = mapCoord.map(c => c.toFixed(2)).join(', ');
+            const fmtLonLat = lonLat.map(c => c.toFixed(5)).join(', ');
+
+            map_{{ map.id }}_coordsEl.innerText = `Map: [${fmtMap}]  LonLat: [${fmtLonLat}]`;
+        }
+    });
+
+    //-- end handler -----------------------------------------------
+{% endblock %}
