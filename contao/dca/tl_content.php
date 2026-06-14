@@ -35,7 +35,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
     ]
 ];
 
-$GLOBALS['TL_DCA']['tl_content']['fields']['addFeatureList'] = DcaUtils::buildAddField(false);
+$GLOBALS['TL_DCA']['tl_content']['fields']['addFeatureList'] = DcaUtils::buildAddField();
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['listHeadline'] =
 [
@@ -51,14 +51,4 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['listHeadline'] =
     ]
 ];
 
-$GLOBALS['TL_DCA']['tl_content']['fields']['isActiveList'] =
-[
-    'inputType'     => 'checkbox',
-    'eval'          => [
-        'tl_class'  => 'w16'
-    ],
-    'sql'   => [
-        'type'      => 'boolean',
-        'default'   => true
-    ],
-];
+$GLOBALS['TL_DCA']['tl_content']['fields']['isActiveList'] = DcaUtils::buildAddField(true, false);

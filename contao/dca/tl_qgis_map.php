@@ -236,6 +236,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
                         'chosen' => true
                     ],
                 ],
+                'zoom' => DcaUtils::buildRowWizardZoomField($strTable, 'layer'),
             ],
             'eval' => [
                 'tl_class' => 'clr',
@@ -270,7 +271,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             'eval'          => [
                 'mandatory' => true,
                 'unique'    => false,
-                'tl_class' => 'w50',
+                'tl_class' => 'w25 clr',
             ],
             'sql'       => [
                 'type'      => 'string',

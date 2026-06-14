@@ -83,7 +83,7 @@ class QgisMapController extends AbstractContentElementController
         $template->set('map', $map);
         $template->set('image', $figure);
         $arrListHeadline = StringUtil::deserialize($model->listHeadline, true);
-        $template->set('listHeadline', count($arrListHeadline) > 0 ? "<{$arrListHeadline['unit']}>{$arrListHeadline['value']}</{$arrListHeadline['unit']}>" :"");
+        $template->set('listHeadline', !empty($arrListHeadline['value']) ? "<{$arrListHeadline['unit']}>{$arrListHeadline['value']}</{$arrListHeadline['unit']}>" : '');
 
         // handle Backend Request
         //if ($this->isBackendScope($request)) return $template->getResponse();

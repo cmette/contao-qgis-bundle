@@ -101,4 +101,70 @@ class QgisMapModel extends Model
 
         return $styleCollection;
     }
+
+    public function getExtent(): array
+    {
+        $arrLayers = StringUtil::deserialize($this->layers, true);
+
+        foreach ($arrLayers as $layer) {
+            /* @var QgisLayerModel $objLayer */
+            $objLayer = QgisLayerModel::findById($layer['layer']);  // ToDo: wenn Layer gelöscht?
+
+            switch ($layer['zoom']) {
+                case 'param':
+                    $zoom = ['mode' => $layer['zoom']];
+                    continue;
+                    break;
+                case 'layer':
+                    return [
+                        'mode'  => $layer['zoom'],
+                        'source' => $objLayer->type,
+                        'var'   => "layer_{$layer['layer']}"
+                    ];
+                    break;
+                case 'feature':
+dump('feature');
+                    /* @var QgisFeatureModel $collFeatures*/
+                    $collFeatures = $objLayer->getAllFeaturesAsCollection(true,['extent']);
+
+dump($collFeatures->count());
+
+                    #if(count($r) == 1) {
+                    if($collFeatures->count() == 1) {
+                        // nur das erste Auftreten von extent wird verarbeitet
+                        $objFeature = $collFeatures[0];
+dump($objFeature);
+                        $coordinates = $objFeature->geometry_coordinates;
+                    }
+                    #elseif (count($r) > 1) {
+                    elseif ($collFeatures->count() > 1) {
+                        //$collFeatures = QgisFeatureModel::findMultipleByIds($r);
+                        $coordinates = "[]";
+                        $objFeature  = null;
+dump($collFeatures);
+                    } else {
+                        # Layer entscheidet
+                        return [
+                            'mode'  => 'layer',
+                            'source' => $objLayer->type,
+                            'var'   => "layer_{$layer['layer']}"
+                        ];
+                    }
+
+                    return [
+                        'mode'  => $layer['zoom'],
+                        'source' => $objLayer->type,
+                        'var'   => "layer_{$layer['layer']}",
+                        'feature_mode'=> 'extent',
+                        'coordinates' => str_replace(' ', '', $coordinates),
+                        'feature' => $objFeature,
+                    ];
+                    break;
+                default:
+                    $zoom = ['mode' => 'param'];
+            }
+        };
+
+        return $zoom;
+    }
 }

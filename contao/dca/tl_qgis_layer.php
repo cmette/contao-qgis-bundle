@@ -329,8 +329,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             ]
         ],
 
-
-        # speichert ein feature
+        # speichert alle Features dieses Layers
         'features' => [
             'inputType' => 'rowWizard',
             'fields' => [
@@ -367,6 +366,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
                         'chosen' => true
                     ],
                 ],
+                'zoom' => DcaUtils::buildRowWizardZoomField($strTable, 'features'),
             ],  # fields
             'eval' => [
                 'tl_class' => 'clr',

@@ -9,18 +9,40 @@ tl_qgis_map:
   layers_legend: Ebenen (Layers)
   layers:
     - Ebenen
-    - Wählen Sie hier die Ebenen, die auf der Karte dargestellt werden sollen. Sie müssen die Ebenen zuvor unter dem gleichnamigen Menüpunkt definiert haben.
+    - Wählen Sie hier alle Ebenen, die auf der Karte dargestellt werden sollen.
+      Sie müssen die Ebenen zuvor unter dem gleichnamigen Menüpunkt definiert haben. 
+      <b>Achten</b> Sie bitte darauf, dass die Ebenen auch sichtbar=published gesetzt sind. 
+      Die Ebenen werden ihrer Reihenfolge nach aufsteigend übereinander gezeichnet. 
+      Daher sollte die erste Ebene immer die BaseMap OSM sein. Diese wird zuerst gezeichnet, liegt also ganz unten. 
+      Die Einstellung &raquo;Zoom&laquo; bezeichnet hier keinen Wert, sondern ein Verhalten. 
+      <ul><li><b>Zoom auf Parameter</b> bedeutet, dass die unten stehenden Parameter bei der Darstellung der Karte am Frontend 
+      verwendet werden.</li>
+      <li><b>Zoom auf Extent dieser Ebene</b> bedeutet, dass die unten stehenden Parameter bei der Darstellung der Karte am Frontend
+      <b>nicht</b> verwendet werden. Stattdessen wird unmittelbar beim Darstellen der Karte der Umfang (Extent) 
+      der markierten Ebene (Layer) berechnet und die Karte auf diesen Umfang hin vergrößert und ausgerichtet.</li>
+      <li><b>Zoom auf Extent eines Features</b> bedeutet, dass die unten stehenden Parameter bei der Darstellung der Karte am Frontend
+      <b>nicht</b> verwendet werden. Stattdessen wird ein Feature auf diesem Layer gesucht, dessen Eigenschaft auf Zoom .</li>
+      </ul>
   layer_fields:
     layer:
       - Ebene
     style:
       - Style
+    zoom:
+      - Zoom
+    zoom_options:
+      params: auf Parameter
+      layer: auf Extent dieser Ebene
+      feature: auf Extent eines Features
 
   parameters_legend: Karten-Parameter
   map:
     - Kartenansicht
-    - Verwernden Sie die Karte, um die Parameter automatisch zu setzen.
+    - Verwenden Sie den Mausziger auf der  Karte, um die Parameter automatisch zu setzen.
+  center:
+    - Mittelpunkt der Karte EPSG:3857
+    - Beim Verschieben der Karte wird hier der aktuelle Mittelpunkt angezeigt.
   extent:
-    - Umfang
+    - Umfang (Extent)
     - Das Umfangsquadrat über alle Kartenelemente.
     - Zoom to Extent

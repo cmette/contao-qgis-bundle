@@ -169,19 +169,27 @@ EOJ;
     /**
      * @return array
      */
-    public function getAllFeaturesAsCollection(): Collection
+    public function getAllFeaturesAsCollection(bool $enable = true, array $arrZoomFilter = ['parent','extent','combine']): Collection
     {
         $arrFeatures = [];
-        $features = (StringUtil::deserialize($this->features, true));
+        // filtere  nach enabled und zoom
+        $arrRowFeatures = array_values(
+            array_filter(
+                array_map(function ($feature) use ($enable, $arrZoomFilter) {
+                    if($feature['enable'] === ($enable?'1':'0') && in_array($feature['zoom'], $arrZoomFilter)) { return $feature; }
+                },
+                    StringUtil::deserialize($this->features, true)
+                )
+            )
+        );
 
-        if(count($features) > 0)
-            foreach ($features as $feature) {
-                if($objFeature = QgisFeatureModel::findById($feature['feature'])) {
-                    $arrFeatures[] = $objFeature;
-                };
-            }
+        if(count($arrRowFeatures) > 0)
+            foreach ($arrRowFeatures as $feature)
+                if($objFeature = QgisFeatureModel::findById($feature['feature'])) $arrFeatures[] = $objFeature;
 
-        return new Collection($arrFeatures, 'tl_qgis_feature');
+        $collection = new Collection($arrFeatures, 'tl_qgis_feature');
+
+        return $collection;
     }
 
     /**

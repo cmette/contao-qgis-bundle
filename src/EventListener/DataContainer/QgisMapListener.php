@@ -93,7 +93,7 @@ class QgisMapListener
         ];
         $h3     = "<h3><label for='ctrl_$name'><span class='invisible'>Pflichtfeld </span>{$fieldConfig['label'][0]}<span class='mandatory'>*</span></label></h3>;";
         $label  = "<p class='tl_help tl_tip' data-contao--tooltips-target='tooltip'>{$fieldConfig['label'][1]}</p>";
-        $image  = Image::getHtml('/bundles/contaoqgis/img/brackets.svg', $fieldConfig['label'][2], " id='cmd_$name' style='cursor:pointer;' width='20px' height='20px' title=''");
+        $image  = Image::getHtml('/bundles/contaoqgis/img/brackets.svg', $fieldConfig['label'][2], " id='cmd_$name' style='cursor:pointer;background-color:#b0b0b0;' width='20px' height='20px' title=''");
         $code   =<<<Code
 <script type='application/javascript'>
 document.addEventListener('DOMContentLoaded', function () {
@@ -115,8 +115,6 @@ Code;
         $widget = new \Contao\TextField($config);
 
         $html = $widget->generate();
-
-        dump($image);
 /*
         function addButton(field) {
             field.parentNode.classList.add('wizard');

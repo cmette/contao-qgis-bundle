@@ -8,6 +8,19 @@
   }
 }
 
+$gqis-layers-color: #b7ebff;
+$gqis-styles-color: #ffdfbf;
+$gqis-zoom-color: #d4ffb7;
+
+// tips ändern
+.tl_tip {
+  color: #2f9f00;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  height: auto;
+  white-space: normal;
+}
+
 /***********************************************************************************/
 
 // Test zum formatieren ganzer Tabellenzeilen mit Elementen mit Status 'used'
@@ -31,8 +44,23 @@ tr.hover-row:has(span.used) {
  --------------------------------------------------------------------------*/
 form#tl_qgis_map {
 
-  //.dca-field-left { float: left; width: 50%; box-sizing: border-box; }
-  //.dca-field-right { float: right; width: 50%; box-sizing: border-box; }
+  // rowWizard layers = Ebenen
+  table#ctrl_layers {
+    tbody {
+      vertical-align: top;
+      tr {
+        td:has([id$="[zoom]"]) { width: 15%; }
+      }
+    }
+
+    *[id$="[layer]"],
+    *[id$="[style]"] ~ div.choices__list,
+    *[id$="[zoom]"] { border: none; }
+
+    *[id$="[layer]"] { background-color: $gqis-layers-color; }
+    *[id$="[style]"] ~ .choices__list { background-color: $gqis-styles-color; width: 100%; }
+    *[id$="[zoom]"] { background-color: $gqis-zoom-color; width: 100%; }
+  }
 
   .olmap_widget {
     background-color: var(--form-bg);
@@ -63,29 +91,39 @@ form#tl_qgis_layer {
     margin-top: 0.5rem;
   }
 
-  // rowWizard features
+  // rowWizard features = Eigenschaften / Vektordaten
   table#ctrl_features {
-    //border: 1px solid var(--form-border);
-    //border-radius: 1rem;
-
     tbody {
       vertical-align: top;
 
       tr {
+        td:has([id$="[zoom]"]) {
+          width: 15%;
+        }
       }
     }
 
-    *[id^="ctrl_feature"],
-    *[id^="ctrl_style"] {
+    *[id$="[feature]"] ~ div.choices__list,
+    *[id$="[style]"],
+    *[id$="[zoom]"] {
       border: none;
-      background-color: #F6F6F8;
     }
 
-    td:has(>[id*="[feature]"])  { width: 50%; select  { background-color: #ecf4ff; }}
-    td:has(>[id*="[style]"])    { width: 50%; input   { background-color: #ffecec; }}
+    *[id$="[feature]"] ~ .choices__list {
+      background-color: $gqis-layers-color;
+    }
+
+    *[id$="[style]"] {
+      background-color: $gqis-styles-color;
+      width: 100%;
+    }
+
+    *[id$="[zoom]"] {
+      background-color: $gqis-zoom-color;
+      width: 100%;
+    }
   }
 }
-
 
 /*--------------------------------------------------------------------------
   edit mode tl_qgis_feature

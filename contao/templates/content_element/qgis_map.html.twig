@@ -2,6 +2,7 @@
 {% use '@Contao/component/_map.html.twig' %}
 {% use '@Contao/component/_handler.js.twig' %}
 {% use '@Contao/component/_olext.js.twig' %}
+{% use '@Contao/component/_featurelist.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -114,9 +115,7 @@
                     </div>
                 </div>
                 {% if data.addFeatureList %}
-                <div id="map-feature-list-{{ map.id }}">
-                    {{ listHeadline|raw }}
-                </div>
+                    {{ block('featurelist_component') }}
                 {% endif %}
             </div>
             <script type="text/javascript">

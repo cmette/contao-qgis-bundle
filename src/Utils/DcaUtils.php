@@ -32,7 +32,7 @@ class DcaUtils
         ];
     }
 
-    public static function buildAddField(bool $default = false): array
+    public static function buildAddField(bool $default = false, bool $submitOnChange = true): array
     {
         return [
             'inputType' => 'checkbox',
@@ -40,11 +40,30 @@ class DcaUtils
             'filter'    => true,
             'sorting'   => true,
             'eval' => [
-                'submitOnChange' => true,
+                'submitOnChange' => $submitOnChange,
             ],
             'sql' => [
                 'type' => 'boolean',
                 'default' => $default,
+            ],
+        ];
+    }
+
+    public static function buildRowWizardZoomField(string $strTable, string $rowWizardField): array
+    {
+        $options = match($rowWizardField) {
+            'layer'     => ['params','layer','feature'],
+            'features'   => ['parent','extent','combine'],
+        };
+
+        return [
+            'label'     => &$GLOBALS['TL_LANG'][$strTable]["{$rowWizardField}_fields"]['zoom'],
+            'inputType' => 'select',
+            'options'   => $options,
+            'reference' => &$GLOBALS['TL_LANG'][$strTable]["{$rowWizardField}_fields"]['zoom_options'],
+            'eval'          => [
+                'mandatory' => false,
+                'tl_class'  => 'w25'
             ],
         ];
     }

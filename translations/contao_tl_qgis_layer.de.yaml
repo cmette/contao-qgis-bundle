@@ -31,7 +31,10 @@ tl_qgis_layer:
     - Eigenschaften
     - Geben Sie hier die Liste der Eigenschaften ein.
   features_fields:
-    type: Typ
-    properties: "Eigenschaften (JSON)"
-    geometry_type: Geometrie
-    geometry_coordinates: "Koordinaten (Array)"
+    feature: Eigenschaft (Feature)
+    style: Stil
+    zoom: Zoom
+    zoom_options:
+      parent: nach Karte
+      extent: auf dieses Feature (Extent)
+      combine: zusammenfassen (Combine)

@@ -1,0 +1,37 @@
+{% trans_default_domain "tl_qgis_map" %}
+{#
+    baut eine feature list für die Frontend Ansicht einer Karte
+#}
+
+{% block featurelist_component %}
+<div id="map-feature-list-{{ map.id }}">
+    {{ listHeadline|raw }}
+    <script type="application/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+
+        let panel   = document.querySelector('#map-feature-list-{{ map.id }}');
+        let hs      = [];
+
+        layer_5.getSource().forEachFeature(function (feature) {
+            let f = {
+                number: feature.get('id'),
+                name:   feature.get('name'),
+            }
+            hs.push(f);
+        });
+
+        hs.sort((a, b) => a.number - b.number);
+
+        hs.forEach(function (h)
+        {
+            const hsli = document.createElement('div');
+
+            hsli.classList.add(`hs-${h.number}`);
+            hsli.innerHTML = 'Nr. ' + h.number + ' ' + h.name;
+
+            if(panel) panel.appendChild(hsli)
+        });
+    });
+    </script>
+</div>
+{% endblock %}
