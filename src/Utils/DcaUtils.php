@@ -53,7 +53,7 @@ class DcaUtils
     {
         $options = match($rowWizardField) {
             'layer'     => ['params','layer','feature'],
-            'features'   => ['parent','extent','combine'],
+            'features'   => ['parent','combine'],
         };
 
         return [

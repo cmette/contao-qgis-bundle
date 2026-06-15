@@ -135,6 +135,7 @@ class QgisLayerModel extends Model
                         $_styleId = ($objStyle) ? $objStyle->id : 0;
 
                         $strFeatures .= "{
+            \"id\": {$objFeature->id},
             \"type\": \"Feature\",
             \"name\": \"$_name\",
             \"styleId\": \"$_styleId\",

@@ -35,6 +35,5 @@ tl_qgis_layer:
     style: Stil
     zoom: Zoom
     zoom_options:
-      parent: nach Karte
-      extent: auf dieses Feature (Extent)
-      combine: zusammenfassen (Combine)
+      parent: übergeordnet
+      combine: kombinieren

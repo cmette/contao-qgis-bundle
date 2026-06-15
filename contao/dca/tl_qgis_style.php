@@ -84,7 +84,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
 		'__selector__'  =>  [],
 		'default'       =>
             '{name_legend},name;' .
-            '{stroke_legend},stroke_color,stroke_alpha,width;lineCap,lineJoin,miterLimit;lineDash,lineDashOffset;' .
+            '{stroke_legend},stroke_color,stroke_alpha,width,lineCap,lineJoin,miterLimit,lineDash,lineDashOffset;' .
             '{fill_legend},fill_color,fill_alpha;' .
             '{image_legend},image_type;' .
             '',
@@ -251,7 +251,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'unique'    => false,
                 'tl_class'  =>'w33',
                 'rgxp'      => 'custom',
-                'customRgxp'=> '/^\[\d*\]$/',
+                'customRgxp'=> '/^\s*\[\s*(?:\d+\s*(?:,\s*\d+\s*)*)?\]\s*$/',
                 'errorMsg'  => &$GLOBALS['TL_LANG'][$strTable]['lineDash_rgxp_error'],
             ],
             'sql'       => [

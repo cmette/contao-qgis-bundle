@@ -104,7 +104,7 @@ form#tl_qgis_layer {
     }
 
     *[id$="[feature]"] ~ div.choices__list,
-    *[id$="[style]"],
+    *[id$="[style]"] ~ div.choices__list,
     *[id$="[zoom]"] {
       border: none;
     }
@@ -113,7 +113,7 @@ form#tl_qgis_layer {
       background-color: $gqis-layers-color;
     }
 
-    *[id$="[style]"] {
+    *[id$="[style]"] ~ .choices__list {
       background-color: $gqis-styles-color;
       width: 100%;
     }

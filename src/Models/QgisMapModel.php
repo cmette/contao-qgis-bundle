@@ -109,59 +109,28 @@ class QgisMapModel extends Model
         foreach ($arrLayers as $layer) {
             /* @var QgisLayerModel $objLayer */
             $objLayer = QgisLayerModel::findById($layer['layer']);  // ToDo: wenn Layer gelöscht?
-
+dump($layer['zoom']);
             switch ($layer['zoom']) {
-                case 'param':
-                    $zoom = ['mode' => $layer['zoom']];
-                    continue;
+                case 'params':
+                    $zoom = ['mode' => 'params'];
                     break;
                 case 'layer':
-                    return [
-                        'mode'  => $layer['zoom'],
-                        'source' => $objLayer->type,
-                        'var'   => "layer_{$layer['layer']}"
-                    ];
+                    $zoom = ['mode' => 'layer', 'source' => $objLayer->type,'var' => "layer_{$layer['layer']}", ];
                     break;
                 case 'feature':
 dump('feature');
                     /* @var QgisFeatureModel $collFeatures*/
-                    $collFeatures = $objLayer->getAllFeaturesAsCollection(true,['extent']);
-
-dump($collFeatures->count());
-
-                    #if(count($r) == 1) {
-                    if($collFeatures->count() == 1) {
-                        // nur das erste Auftreten von extent wird verarbeitet
-                        $objFeature = $collFeatures[0];
-dump($objFeature);
-                        $coordinates = $objFeature->geometry_coordinates;
-                    }
-                    #elseif (count($r) > 1) {
-                    elseif ($collFeatures->count() > 1) {
-                        //$collFeatures = QgisFeatureModel::findMultipleByIds($r);
-                        $coordinates = "[]";
-                        $objFeature  = null;
-dump($collFeatures);
+                    $collFeatures = $objLayer->getAllFeaturesAsCollection(true,['combine']);
+                    if($collFeatures->count() > 0) {
+                        $mode   = 'feature';
+                        $extent = json_encode(QgisFeatureModel::getExtentFromFeatures($collFeatures));
+                        $zoom = ['mode' => 'feature', 'extent' => $extent];
                     } else {
-                        # Layer entscheidet
-                        return [
-                            'mode'  => 'layer',
-                            'source' => $objLayer->type,
-                            'var'   => "layer_{$layer['layer']}"
-                        ];
+                        $zoom = ['mode' => 'layer', 'source' => $objLayer->type,'var' => "layer_{$layer['layer']}", ];
                     }
-
-                    return [
-                        'mode'  => $layer['zoom'],
-                        'source' => $objLayer->type,
-                        'var'   => "layer_{$layer['layer']}",
-                        'feature_mode'=> 'extent',
-                        'coordinates' => str_replace(' ', '', $coordinates),
-                        'feature' => $objFeature,
-                    ];
                     break;
                 default:
-                    $zoom = ['mode' => 'param'];
+                    $mode = 'param';
             }
         };
 

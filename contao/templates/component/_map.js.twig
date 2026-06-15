@@ -35,24 +35,17 @@
     });
 
     {% set extent = map.getExtent() %}
-
-    {%- if extent.mode == 'layer' -%}
+{% dump(extent.mode) %}
+    {%- if extent.mode == 'params' -%}
+    {%- elseif extent.mode == 'layer' -%}
         {%- if extent.source == 'Tile' -%}
         {%- elseif extent.source == 'Vector' -%}
     extent = {{ extent.var }}.getSource().getExtent();
     map_{{- map.id -}}.getView().fit(extent, map_{{ map.id }}.getSize());
         {% endif %}
     {%- elseif extent.mode == 'feature' -%}
-{% dump(extent) %}
-        {% if extent.feature_mode == 'extent' %}
-format = new ol.format.GeoJSON();
-geom = format.readGeometry({type: '{{ extent.feature.geometry_type }}', coordinates: {{ extent.feature.geometry_coordinates|raw }} });
-geom.transform('EPSG:4326', 'EPSG:3857');
-extent = geom.getExtent(); // [minX, minY, maxX, maxY]
-console.log(extent);
-
-map_{{- map.id -}}.getView().fit(extent, map_{{ map.id }}.getSize());
-        {% endif %}
+        extent = ol.proj.transformExtent({{ extent.extent|raw }},'EPSG:4326', 'EPSG:3857');
+        map_{{- map.id -}}.getView().fit(extent, map_{{ map.id }}.getSize());
     {% endif %}
 
     //-- end Map -------------------------------------------------------------------------

@@ -24,6 +24,7 @@ use Contao\CoreBundle\DataContainer\DataContainerOperation;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\Image;
+use Contao\Message;
 use Contao\Model;
 use Contao\StringUtil;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -71,5 +72,21 @@ class QgisLayerListener
     public function listDeleteButton(DataContainerOperation $operation): void
     {
         $this->handleDeleteButton($operation);
+    }
+
+
+    #[AsCallback(table: self::STR_TABLE, target: 'fields.features.save')]
+    public function fieldsFeaturesSave(mixed $value, DataContainer $dc): mixed
+    {
+        // hole alle featureIDs
+        $featureIds = array_filter(array_map(function ($feature) { return $feature['feature']; }, StringUtil::deserialize($value, true)));
+        // zähle Vorkommen aller Werte
+        $counts = array_count_values($featureIds);
+        // filtere mehr als 1 Vorkommen
+        $duplicates = array_keys(array_filter($counts, function($c) { return $c > 1; }));
+        //
+        if(count($duplicates) > 0) Message::addError("Ein oder mehrere Features werden mehrfach angezeigt. Bitte prüfen Sie die Liste der Features.");
+
+        return $value;
     }
 }

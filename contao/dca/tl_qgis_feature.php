@@ -71,6 +71,14 @@ $GLOBALS['TL_DCA'][$strTable] = [
             'showColumns' => false,
 			#'format' => '%s',
 		],
+        'global_operations' => [
+            'importJson' => [
+                'label' => &$GLOBALS['TL_LANG'][$strTable]['importJson'],
+                'href'  => 'key=importJson',
+                'class' => 'header_my_op',
+                'attributes' => 'onclick="Backend.getScrollOffset();"'
+            ],
+        ],
 		'operations' =>  [
             'edit',
             'activate',
@@ -86,6 +94,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             '{name_legend},name;' .
             '{properties_legend},properties;' .
             '{style_legend},style;' .
+            '{label_legend},useAsLabel;' .
             '{geometry_legend},geometry_type,geometry_coordinates;' .
             '',
 	],
@@ -171,6 +180,25 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'unsigned'  => true,
                 'notnull'   => true,
                 'default'   => 0,
+            ]
+        ],
+        /**********************************************************************
+         * label_legend
+         **********************************************************************/
+        'useAsLabel' => [
+            'inputType'     => 'radioTable',
+            'options'       => ['useTitle', 'useProperty', '2rwf', '3rw'],
+            'reference'     => &$GLOBALS['TL_LANG'][$strTable]['useAsLabel'],
+            'eval'          => [
+                'helpwizard'    => true,
+                'cols'          =>4,
+                'submitOnChange'=> false
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 255,
+                'fixed'     => true,
+                'default'   => 'useTitle',
             ]
         ],
         /**********************************************************************

@@ -68,8 +68,8 @@ class QgisMapController extends AbstractContentElementController
                 // <link rel="stylesheet" href="files/content-arnsdorf/hoyk/ol-ext_popup.css">
                 // <link rel="stylesheet" href="files/content-arnsdorf/hoyk/ol-ext_layerswitcher.css">
             }
-
-            $GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/autolinker/dist/4.1.5/Autolinker.js';
+            // ToDo: kann gelöscht werden, wird nicht mehr benötigt
+            #$GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/autolinker/dist/4.1.5/Autolinker.js';
 
             $figure = null;
             $template->set('layout', $map->floating);
