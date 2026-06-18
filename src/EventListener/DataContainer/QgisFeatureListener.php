@@ -23,6 +23,7 @@ use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\DataContainer\DataContainerOperation;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
+use Contao\Message;
 
 class QgisFeatureListener
 {
@@ -69,5 +70,25 @@ class QgisFeatureListener
     public function listDeleteButton(DataContainerOperation $operation): void
     {
         $this->handleDeleteButton($operation);
+    }
+
+
+    #[AsCallback(table: self::STR_TABLE, target: 'fields.geometry_coordinates.save')]
+    public function geometryCoordinatesSave(mixed $value, DataContainer $dc): mixed
+    {
+        $withoutSpaces = str_replace(' ', '', $value);
+        $countR = mb_substr_count($withoutSpaces, "[", 'UTF-8');
+        $countL = mb_substr_count($withoutSpaces, "]", 'UTF-8');
+
+        if ($countR > $countL) {
+            #Message::addError("Es fehlt eine ] Linksklammer");
+            throw new \Exception("Es fehlt eine ] Linksklammer");
+        } elseif ($countR < $countL) {
+            #Message::addError("Es fehlt eine [ Rechtslammer");
+            throw new \Exception("Es fehlt eine [ Rechtsklammer");
+        }
+
+
+        return $withoutSpaces;
     }
 }

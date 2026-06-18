@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cmette\ContaoQgisBundle\EventListener\DataContainer;
 
+use Cmette\ContaoQgisBundle\Models\QgisLayerModel;
 use Cmette\ContaoQgisBundle\Models\QgisMapModel;
 use Contao\Config;
 use Contao\ContentModel;
@@ -88,7 +89,7 @@ class ContentElementListener
 
         $maps = QgisMapModel::findAll();
 
-        if (null !== $maps) {
+        if (null !== $maps) {   // ToDo: map disabled?
             foreach ($maps as $map) {
                 $options[$map->id] = "{$map->title}";
             }
@@ -99,6 +100,41 @@ class ContentElementListener
         return $options;
     }
 
+    /**
+     * listet Layer, die auf der map vorhanden sind und deren features in die
+     * Liste übertragern werden sollen
+     *
+     * @param DataContainer $dc
+     * @return array
+     */
+    #[AsCallback(table: self::STR_TABLE, target: 'fields.featureSourceLayer.options')]
+    public function featureSourceLayerOptions(DataContainer $dc): array
+    {
+        $options = [];
+
+        $arrContent = $dc->getCurrentRecord();
+        $mapId      = $arrContent['qgis_map'];
+
+        if($objMap     = QgisMapModel::findById($mapId)) {
+            // map is available
+            if($layers = $objMap->getLayers()) {
+                foreach ($layers as $layer) {
+                    if ($layer->features) $options[$layer->id] = "{$layer->title} ({$layer->type})";
+                }
+            }
+        } else {
+            // ToDo: no map found
+        };
+
+        asort($options);
+
+        return $options;
+    }
+
+    /**
+     * @param array $row
+     * @return array
+     */
     private function generateGridLabel(array $row): array
     {
         $type = $this->generateContentTypeLabel($row);
@@ -128,6 +164,10 @@ class ContentElementListener
         return [$type, $preview, $row['invisible'] ?? null ? 'unpublished' : 'published'];
     }
 
+    /**
+     * @param array $row
+     * @return string
+     */
     private function generateContentTypeLabel(array $row): string
     {
         $transId = "CTE.$row[type].0";

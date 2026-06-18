@@ -177,7 +177,8 @@ EOJ;
         $arrRowFeatures = array_values(
             array_filter(
                 array_map(function ($feature) use ($enable, $arrZoomFilter) {
-                    if($feature['enable'] === ($enable?'1':'0') && in_array($feature['zoom'], $arrZoomFilter)) { return $feature; }
+                    if(array_key_exists('enable',$feature) && $feature['enable'] === ($enable?'1':'0') &&
+                        array_key_exists('zoom', $feature) && in_array($feature['zoom'], $arrZoomFilter)) { return $feature; }
                 },
                     StringUtil::deserialize($this->features, true)
                 )

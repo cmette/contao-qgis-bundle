@@ -4,34 +4,125 @@
 #}
 
 {% block featurelist_component %}
-<div id="map-feature-list-{{ map.id }}">
-    {{ listHeadline|raw }}
-    <script type="application/javascript">
+<script type="application/javascript">
     document.addEventListener('DOMContentLoaded', function () {
-
-        let panel   = document.querySelector('#map-feature-list-{{ map.id }}');
+        let panel   = document.querySelector('#map-{{ map.id }}-feature-list');
         let hs      = [];
 
-        layer_5.getSource().forEachFeature(function (feature) {
+        layer_{{ data.featureSourceLayer }}.getSource().forEachFeature(function (feature) {
             let f = {
-                number: feature.get('id'),
-                name:   feature.get('name'),
+                id: feature.getId(),
+                name: feature.get('name'),
             }
             hs.push(f);
         });
 
-        hs.sort((a, b) => a.number - b.number);
+        // sorter
+        hs.sort((a, b) => a.name.localeCompare(b.name));
 
         hs.forEach(function (h)
         {
             const hsli = document.createElement('div');
-
-            hsli.classList.add(`hs-${h.number}`);
-            hsli.innerHTML = 'Nr. ' + h.number + ' ' + h.name;
+            // ToDo: hier die Liste frei konfigurierbar machen
+            hsli.dataset.featureId = h.id;
+            hsli.classList.add(`map-{{ map.id }}-feature-${h.id}`);
+            hsli.innerHTML = h.name;
 
             if(panel) panel.appendChild(hsli)
         });
+
+        //------------------------------------
+
+        //const source = new VectorSource({ features });
+        const source = layer_{{ data.featureSourceLayer }}.getSource();
+        // 2) Layer & Standard Style
+        const defaultStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 6,
+                fill: new ol.style.Fill({ color: 'blue' }),
+                stroke: new ol.style.Stroke({ color: 'white', width: 2 })
+            })
+        });
+        const vectorLayer = new ol.layer.Vector({
+            source,
+            style: defaultStyle
+        });
+
+        // 4) Highlight layer (separater VectorLayer für Markierung)
+        const highlightSource = new ol.source.Vector();
+        const highlightStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 10,
+                fill: new ol.style.Fill({ color: 'rgba(255,0,0,0.6)' }),
+                stroke: new ol.style.Stroke({ color: 'red', width: 2 })
+            })
+        });
+        const highlightLayer = new ol.layer.Vector({
+            source: highlightSource,
+            style: highlightStyle
+        });
+        map_{{ map.id }}.addLayer(highlightLayer);
+
+        // 5) Helfer: Feature nach ID finden
+        function getFeatureById(id) {
+            return source.getFeatureById(id) || null;
+        }
+
+        // 6) Event-Handler fürs Hover über externe DIVs
+        let currentHighlight = null;
+
+        function highlightFeatureById(id) {
+            // falls gleiches Feature, nichts tun
+            if (currentHighlight && currentHighlight.getId() === id) return;
+
+            // clear
+            highlightSource.clear();
+            currentHighlight = null;
+
+            if (!id) return;
+
+            const feat = getFeatureById(id);
+            if (!feat) return;
+
+            // clone Feature (oder referenzieren) in Highlight-Source
+            const clone = feat.clone();
+            clone.setId(feat.getId()); // optional
+            highlightSource.addFeature(clone);
+            currentHighlight = feat;
+
+            // optional: View auf Feature zoomen/pan (dezent)
+            const geometry = feat.getGeometry();
+            //if (geometry) map_{{ map.id }}.getView().animate({center: geometry.getCoordinates(), duration: 250});
+            //coordinates1 =geometry.getCoordinates();
+            //coordinates2 = ol.proj.transform(coordinates1, 'EPSG:4326', 'EPSG:3857');
+            extent = geometry.getExtent()
+            center = ol.extent.getCenter(extent);
+            //if (geometry) map_{{ map.id }}.getView().animate({center: center, duration: 250});
+            map_{{- map.id -}}.getView().fit(extent,
+                {
+                    size: map_{{ map.id }}.getSize(),
+                    padding: [50, 50, 50, 50], // pixel add to [top, right, bottom, left]
+                    duration: 1000, // ms
+                    easing: ol.easing.easeOut,
+                }
+            );
+        }
+
+        function clearHighlight() {
+            highlightSource.clear();
+            currentHighlight = null;
+        }
+        //------------------------------------
+
+        document.querySelectorAll('[class^="map-{{ map.id }}-feature"]').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                const id = el.dataset.featureId;
+                highlightFeatureById(id);
+            });
+            el.addEventListener('mouseleave', () => {
+                clearHighlight();
+            });
+        });
     });
-    </script>
-</div>
+</script>
 {% endblock %}

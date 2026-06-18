@@ -109,7 +109,9 @@ class QgisMapModel extends Model
         foreach ($arrLayers as $layer) {
             /* @var QgisLayerModel $objLayer */
             $objLayer = QgisLayerModel::findById($layer['layer']);  // ToDo: wenn Layer gelöscht?
-dump($layer['zoom']);
+
+            if(!array_key_exists('zoom', $layer)) { return ['mode' => 'params']; }
+
             switch ($layer['zoom']) {
                 case 'params':
                     $zoom = ['mode' => 'params'];
@@ -118,7 +120,6 @@ dump($layer['zoom']);
                     $zoom = ['mode' => 'layer', 'source' => $objLayer->type,'var' => "layer_{$layer['layer']}", ];
                     break;
                 case 'feature':
-dump('feature');
                     /* @var QgisFeatureModel $collFeatures*/
                     $collFeatures = $objLayer->getAllFeaturesAsCollection(true,['combine']);
                     if($collFeatures->count() > 0) {

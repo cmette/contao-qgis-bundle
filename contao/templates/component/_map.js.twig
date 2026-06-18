@@ -35,17 +35,30 @@
     });
 
     {% set extent = map.getExtent() %}
-{% dump(extent.mode) %}
     {%- if extent.mode == 'params' -%}
     {%- elseif extent.mode == 'layer' -%}
         {%- if extent.source == 'Tile' -%}
         {%- elseif extent.source == 'Vector' -%}
     extent = {{ extent.var }}.getSource().getExtent();
-    map_{{- map.id -}}.getView().fit(extent, map_{{ map.id }}.getSize());
+    map_{{- map.id -}}.getView().fit(extent,
+        {
+            size: map_{{ map.id }}.getSize(),
+            padding: [50, 50, 50, 50], // pixel add to [top, right, bottom, left]
+            duration: 1000, // ms
+            easing: ol.easing.easeOut,
+        }
+    );
         {% endif %}
     {%- elseif extent.mode == 'feature' -%}
         extent = ol.proj.transformExtent({{ extent.extent|raw }},'EPSG:4326', 'EPSG:3857');
-        map_{{- map.id -}}.getView().fit(extent, map_{{ map.id }}.getSize());
+        map_{{- map.id -}}.getView().fit(extent,
+            {
+                size: map_{{ map.id }}.getSize(),
+                padding: [50, 50, 50, 50], // pixel add to [top, right, bottom, left]
+                duration: 1000, // ms
+                easing: ol.easing.easeOut,
+            }
+        );
     {% endif %}
 
     //-- end Map -------------------------------------------------------------------------

@@ -72,7 +72,7 @@ map_{{- map.id -}}_styleCache = {
  */
 map_{{- map.id -}}_styleFunction = (feature, resolution) => {
     // Zugriff auf Feature-Attribute
-    const q_style_id = feature.get('qStyleId');
+    const styleId = feature.get('styleId');
 
     // Auflösung an Zoomstufen anpassen
     if (resolution > 100) {
@@ -80,6 +80,6 @@ map_{{- map.id -}}_styleFunction = (feature, resolution) => {
     }
 
     // Rückgabe: Style-Instanz, Array von Styles oder null
-    return map_{{- map.id -}}_styleCache[`style_${q_style_id}`](feature);
+    return map_{{- map.id -}}_styleCache[`style_${styleId}`](feature);
 };
 {% endblock %}

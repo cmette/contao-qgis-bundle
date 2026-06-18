@@ -12,9 +12,33 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['qgis_map'] =
     '{invisible_legend:hide},invisible,start,stop;'
 ;
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addFeatureList';
-$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addFeatureList'] = 'listHeadline,isActiveList';
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addFeatureList'] = 'featureSourceLayer,listHeadline,isActiveList';
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
+[
+    'inputType' => 'select',
+    'search'    => true,
+    'filter'    => true,
+    'sorting' => true,
+    'eval'      => [
+        'mandatory' => true,
+        'submitOnChange' => true,
+        'includeBlankOption'=> false,
+        'tl_class' => 'w50',
+        'multiple' => false,
+        'chosen' => true
+    ],
+    'sql' => [
+        'type'      => 'integer',
+        'unsigned'  => true,
+        'notnull'   => true,
+        'default'   => 0,
+    ]
+];
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['addFeatureList'] = DcaUtils::buildAddField();
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['featureSourceLayer'] =
 [
     'inputType' => 'select',
     'search'    => true,
@@ -35,19 +59,21 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
     ]
 ];
 
-$GLOBALS['TL_DCA']['tl_content']['fields']['addFeatureList'] = DcaUtils::buildAddField();
-
 $GLOBALS['TL_DCA']['tl_content']['fields']['listHeadline'] =
 [
-    'search'    => true,
     'inputType' => 'inputUnit',
+    'search'    => true,
     'options'   => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-    'eval'      => ['maxlength'=>200, 'basicEntities'=>true, 'tl_class'=>'w50 clr'],
+    'eval'      => [
+        'maxlength' =>200,
+        'basicEntities'=>true,
+        'tl_class'  =>'w50 clr'
+    ],
     'sql'       => [
         'type'      => 'string',
         'length'    => 255,
         'fixed'     => true,
-        'default'   => 'a:2:{s:5:\"value\";s:0:\"\";s:4:\"unit\";s:2:\"h2\";}',
+        'default'   => "a:2:{s:5:\"value\";s:0:\"\";s:4:\"unit\";s:2:\"h2\";}",
     ]
 ];
 

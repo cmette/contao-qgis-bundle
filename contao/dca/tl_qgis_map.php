@@ -216,6 +216,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
                     #'reference' => &$GLOBALS['TL_LANG'][$strTable]['catalog_fields']['provider_options'],
                     'eval'          => [
                         'mandatory' => true,
+                        'unique'    => true,
                         'tl_class'  => 'w25'
                     ],
                 ],
@@ -240,6 +241,8 @@ $GLOBALS['TL_DCA'][$strTable] = [
             ],
             'eval' => [
                 'tl_class' => 'clr',
+                'explanation' => 'layers',
+                'helpwizard' => true,
                 'actions' => [
                     'copy',
                     'delete',
@@ -250,9 +253,9 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'sortable'  => true, // disable the sorting, defaults to true
             ],
             'sql' => [
-                'type' => 'text',
-                'length' => MySQLPlatform::LENGTH_LIMIT_BLOB,
-                'notnull' => false
+                'type'      => 'text',
+                'length'    => MySQLPlatform::LENGTH_LIMIT_BLOB,
+                'notnull'   => false
             ],
         ],
         /**********************************************************************
