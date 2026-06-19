@@ -167,6 +167,16 @@ form#tl_qgis_feature {
     margin-top: 0.5rem;
   }
 
+  .drop_widget {
+    background-color: var(--form-bg);
+    border: 1px solid brown;
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    min-height: 30px;
+    margin: 3px 0;
+    padding: 5px 6px 6px;
+  }
+
   // rowWizard geometry
   table#ctrl_geometry {
     //border: 1px solid var(--form-border);

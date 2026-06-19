@@ -29,7 +29,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             'mode'                  => DataContainer::MODE_SORTED,
 			'fields'                => ['title'],
 			'headerFields'          => ['title'],
-			'panelLayout'           => 'filter;sort,search,limit',
+			'panelLayout'           => 'filter,sort,search,limit',
             'defaultSearchField'    => 'title',
             #'renderAsGrid'  => true,
 			#'limitHeight'   => 160
@@ -241,7 +241,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             ],
             'eval' => [
                 'tl_class' => 'clr',
-                'explanation' => 'layers',
+                'explanation' => &$GLOBALS['TL_LANG'][$strTable]['xpl']['layers'],
                 'helpwizard' => true,
                 'actions' => [
                     'copy',

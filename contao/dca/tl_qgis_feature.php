@@ -91,7 +91,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
 	'palettes' =>  [
 		'__selector__'  =>  [],
 		'default'       =>
-            '{name_legend},name;' .
+            '{name_legend},name,import;' .
             '{properties_legend},properties;' .
             '{style_legend},style;' .
             '{label_legend},useAsLabel;' .
@@ -132,6 +132,12 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'fixed'     => true,
                 'default'   => '',
             ]
+        ],
+        'import' => [
+            'label' => 'label',
+            'eval'          => [
+                'tl_class'  =>'w50'
+            ],
         ],
         /**********************************************************************
          * property_legend

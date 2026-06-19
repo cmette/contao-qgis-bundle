@@ -73,6 +73,9 @@ class QgisMapListener
         $this->handleDeleteButton($operation);
     }
 
+
+
+
     ##[AsCallback(table: self::STR_TABLE, target: 'fields.extent.input_field')]
     public function fieldsExtentInputField(DataContainer $dc, string $label): string
     {

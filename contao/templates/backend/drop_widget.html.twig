@@ -1,0 +1,97 @@
+<div class="w25 widget">
+    <h3><label for="ctrl_import">Import</label></h3>
+    <div id="qgis_import_drop" name="tl_import" class="drop_widget">{{ test }}</div>
+
+    <p class="tl_help tl_tip" data-contao--tooltips-target="tooltip">Ziehen Sie hier ein Feature-String als Text.</p>
+    <script>
+console.log('script start');
+        //document.addEventListener('DOMContentLoaded', function () {
+            drop = document.querySelector('#qgis_import_drop')
+
+            // Dropzone: erlauben zu droppen, das ist essentiell, sonst kein Drop
+            drop.addEventListener('dragover', (e) => {
+                e.preventDefault(); // ohne das ist drop nicht erlaubt
+                e.dataTransfer.dropEffect = 'copy';
+                drop.classList.add('over');
+            });
+
+            // Drop-Handler
+            drop.addEventListener('drop', (e) => {
+                e.preventDefault();
+                drop.classList.remove('over');
+
+                // Dateien vom Desktop
+                const files = Array.from(e.dataTransfer.files);
+                if (files.length) {
+                    files.forEach(f => {
+                        console.log('File:', f.name, f.size, f.type);
+                    });
+                    drop.textContent = files.map(f => f.name).join(', ');
+                    return;
+                }
+
+                // Fallback: Text/URI
+                const text = e.dataTransfer.getData('text/plain') || e.dataTransfer.getData('text/uri-list');
+                if (text) {
+                    //drop.textContent = 'Data: ' + text;
+                    let feature = JSON.parse(text);
+
+                    console.log(text);
+
+                    let memberStack = [];
+
+                    if (feature?.type != null) {
+                        // member existiert und ist nicht null/undefined
+                        memberStack.push({'state': 'Type vorhanden'});
+                        if(feature.type == 'Feature') {
+                            memberStack.push({'state': 'Feature vorhanden'});
+                            //drop.innerHTML = feature.type;
+
+                            if (
+                                feature?.properties != null &&
+                                feature?.geometry != null) {
+
+                                memberStack.push({'state': 'Properties vorhanden'});
+                                memberStack.push({'state': 'Geometry vorhanden'});
+
+                                if(feature.geometry.type != null && feature.geometry.coordinates != null) {
+                                    memberStack.push({'state': 'Geometry vorhanden'});
+
+                                    console.log('feature kann geladen werden');
+                                }
+                            }
+                        };
+                    }
+
+                    memberStack.forEach((f, i) => {
+                        const element = document.createElement('div');
+
+                        element.innerHTML = f.state;
+
+                        drop.appendChild(element);
+                    })
+
+                    const properties = document.getElementById('ctrl_properties');
+                    if(properties) properties.value = JSON.stringify(feature.properties);
+
+                    const name = document.getElementById('ctrl_name');
+                    if(feature.properties.name  != null && feature.properties.name.length > 0) {
+                        if(name) name.value = feature.properties.name;
+                    }
+                    else if (feature.properties.title != null && feature.properties.title.length > 0) {
+                        if(name) name.value = feature.properties.title;
+                    }
+
+                    const geometry_type = document.getElementById('ctrl_geometry_type');
+                    if(geometry_type) {
+                        const match = Array.from(geometry_type.options).find(o => o.value.trim() === feature.geometry.type.trim());
+                        if (match) geometry_type.value = match.value; // oder: select.selectedIndex = match.index;
+                    }
+
+                    const geometry_coordinates = document.getElementById('ctrl_geometry_coordinates');
+                    if(geometry_coordinates) geometry_coordinates.value = JSON.stringify(feature.geometry.coordinates).replace(/\s+/g, '');
+                }
+            });
+        //});
+    </script>
+</div>

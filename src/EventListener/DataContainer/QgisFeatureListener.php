@@ -24,6 +24,7 @@ use Contao\CoreBundle\DataContainer\DataContainerOperation;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\Message;
+use Twig\Environment;
 
 class QgisFeatureListener
 {
@@ -34,6 +35,7 @@ class QgisFeatureListener
 
     public function __construct(
         private readonly ContaoCsrfTokenManager $tokenManager,
+        private readonly Environment $twig
         #private readonly AuthorizationCheckerInterface $authorizationChecker,
     )
     {
@@ -43,7 +45,7 @@ class QgisFeatureListener
     #[AsCallback(table: self::STR_TABLE, target: 'list.label.group')]
     public function ListLabelGroupCallback(string $group, string|null $mode, string $field, array $row, DataContainer $dc): string
     {
-        return $row['name'][0];
+        return $row['name'][0]??'?';
     }
 
     /**
@@ -73,12 +75,26 @@ class QgisFeatureListener
     }
 
 
+
+
+
+    ##[AsCallback(table: self::STR_TABLE, target: 'list.sorting.panel_callback.import')]
+    #[AsCallback(table: self::STR_TABLE, target: 'fields.import.input_field')]
+    public function listSortingPanelCallback(DataContainer $dc, string $label): string
+    {
+        $html = $this->twig->render('@Contao/backend/drop_widget.html.twig',
+            [
+                'test' => 'Hier',
+            ]);
+
+        return $html;
+    }
     #[AsCallback(table: self::STR_TABLE, target: 'fields.geometry_coordinates.save')]
     public function geometryCoordinatesSave(mixed $value, DataContainer $dc): mixed
     {
         $withoutSpaces = str_replace(' ', '', $value);
-        $countR = mb_substr_count($withoutSpaces, "[", 'UTF-8');
-        $countL = mb_substr_count($withoutSpaces, "]", 'UTF-8');
+        $countL = mb_substr_count($withoutSpaces, "[", 'UTF-8');
+        $countR = mb_substr_count($withoutSpaces, "]", 'UTF-8');
 
         if ($countR > $countL) {
             #Message::addError("Es fehlt eine ] Linksklammer");

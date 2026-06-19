@@ -16,7 +16,7 @@
 
         feature.setId(gj.id);   // überschreibt die interne ol feature id
         //feature.set('name', gj.name);
-        {# füge feature zur source hinzu #}
+        {# füge feature dem Layer hinzu #}
         source_{{ layer.type }}_{{ layer.id }}.addFeature(feature);
     });
     /*-- end features -----------------------------------------------*/
