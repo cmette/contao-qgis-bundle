@@ -12,7 +12,10 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['qgis_map'] =
     '{invisible_legend:hide},invisible,start,stop;'
 ;
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addFeatureList';
-$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addFeatureList'] = 'featureSourceLayer,listHeadline,isActiveList';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addActiveList';
+
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addFeatureList'] = 'featureSourceLayer,listHeadline,isActiveList,addActiveList';
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addActiveList']  = 'zoomExtentOnHover,zoomExtentOnClick';
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
 [
@@ -77,4 +80,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['listHeadline'] =
     ]
 ];
 
-$GLOBALS['TL_DCA']['tl_content']['fields']['isActiveList'] = DcaUtils::buildAddField(true, false);
+$GLOBALS['TL_DCA']['tl_content']['fields']['addActiveList']      = DcaUtils::buildAddField(true, true);
+$GLOBALS['TL_DCA']['tl_content']['fields']['zoomExtentOnClick']  = DcaUtils::buildAddField(true, false);
+$GLOBALS['TL_DCA']['tl_content']['fields']['zoomExtentOnHover']  = DcaUtils::buildAddField(false, false);

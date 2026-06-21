@@ -12,9 +12,11 @@ declare(strict_types=1);
 
 namespace Cmette\ContaoQgisBundle\Models;
 
+use Contao\FilesModel;
 use Contao\Model;
 use Contao\Model\Collection;
 use Contao\StringUtil;
+use Contao\System;
 
 /**
  * Reads and writes source entities. This refers to abstract sources such as
@@ -64,6 +66,15 @@ class QgisLayerModel extends Model
         'XYZ',
     ];
 
+    private const IMAGE_SOURCE_TYPES = [
+        'ImageStatic',
+        'ImageWMS',
+        'ImageArcGISRest',
+        'ImageMapGuide',
+        'ImageCanvas',
+        'ImageTile'
+    ];
+
     private const FORMAT_TYPES = [
         'GML',
         'GeoJSON'
@@ -85,9 +96,30 @@ class QgisLayerModel extends Model
         return self::LAYER_TYPES;
     }
 
-    public static function getSourceTypes(): array
+    public static function getSourceTypes(string $layerType): array
     {
-        return self::SOURCE_TYPES;
+        switch ($layerType) {
+            case 'Tile':
+                $sources = self::SOURCE_TYPES;
+                break;
+            case 'Image':
+                /*
+                ol/source/ImageStatic: für ein einzelnes statisches Bild mit imageExtent
+                ol/source/ImageWMS: für Bilder von einem WMS-Service (parameterbasiert, tile-artig als Bild)
+                ol/source/ImageArcGISRest: für ArcGIS-REST Image-Services
+                ol/source/ImageMapGuide: für MapGuide-Image-Services
+                ol/source/ImageCanvas: für dynamisch gerenderte Bilder (Canvas-Render, z. B. selbst gezeichnet)
+                ol/source/ImageTile: für “bildbasiertes Tiling” (eher fortgeschritten; wenn du mehrere Bildkacheln verwalten willst)
+                */
+                $sources = self::IMAGE_SOURCE_TYPES;
+                break;
+            case 'Vector':
+                $sources = self::SOURCE_TYPES;
+                break;
+            default:
+                $sources = self::SOURCE_TYPES;
+        }
+        return $sources;
     }
 
     public static function getFormatTypes(): array
@@ -193,6 +225,19 @@ EOJ;
 
         return $collection;
     }
+
+    public function getImageSourceUrl(): string
+    {
+        $file = FilesModel::findByUuid($this->image_source_singleSRC); // je nachdem, was du hast
+
+        $request = System::getContainer()->get('request_stack')->getCurrentRequest();
+        $backendUrl = rtrim($request->getSchemeAndHttpHost(), '/').$request->getBaseUrl();
+
+        $contaoBackendUrl = $backendUrl . '/' . $file->path;
+
+        return $contaoBackendUrl;
+    }
+
 
     /**
      * @return int

@@ -63,7 +63,8 @@ class DcaUtils
             'reference' => &$GLOBALS['TL_LANG'][$strTable]["{$rowWizardField}_fields"]['zoom_options'],
             'eval'          => [
                 'mandatory' => false,
-                'tl_class'  => 'w25'
+                'tl_class'  => 'w25',
+                'cell_class'=> 'zoom'
             ],
         ];
     }

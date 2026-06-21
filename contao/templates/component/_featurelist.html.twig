@@ -115,6 +115,14 @@
         //------------------------------------
 
         document.querySelectorAll('[class^="map-{{ map.id }}-feature"]').forEach(el => {
+            {% if data.addFeatureList %}
+                {% if data.zoomExtentOnClick %}
+            el.addEventListener('click', () => {
+                const id = el.dataset.featureId;
+                highlightFeatureById(id);
+            });
+                {% endif %}
+                {% if data.zoomExtentOnHover %}
             el.addEventListener('mouseenter', () => {
                 const id = el.dataset.featureId;
                 highlightFeatureById(id);
@@ -122,6 +130,8 @@
             el.addEventListener('mouseleave', () => {
                 clearHighlight();
             });
+                {% endif %}
+            {% endif %}
         });
     });
 </script>

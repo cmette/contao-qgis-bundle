@@ -133,10 +133,11 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'default'   => '',
             ]
         ],
+        # virtuelles Feld - wird vom Listener behandelt
         'import' => [
             'label' => 'label',
             'eval'          => [
-                'tl_class'  =>'w50'
+                'tl_class'  =>''
             ],
         ],
         /**********************************************************************

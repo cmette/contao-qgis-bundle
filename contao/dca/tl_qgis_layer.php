@@ -60,6 +60,11 @@ $GLOBALS['TL_DCA'][$strTable] = [
             '{title_legend},title,style;' .
             '{type_legend},type;' .
             '',
+        'Image' =>
+            '{title_legend},title,style;' .
+            '{type_legend},type;' .
+            '{source_legend},image_source,attribution,image_source_singleSRC,image_extent;' .
+            '',
         'Tile' =>
             '{title_legend},title,style;' .
             '{type_legend},type;' .
@@ -107,29 +112,6 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'default'   => '',
             ]
         ],
-        /**********************************************************************
-         * type_legend
-         **********************************************************************/
-        # layer.type = nur QGis intern
-        'type' => [
-            'search'    => true,
-            'filter'    => false,
-            'sorting'   => true,
-            'inputType' => 'select',
-            'options'   => QgisLayerModel::getLayerTypes(),
-            'reference' => &$GLOBALS['TL_LANG'][$strTable]['type_options'],
-            'eval'          => [
-                'mandatory' => true,
-                'unique'    => false,
-                'tl_class'  =>'w25'
-            ],
-            'sql'       => [
-                'type'      => 'string',
-                'length'    => 20,
-                'fixed'     => true,
-                'default'   => 'OSM',
-            ]
-        ],
         # ein Style für die gesamte Ebene - Feature Styles haben Vorrang!
         'style' => [
             'search'    => true,
@@ -158,6 +140,111 @@ $GLOBALS['TL_DCA'][$strTable] = [
             ]
         ],
         /**********************************************************************
+         * type_legend
+         **********************************************************************/
+        # layer.type = nur QGis intern
+        'type' => [
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'inputType' => 'select',
+            'options'   => QgisLayerModel::getLayerTypes(),
+            'reference' => &$GLOBALS['TL_LANG'][$strTable]['type_options'],
+            'eval'          => [
+                'mandatory' => true,
+                'unique'    => false,
+                'tl_class'  =>'w25'
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => 'OSM',
+            ]
+        ],
+        /**********************************************************************
+         * source_legend
+         **********************************************************************/
+        # Datenquelle des Layers, jedes Layer hat nur eine Datenquelle
+        # jeder LayerType hat ein spezifisches Set von Datenquellen-Typen
+
+        # ImageSources ---------------------------
+        'image_source' => [
+            'inputType' => 'select',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'options'   => QgisLayerModel::getSourceTypes('Image'),
+            'eval'      => [
+                'mandatory' => true,
+                'includeBlankOption'=> false,
+                'tl_class' => 'w25',
+                'multiple' => false,
+                'chosen' => true,
+                'submitOnChange'=>true,
+            ],
+            'sql' => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => '',
+            ]
+        ],
+        # ImageSourceUrl
+        'image_source_singleSRC' => [
+            'exclude' => true,
+            'inputType' => 'fileTree',
+            'eval' => [
+                'filesOnly'  => true,
+                'fieldType'  => 'radio',
+                'extensions' => '%contao.image.valid_extensions%',
+            ],
+            'sql' => [
+                'type' => 'binary',
+                'length' => 16,
+                'fixed' => true,
+                'notnull' => false,
+            ],
+        ],
+        # Extent (BoundingBox) der Karte, hier string: [[x,y],[x,y]]
+        'image_extent' => [
+            'inputType'     => 'text',
+            'eval'          => [        // ToDo: regexp extent?
+                'mandatory' => true,
+                'unique'    => false,
+                'tl_class' => 'w50',
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 255,
+                'fixed'     => true,
+                'default'   => '[]',
+            ]
+        ],
+
+        #
+        'source' => [
+            'inputType' => 'select',
+            'search'    => true,
+            'filter'    => false,
+            'sorting'   => true,
+            'options'   => QgisLayerModel::getSourceTypes('Tile'),
+            'eval'      => [
+                'mandatory' => true,
+                'includeBlankOption'=> false,
+                'tl_class' => 'w25',
+                'multiple' => false,
+                'chosen' => true,
+                'submitOnChange'=>true,
+            ],
+            'sql' => [
+                'type'      => 'string',
+                'length'    => 20,
+                'fixed'     => true,
+                'default'   => '',
+            ]
+        ],
+        /**********************************************************************
          * config_legend
          **********************************************************************/
         // Transparenz 0 ... 1
@@ -181,28 +268,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'comment'   => ''
             ]
         ],
-        # Datenquelle des Layers, jedes Layer hat nur eine Datenquelle
-        'source' => [
-            'inputType' => 'select',
-            'search'    => true,
-            'filter'    => false,
-            'sorting'   => true,
-            'options'   => QgisLayerModel::getSourceTypes(),
-            'eval'      => [
-                'mandatory' => true,
-                'includeBlankOption'=> false,
-                'tl_class' => 'w25',
-                'multiple' => false,
-                'chosen' => true,
-                'submitOnChange'=>true,
-            ],
-            'sql' => [
-                'type'      => 'string',
-                'length'    => 20,
-                'fixed'     => true,
-                'default'   => '',
-            ]
-        ],
+
         # jede Datenquelle hat eine attribution
         'attribution' => [
             'inputType' => 'text',
@@ -346,8 +412,10 @@ $GLOBALS['TL_DCA'][$strTable] = [
                         'mandatory' => true,
                         'includeBlankOption'=> false,
                         #'blankOptionLabel'  => 'kein/unbekannt',
-                        'multiple' => false,
-                        'chosen' => true
+                        'multiple'  => false,
+                        'unique'    => true,
+                        'chosen'    => true,
+                        'cell_class'=> 'feature'
                     ],
                 ],
                 'style' => [
@@ -363,7 +431,8 @@ $GLOBALS['TL_DCA'][$strTable] = [
                         'mandatory' => false,
                         'includeBlankOption'=> false,
                         'multiple' => false,
-                        'chosen' => true
+                        'chosen' => true,
+                        'cell_class'=> 'style'
                     ],
                 ],
                 'zoom' => DcaUtils::buildRowWizardZoomField($strTable, 'features'),
@@ -377,7 +446,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
                     'enable',
                 ],
                 'min' => 1,         // minimum rows
-                'max' => 20,        // maximum rows
+                'max' => 100,        // maximum rows
                 'sortable' => true, // disable the sorting, defaults to true
             ],
             'sql' => [

@@ -1,14 +1,17 @@
-<div class="w25 widget">
+<div class="w50 widget drop-widget">
     <h3><label for="ctrl_import">Import</label></h3>
-    <div id="qgis_import_drop" name="tl_import" class="drop_widget">{{ test }}</div>
-
-    <p class="tl_help tl_tip" data-contao--tooltips-target="tooltip">Ziehen Sie hier ein Feature-String als Text.</p>
+    <div id="qgis_import_drop" name="tl_import" class="drop-target">
+        {{ image|raw }}
+        <div id="drop-state" class="drop-await">bereit</div>
+    </div>
+    <p class="tl_help tl_tip" data-contao--tooltips-target="tooltip">Ziehen Sie hier ein Feature-String über das Import-Symbol links. Der String muss als plaintext im json-Format vorliegen.</p>
     <script>
-console.log('script start');
         //document.addEventListener('DOMContentLoaded', function () {
-            drop = document.querySelector('#qgis_import_drop')
+            drop  = document.querySelector('#qgis_import_drop');
+            state = document.querySelector('#drop-state');
+            tip   = document.querySelector('.drop-widget p.tl_tip');
 
-            // Dropzone: erlauben zu droppen, das ist essentiell, sonst kein Drop
+            // Drop erlauben, sonst kein Drop
             drop.addEventListener('dragover', (e) => {
                 e.preventDefault(); // ohne das ist drop nicht erlaubt
                 e.dataTransfer.dropEffect = 'copy';
@@ -32,19 +35,26 @@ console.log('script start');
 
                 // Fallback: Text/URI
                 const text = e.dataTransfer.getData('text/plain') || e.dataTransfer.getData('text/uri-list');
-                if (text) {
-                    //drop.textContent = 'Data: ' + text;
-                    let feature = JSON.parse(text);
 
-                    console.log(text);
+                if (text) {
+                    let feature;
+                    let ready = false;
+
+                    try {
+                        feature = JSON.parse(text)
+                    } catch (e) {
+                        feature = null;
+                    } finally {
+
+                    }
 
                     let memberStack = [];
 
-                    if (feature?.type != null) {
+                    if (feature && feature?.type != null && feature?.type.length > 0) {
                         // member existiert und ist nicht null/undefined
-                        memberStack.push({'state': 'Type vorhanden'});
+                        memberStack.push({'state': `Key "type": vorhanden OK`});
                         if(feature.type == 'Feature') {
-                            memberStack.push({'state': 'Feature vorhanden'});
+                            memberStack.push({'state': `type ist "Feature" OK`});
                             //drop.innerHTML = feature.type;
 
                             if (
@@ -56,20 +66,37 @@ console.log('script start');
 
                                 if(feature.geometry.type != null && feature.geometry.coordinates != null) {
                                     memberStack.push({'state': 'Geometry vorhanden'});
-
-                                    console.log('feature kann geladen werden');
+                                    ready = true;
+                                } else {
+                                    // feature.geometry.coordinates fehlerhaft
+                                    memberStack.push({'state': `feature.geometry.coordinates: ist fehlerhaft`});
                                 }
+                            } else {
+                                // feature.properties oder feature.geometry fehlerhaft
+                                memberStack.push({'state': `feature.properties oder feature.geometry: sind fehlerhaft`});
                             }
-                        };
+                        }
+                    } else {
+                        // feature oder feature.type ist nicht korrekt
+                        memberStack.push({'state': `feature.type: ist fehlerhaft`});
                     }
 
+                    slist = document.createElement('span');
+
                     memberStack.forEach((f, i) => {
-                        const element = document.createElement('div');
+                        const item = document.createElement('span');
+                        item.textContent = f.state;
+                        slist.appendChild(item);
+                    });
 
-                        element.innerHTML = f.state;
-
-                        drop.appendChild(element);
-                    })
+                    if (!ready) {
+                        tip.textContent = '';
+                        tip.appendChild(slist);
+                        state.classList.add('drop-error');
+                        state.classList.remove('drop-await');
+                        state.innerHTML = 'Fehler';
+                        return;
+                    }
 
                     const properties = document.getElementById('ctrl_properties');
                     if(properties) properties.value = JSON.stringify(feature.properties);
@@ -90,6 +117,10 @@ console.log('script start');
 
                     const geometry_coordinates = document.getElementById('ctrl_geometry_coordinates');
                     if(geometry_coordinates) geometry_coordinates.value = JSON.stringify(feature.geometry.coordinates).replace(/\s+/g, '');
+
+                    state.classList.add('drop-ok');
+                    state.classList.remove('drop-await');
+                    state.innerHTML = 'OK';
                 }
             });
         //});

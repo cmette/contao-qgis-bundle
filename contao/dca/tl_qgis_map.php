@@ -217,7 +217,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
                     'eval'          => [
                         'mandatory' => true,
                         'unique'    => true,
-                        'tl_class'  => 'w25'
+                        'cell_class'  => 'layer'
                     ],
                 ],
                 'style' => [
@@ -234,7 +234,8 @@ $GLOBALS['TL_DCA'][$strTable] = [
                         'includeBlankOption'=> true,
                         #'blankOptionLabel'  => 'kein/unbekannt',
                         'multiple' => false,
-                        'chosen' => true
+                        'chosen' => true,
+                        'cell_class'  => 'style'
                     ],
                 ],
                 'zoom' => DcaUtils::buildRowWizardZoomField($strTable, 'layer'),
@@ -274,7 +275,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             'eval'          => [
                 'mandatory' => true,
                 'unique'    => false,
-                'tl_class' => 'w25 clr',
+                'tl_class' => 'w25',
             ],
             'sql'       => [
                 'type'      => 'string',
@@ -283,13 +284,13 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'default'   => '',
             ]
         ],
-        # Mittelpunkt der Karte, hier string: [[x,y],[x,y]]
+        # Extent (BoundingBox) der Karte, hier string: [[x,y],[x,y]]
         'extent' => [
             'inputType'     => 'text',
             'eval'          => [
                 'mandatory' => true,
                 'unique'    => false,
-                'tl_class' => 'w50',
+                'tl_class' => 'w25',
             ],
             'sql'       => [
                 'type'      => 'string',
@@ -328,7 +329,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             'eval'      => [
                 // wenn addSeries true, dann muss eine Reihe angegeben werden!
                 'mandatory' => true,
-                'tl_class' => 'w50',
+                'tl_class' => 'w25',
                 'multiple' => false,
                 'chosen' => true,
             ],

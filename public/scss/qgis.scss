@@ -8,11 +8,11 @@
   }
 }
 
-$gqis-layers-color: #b7ebff;
-$gqis-styles-color: #ffdfbf;
-$gqis-zoom-color: #d4ffb7;
+$gqis-layers-color: #e5fbff;
+$gqis-styles-color: #ffe9cb;
+$gqis-zoom-color: #e7fbd6;
 
-// tips ändern
+// global tips ändern
 .tl_tip {
   color: #2f9f00;
   margin-top: 0.5rem;
@@ -45,13 +45,16 @@ tr.hover-row:has(span.used) {
     border:3px solid #e0e0e0;
     border-radius:0.5rem;
   }
-
-  [id$="-feature-list"] {
+  .list {
     flex: 0 1 25%;
     border: 3px solid #e0e0e0;
     border-radius:0.5rem;
     overflow: scroll;
     padding: 1rem;
+
+  }
+
+  [id$="-feature-list"] {
 
     div {
       font-size: 0.8rem;
@@ -69,6 +72,10 @@ tr.hover-row:has(span.used) {
     }
   }
 }
+/*--------------------------------------------------------------------------
+  Backend
+ --------------------------------------------------------------------------*/
+
 
 /*--------------------------------------------------------------------------
   edit mode tl_qgis_map
@@ -77,20 +84,17 @@ form#tl_qgis_map {
 
   // rowWizard layers = Ebenen
   table#ctrl_layers {
-    tbody {
-      vertical-align: top;
-      tr {
-        td:has([id$="[zoom]"]) { width: 15%; }
+      tbody {
+        vertical-align: top;
+
+        tr {
+          td { select { border: none; }}
+
+          td.layer  {  width: auto; select { background-color: $gqis-layers-color; }}
+          td.style  {  width: 20%; .choices__list { background-color: $gqis-styles-color; }}
+          td.zoom   {  width: 10%; select { background-color: $gqis-zoom-color; }}
+        }
       }
-    }
-
-    *[id$="[layer]"],
-    *[id$="[style]"] ~ div.choices__list,
-    *[id$="[zoom]"] { border: none; }
-
-    *[id$="[layer]"] { background-color: $gqis-layers-color; }
-    *[id$="[style]"] ~ .choices__list { background-color: $gqis-styles-color; width: 100%; }
-    *[id$="[zoom]"] { background-color: $gqis-zoom-color; width: 100%; }
   }
 
   .olmap_widget {
@@ -128,30 +132,12 @@ form#tl_qgis_layer {
       vertical-align: top;
 
       tr {
-        td:has([id$="[zoom]"]) {
-          width: 15%;
-        }
+        td { select { border: none; }}
+
+        td.feature  {  width: auto; .choices__list { background-color: $gqis-layers-color; }}
+        td.style    {  width: 20%; .choices__list { background-color: $gqis-styles-color; }}
+        td.zoom     {  width: 10%; select { background-color: $gqis-zoom-color; }}
       }
-    }
-
-    *[id$="[feature]"] ~ div.choices__list,
-    *[id$="[style]"] ~ div.choices__list,
-    *[id$="[zoom]"] {
-      border: none;
-    }
-
-    *[id$="[feature]"] ~ .choices__list {
-      background-color: $gqis-layers-color;
-    }
-
-    *[id$="[style]"] ~ .choices__list {
-      background-color: $gqis-styles-color;
-      width: 100%;
-    }
-
-    *[id$="[zoom]"] {
-      background-color: $gqis-zoom-color;
-      width: 100%;
     }
   }
 }
@@ -167,14 +153,61 @@ form#tl_qgis_feature {
     margin-top: 0.5rem;
   }
 
-  .drop_widget {
-    background-color: var(--form-bg);
-    border: 1px solid brown;
-    border-radius: var(--border-radius);
-    box-sizing: border-box;
-    min-height: 30px;
-    margin: 3px 0;
-    padding: 5px 6px 6px;
+  .drop-widget {
+    grid-column: 7 / span 6;
+
+    .drop-target {
+      display: flex;
+      align-content: space-between;
+      align-items: flex-start;
+      //flex-direction: column;
+      float: left;
+      width: 25%;
+      background-color: var(--form-bg);
+      border: 1px solid var(--form-border);
+      border-radius: var(--border-radius);
+      box-sizing: border-box;
+      //min-height: 60px;
+      margin: 3px 0;
+      padding: 5px 6px 6px;
+
+      img {
+        flex: 0 0 25%;
+      }
+
+      #drop-state {
+        flex: 1 1 75%;
+        align-self: center;
+        text-align: center;
+        font-weight: bold;
+      }
+      .drop-await { color: darkorange; }
+      .drop-ok    { color: green; }
+      .drop-error { color: red; }
+
+      &.over {
+        border: 1px solid red;
+      }
+    }
+    p {
+      padding-left: 1rem;
+
+      span {  // das ist Quatsch hier, verbessern!
+        counter-reset: item;
+        padding-left: 0;
+        list-style: none;
+
+        span {
+          display: inline-block;
+          counter-increment: item;
+          margin-right: 8px; /* optional */
+        }
+
+        &::before {
+          content: counter(item) ". ";
+        }
+      }
+    }
   }
 
   // rowWizard geometry

@@ -23,6 +23,7 @@ use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\DataContainer\DataContainerOperation;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
+use Contao\Image;
 use Contao\Message;
 use Twig\Environment;
 
@@ -84,7 +85,8 @@ class QgisFeatureListener
     {
         $html = $this->twig->render('@Contao/backend/drop_widget.html.twig',
             [
-                'test' => 'Hier',
+                // ToDo: Label
+                'image' => Image::getHtml('/bundles/contaoqgis/img/folder-input.svg', 'Label', " id='cmd_import' title='Drag here'"),
             ]);
 
         return $html;

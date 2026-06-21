@@ -1,0 +1,17 @@
+tl_content:
+  map_legend: OpenLayers Karten-Definition
+  qgis_map:
+    - folgende Karte darstellen
+    - Wählen Sie hier eine vorkonfigurierte Karte für die Darstellung am Frontend
+  addFeatureList:
+    - eine Liste aus Features generieren (experimentell)
+    - Wenn Sie diese Option wählen, wird zusätzlich zur Kartendarsellung eine Liste aus bestimmten Features eines Layers generiert.
+  featureSourceLayer:
+    - Quell-Ebene für die Feature-Liste
+    - Wählen Sie hier eine Ebene, der die Features für die Liste entnommen werden sollen.
+  listHeadline:
+    - Überschrift Feature-Liste
+    - Hier können Sie der Feature-Liste eine eigene Überschrift geben. Lassen Sie das Feld einfach leer, wenn keine Überschrift dargestellt werden soll.
+  isActiveList:
+    - Feature-Liste als aktive Liste generieren
+    - Wenn Sie die Funktionen Click und Hover der Listenelemente verwenden möchten, so aktivieren Sie diese Option.

@@ -11,16 +11,26 @@
 {% set layers = map.getLayers() %}
 {% for layer in layers %}
 //-- Layer.{{ layer.type }}.{{ layer.format }} -----------------------------------------------
+    {% if layer.type == 'Vector' %}{# ------------------------ #}
     var source_{{ layer.type }}_{{ layer.id }} = new ol.source.{{ layer.source }}({attributions: '{{ layer.attribution|raw }}',});
-    {% if layer.type == 'Vector' %}
-var format_{{ layer.type }}_{{ layer.id }} = new ol.format.{{ layer.format }}();
+    var format_{{ layer.type }}_{{ layer.id }} = new ol.format.{{ layer.format }}();
+        {% if layer.format == 'GeoJSON' %}
+        {{ block('features_component') }}
+        {% endif %}
 
-    {% if layer.format == 'GeoJSON' %}
-    {{ block('features_component') }}
-    {% endif %}
-
-    {% elseif layer.type == 'Tile' %}
+    {% elseif layer.type == 'Tile' %}{# ------------------------ #}
+    var source_{{ layer.type }}_{{ layer.id }} = new ol.source.{{ layer.source }}({attributions: '{{ layer.attribution|raw }}',});
     source_{{ layer.type }}_{{ layer.id }}.setUrl('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    {% elseif layer.type == 'Image' %}{# ------------------------ #}
+    var source_{{ layer.type }}_{{ layer.id }} = new ol.source.{{ layer.source }}(
+        {
+            attributions: '{{ layer.attribution|raw }}',
+            url: '{{ layer.getImageSourceUrl()|raw }}',
+            projection: 'EPSG:3857',
+            //extent: ol.proj.transformExtent(extent, 'EPSG:3857','EPSG:4326'),
+            imageEextent: {{ layer.image_extent|raw }},
+        }
+    );
     {% endif %}
 
     var layer_{{ layer.id }} = new ol.layer.{{- layer.type -}}({
