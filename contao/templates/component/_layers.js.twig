@@ -39,6 +39,7 @@
         opacity: {{ layer.opacity }},
         source: source_{{ layer.type }}_{{ layer.id }},
         interactive: true,
+
         {% if layer.format == 'GeoJSON' %}
         declutter: false,
         style: map_{{- map.id -}}_styleFunction,

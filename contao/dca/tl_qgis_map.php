@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
 
 	// Subpalettes
 	'subpalettes' =>  [
-        'addOpenLayers'     => 'olDistVersion,loadOpenLayersJs,laodOpenLayersCss',
+        'addOpenLayers'     => 'olDistVersion,loadOpenLayersJs,loadOpenLayersCss',
         'addOpenLayersExt'  => 'olExtDistVersion,loadOpenLayersExtJs,loadOpenLayersExtCss,useCompass;',
     ],
 
@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             ],
         ],
         // load open layers css
-        'laodOpenLayersCss' => [
+        'loadOpenLayersCss' => [
             'inputType'     => 'checkbox',
             'eval'          => [
                 'tl_class'  => 'w16'
