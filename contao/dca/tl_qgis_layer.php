@@ -394,7 +394,6 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'default'   => '',
             ]
         ],
-
         # speichert alle Features dieses Layers
         'features' => [
             'inputType' => 'rowWizard',

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Cmette\ContaoQgisBundle\Models;
 
+use Contao\ContentModel;
 use Contao\Model;
 use Contao\Model\Collection;
 use Contao\StringUtil;
@@ -47,6 +48,27 @@ class QgisMapModel extends Model
         return ($this->tstamp && !empty($this->zoom)) ? $this->zoom : '13.0'; // ToDo: configurable zoom
     }
 
+    /**
+     * @param $layerId
+     * @return QgisLayerModel|null
+     */
+    public function getLayer($layerId):QgisLayerModel|null
+    {
+        /* @var QgisLayerModel $objLayer */
+        $objLayer = QgisLayerModel::findById($layerId);
+
+        if($objLayer) {
+            return ($this->isFrontendRequest() && !$objLayer->published) ? null : $objLayer;
+        }
+
+        return $objLayer;
+    }
+
+    /**
+     * liefert alle Layer, die in einer Map verwendet werden
+     *
+     * @return Collection|null
+     */
     public function getLayers():Collection|null
     {
         $arrLayers  = StringUtil::deserialize($this->layers, true);
@@ -73,6 +95,11 @@ class QgisMapModel extends Model
         return new Collection($collLayers, self::$strTable);
     }
 
+    /**
+     * liefert alle styles, die in einer Map verwendet werden
+     *
+     * @return Collection|null
+     */
     public function getAllStyles():Collection|null
     {
         $arrStyles = [];
@@ -142,5 +169,16 @@ class QgisMapModel extends Model
         }
 
         return $zoom;
+    }
+
+    public function getPropertiesFromData($contentId): string|null
+    {
+        $result = [];
+
+        $objContent = ContentModel::findById($contentId);
+        $result = json_encode(StringUtil::deserialize($objContent->listProperties, true), JSON_UNESCAPED_UNICODE);
+
+dump($result);
+        return $result;
     }
 }

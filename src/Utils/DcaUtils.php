@@ -41,6 +41,7 @@ class DcaUtils
             'sorting'   => true,
             'eval' => [
                 'submitOnChange' => $submitOnChange,
+                'tl_class'  => ''
             ],
             'sql' => [
                 'type' => 'boolean',

@@ -50,12 +50,6 @@ class QgisMapController extends AbstractContentElementController
                 ->setLinkAttribute('title', 'neuer Titel')
                 ->buildIfResourceExists();
             */
-            /*
-                <link rel="stylesheet" href="files/libs/openlayers/dist/10.8.0/ol.css">
-                <script src="files/libs/olext/dist/4.0.38/ol-ext.js"></script>
-                <link rel="stylesheet" href="files/libs/olext/dist/4.0.38/ol-ext.css">
-                <script src="files/libs/autolinker/dist/4.1.5/Autolinker.js"></script>
-            */
             if($map->addOpenLayers) {
                 if ($map->loadOpenLayersJs)     $GLOBALS['TL_JAVASCRIPT'][] = "files/libs/openlayers/dist/{$map->olDistVersion}/ol.js";
                 if ($map->loadOpenLayersCss)    $GLOBALS['TL_CSS'][] = "files/libs/openlayers/dist/{$map->olDistVersion}/ol.css";
@@ -68,8 +62,6 @@ class QgisMapController extends AbstractContentElementController
                 // <link rel="stylesheet" href="files/content-arnsdorf/hoyk/ol-ext_popup.css">
                 // <link rel="stylesheet" href="files/content-arnsdorf/hoyk/ol-ext_layerswitcher.css">
             }
-            // ToDo: kann gelöscht werden, wird nicht mehr benötigt
-            #$GLOBALS['TL_JAVASCRIPT'][] = 'files/libs/autolinker/dist/4.1.5/Autolinker.js';
 
             $figure = null;
             $template->set('layout', $map->floating);

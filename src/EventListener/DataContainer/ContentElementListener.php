@@ -132,6 +132,45 @@ class ContentElementListener
     }
 
     /**
+     * @param DataContainer $dc
+     * @return array
+     */
+    #[AsCallback(table: self::STR_TABLE, target: 'fields.listProperties.fields.property.options')]
+    public function listPropertiesPropertiesOptions(DataContainer $dc): array
+    {
+        $options = [];
+        $properties = [];
+
+        $arrContent = $dc->getCurrentRecord();
+        $layerId    = $arrContent['featureSourceLayer'];
+
+        /* @var QgisLayerModel $objLayer */
+        if($objLayer = QgisLayerModel::findById($layerId)) {
+            if($collFeatures = $objLayer->getAllFeaturesAsCollection())
+                foreach ($collFeatures as $feature) {
+                    $arrProperties = json_decode(html_entity_decode($feature->properties), true);
+
+                    foreach ($arrProperties as $_key => $_property) {
+                        $properties[$_key] = (!array_key_exists($_key, $properties)) ? 1 : ++$properties[$_key];
+                    }
+                }
+        }
+        dump($properties);
+
+        foreach ($properties as $_key => $_property) {
+            $options[$_key] = "$_key [{$_property}mal]";
+        }
+
+        asort($options);
+
+        return $options;
+    }
+
+
+
+
+
+    /**
      * @param array $row
      * @return array
      */

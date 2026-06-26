@@ -2,31 +2,85 @@
 {#
     baut eine feature list für die Frontend Ansicht einer Karte
 #}
-
 {% block featurelist_component %}
 <script type="application/javascript">
     document.addEventListener('DOMContentLoaded', function () {
         let panel   = document.querySelector('#map-{{ map.id }}-feature-list');
-        let hs      = [];
+        let featureList = [];
 
         layer_{{ data.featureSourceLayer }}.getSource().forEachFeature(function (feature) {
             let f = {
                 id: feature.getId(),
+                number: feature.get('number'),
                 name: feature.get('name'),
             }
-            hs.push(f);
+            featureList.push(f);
         });
 
-        // sorter
-        hs.sort((a, b) => a.name.localeCompare(b.name));
+        // prepare parameter for the feature list
+        {% set properties = map.getPropertiesFromData(data.id) %}
+        properties = JSON.parse('{{ properties|raw }}');
+        dispFields = [];
+        sortFields = [];
+        // build sort- and display fields
+        properties.forEach(property => {
+            if(property.enable==1) dispFields.push(property.property);
+            if(property.sortBy!='none') sortFields.push({property: property.property, sortBy: property.sortBy});
+        })
+console.log(dispFields);
+        // sort
+        if(sortFields.length > 0) {
 
-        hs.forEach(function (h)
+            const prop = sortFields[0].property;
+            const dir = sortFields[0].sortBy; // 'asc' oder 'desc'
+
+            featureList.sort((a, b) => {
+                const av = a[prop];
+                const bv = b[prop];
+
+                const aNum = typeof av === 'number'
+                    ? av
+                    : (typeof av === 'string' && av.trim() !== '' ? Number(av) : NaN);
+
+                const bNum = typeof bv === 'number'
+                    ? bv
+                    : (typeof bv === 'string' && bv.trim() !== '' ? Number(bv) : NaN);
+
+                let res;
+                if (!Number.isNaN(aNum) && !Number.isNaN(bNum)) {
+console.log('numerisch');
+                    res = aNum - bNum; // numerisch
+                } else {
+console.log('string');
+                    res = String(av ?? '').localeCompare(String(bv ?? '')); // string
+                }
+
+                return dir === 'desc' ? -res : res;
+            });
+
+        }
+
+        // build list
+        featureList.forEach(function (h)
         {
             const hsli = document.createElement('div');
             // ToDo: hier die Liste frei konfigurierbar machen
             hsli.dataset.featureId = h.id;
             hsli.classList.add(`map-{{ map.id }}-feature-${h.id}`);
-            hsli.innerHTML = h.name;
+            hsli.setAttribute('title', 'Klick Zoom auf Objekt');
+
+            //console.log(properties);
+
+            //hsli.innerHTML = `${h.name}`;
+
+console.log(dispFields.map(f => h?.[f]));
+
+            const text = dispFields
+                .map(f => h?.[f])
+                .filter(v => v !== null && v !== undefined && String(v).trim() !== '')
+                .join(' ');
+
+            hsli.textContent = text; // oder: el.textContent = text; (sicherer gegen HTML)
 
             if(panel) panel.appendChild(hsli)
         });

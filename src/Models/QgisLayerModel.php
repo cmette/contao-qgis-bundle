@@ -226,6 +226,9 @@ EOJ;
         return $collection;
     }
 
+    /**
+     * @return string
+     */
     public function getImageSourceUrl(): string
     {
         $file = FilesModel::findByUuid($this->image_source_singleSRC); // je nachdem, was du hast

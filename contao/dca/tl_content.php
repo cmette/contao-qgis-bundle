@@ -1,6 +1,7 @@
 <?php
 
 use Cmette\ContaoQgisBundle\Utils\DcaUtils;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['qgis_map'] =
     '{type_legend},type,headline,title;' .
@@ -12,9 +13,11 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['qgis_map'] =
     '{invisible_legend:hide},invisible,start,stop;'
 ;
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addFeatureList';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'isSortedList';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addActiveList';
 
-$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addFeatureList'] = 'featureSourceLayer,listHeadline,isActiveList,addActiveList';
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addFeatureList'] = 'featureSourceLayer,listHeadline,isSortedList,addActiveList';
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['isSortedList']   = 'listProperties';
 $GLOBALS['TL_DCA']['tl_content']['subpalettes']['addActiveList']  = 'zoomExtentOnHover,zoomExtentOnClick';
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
@@ -81,5 +84,60 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['listHeadline'] =
 ];
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['addActiveList']      = DcaUtils::buildAddField(true, true);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['isSortedList']       = DcaUtils::buildAddField(true, true);
+$GLOBALS['TL_DCA']['tl_content']['fields']['listProperties']     = [
+    'inputType' => 'rowWizard',
+    'fields' => [
+        'property' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['listProperties_fields']['property'],
+            'inputType' => 'select',
+            #'options'       => ['useTitle', 'useProperty', '2rwf', '3rw'],
+            'reference'     => &$GLOBALS['TL_LANG']['tl_content']['listProperties_fields'],
+            'eval'      => [
+                // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                'mandatory' => true,
+                'includeBlankOption'=> false,
+                #'blankOptionLabel'  => 'kein/unbekannt',
+                'multiple'  => false,
+                'unique'    => true,
+                'chosen'    => false,
+                'cell_class'=> 'property'
+            ],
+        ],
+        'sortBy' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['listProperties_fields']['sortBy'],
+            'inputType' => 'select',
+            'options'   => ['none', 'asc', 'desc'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_content']['listProperties_sortBy_options'],
+            'eval'      => [
+                // wenn addSeries true, dann muss eine Reihe angegeben werden!
+                'mandatory' => false,
+                'includeBlankOption'=> false,
+                'multiple' => false,
+                'chosen' => false,
+                'cell_class'=> 'sortBy'
+            ],
+        ],
+    ],  # fields
+    'eval' => [
+        'tl_class' => 'clr',
+
+        'actions' => [
+            'copy',
+            'delete',
+            'enable',
+        ],
+        'min' => 1,         // minimum rows
+        'max' => 100,        // maximum rows
+        'sortable' => true, // disable the sorting, defaults to true
+    ],
+    'sql' => [
+        'type' => 'text',
+        'length' => MySQLPlatform::LENGTH_LIMIT_BLOB,
+        'notnull' => false
+    ],
+];
+
 $GLOBALS['TL_DCA']['tl_content']['fields']['zoomExtentOnClick']  = DcaUtils::buildAddField(true, false);
 $GLOBALS['TL_DCA']['tl_content']['fields']['zoomExtentOnHover']  = DcaUtils::buildAddField(false, false);
