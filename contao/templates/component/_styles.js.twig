@@ -4,7 +4,7 @@
 #}
 
 {% block styles_component %}
-//-- olmap-{{ map.id }} Styles -----------------------------------------------
+//-- _style.js.twig: olmap-{{ map.id }} ---------------------------------------
 function mm2px(m) {
     // mittlerer Pixelabstand berechnen (units pro Pixel)
     const _map = map_{{- map.id -}};
@@ -82,4 +82,5 @@ map_{{- map.id -}}_styleFunction = (feature, resolution) => {
     // Rückgabe: Style-Instanz, Array von Styles oder null
     return map_{{- map.id -}}_styleCache[`style_${styleId}`](feature);
 };
+//-- _styles.js.twig end ------------------------------------------------------
 {% endblock %}

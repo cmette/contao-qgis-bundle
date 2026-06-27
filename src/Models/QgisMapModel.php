@@ -49,18 +49,31 @@ class QgisMapModel extends Model
     }
 
     /**
+     * liefert das angefragte Layer aus map.layers oder null
+     *
      * @param $layerId
      * @return QgisLayerModel|null
      */
-    public function getLayer($layerId):QgisLayerModel|null
+    public function getLayer(int $layerId):QgisLayerModel|null
     {
+        $arrLayer = [];
+        // deserialize map.layers
+        $arrLayers  = StringUtil::deserialize($this->layers, true);
+        // suche nach layerId
+        $arrLayer = array_filter($arrLayers, function ($item) use ($layerId) { return ((int)$item['layer'] === $layerId); });
+        // kein passendes Layer gefunden, zurück
+dump($arrLayer);
+        if(count($arrLayer)===0) return null;
+        // hole erstes Element - es kann das layer nur einmal geben
+        $layer = reset($arrLayer);
+dump($layer);
         /* @var QgisLayerModel $objLayer */
-        $objLayer = QgisLayerModel::findById($layerId);
+        $objLayer = QgisLayerModel::findById($layer['layer']);
+dump($layer['enable']==='1');
+        //
+        if(!is_null($objLayer)) $objLayer->_enable = ($layer['enable']==='1');
 
-        if($objLayer) {
-            return ($this->isFrontendRequest() && !$objLayer->published) ? null : $objLayer;
-        }
-
+dump($objLayer);
         return $objLayer;
     }
 
@@ -129,18 +142,23 @@ class QgisMapModel extends Model
         return $styleCollection;
     }
 
+    /**
+     * berechnet zoom und extent aus den verschiedenen Einstellungen der Layer
+     *
+     * @return array|string[]
+     */
     public function getExtent(): array
     {
         $arrLayers = StringUtil::deserialize($this->layers, true);
-
+        // enthält die Karte überhaupt eine Ebene?
         if(count($arrLayers) > 0) {
             foreach ($arrLayers as $layer) {
                 /* @var QgisLayerModel $objLayer */
                 $objLayer = QgisLayerModel::findById($layer['layer']);  // ToDo: wenn Layer gelöscht?
-
-                if (!array_key_exists('zoom', $layer)) {
-                    return ['mode' => 'params'];
-                }
+                // ist kein Layer.zoom vorhanden, dann werden die Parameter der Karte verwendet
+                if (!array_key_exists('zoom', $layer)) return ['mode' => 'params'];
+                // wenn layer unsichtbar, dann werden die Parameter der Karte verwendet
+                if ($layer['enable'] != '1') return ['mode' => 'params'];
 
                 switch ($layer['zoom']) {
                     case 'params':
@@ -171,14 +189,20 @@ class QgisMapModel extends Model
         return $zoom;
     }
 
+    /**
+     * decodiert die Properties aus einem gegebenen record aus tl_content
+     *
+     * @param $contentId
+     * @return string|null
+     */
     public function getPropertiesFromData($contentId): string|null
     {
         $result = [];
 
-        $objContent = ContentModel::findById($contentId);
-        $result = json_encode(StringUtil::deserialize($objContent->listProperties, true), JSON_UNESCAPED_UNICODE);
-
-dump($result);
-        return $result;
+        if($objContent = ContentModel::findById($contentId)) {
+            return  json_encode(StringUtil::deserialize($objContent->listProperties, true), JSON_UNESCAPED_UNICODE);
+        } else {
+            return null;
+        }
     }
 }

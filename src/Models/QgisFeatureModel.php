@@ -119,6 +119,7 @@ dump(json_encode($feature->geometry_coordinates, JSON_PRETTY_PRINT | JSON_UNESCA
 #dump($env);
             self::extendExtent($combined, $env);
         }
+dump($combined);
         return $combined;
     }
 }

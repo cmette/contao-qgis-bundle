@@ -43,6 +43,6 @@ tl_qgis_map:
     - Mittelpunkt der Karte EPSG:3857
     - Beim Verschieben der Karte wird hier der aktuelle Mittelpunkt angezeigt.
   extent:
-    - Umfang (Extent)
-    - Das Umfangsquadrat über alle Kartenelemente.
+    - Bounding Box (Extent)
+    - Die Bounding Box über alle Kartenelemente.
     - Zoom to Extent

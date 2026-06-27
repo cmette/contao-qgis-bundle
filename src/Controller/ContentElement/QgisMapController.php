@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Cmette\ContaoQgisBundle\Controller\ContentElement;
 
+use Cmette\ContaoQgisBundle\Models\QgisLayerModel;
 use Cmette\ContaoQgisBundle\Models\QgisMapModel;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
@@ -74,6 +75,7 @@ class QgisMapController extends AbstractContentElementController
         $template->set('settings', $settings);
         $template->set('map', $map);
         $template->set('image', $figure);
+        $template->set('featureLayer', QgisLayerModel::findById($model->featureSourceLayer));
         $arrListHeadline = StringUtil::deserialize($model->listHeadline, true);
         $template->set('listHeadline', !empty($arrListHeadline['value']) ? "<{$arrListHeadline['unit']}>{$arrListHeadline['value']}</{$arrListHeadline['unit']}>" : '');
 

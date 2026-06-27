@@ -155,11 +155,8 @@ class ContentElementListener
                     }
                 }
         }
-        dump($properties);
 
-        foreach ($properties as $_key => $_property) {
-            $options[$_key] = "$_key [{$_property}mal]";
-        }
+        foreach ($properties as $_key => $_property) $options[$_key] = "$_key [{$_property}mal]";
 
         asort($options);
 

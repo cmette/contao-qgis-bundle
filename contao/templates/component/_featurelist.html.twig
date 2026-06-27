@@ -9,17 +9,14 @@
         let featureList = [];
 
         layer_{{ data.featureSourceLayer }}.getSource().forEachFeature(function (feature) {
-            let f = {
-                id: feature.getId(),
-                number: feature.get('number'),
-                name: feature.get('name'),
-            }
-            featureList.push(f);
+            let _feature = feature.getProperties();
+            // die id des Datensatzes als feature member hinzufügen
+            _feature.id = feature.getId();
+            // das Ergebnis der feature list hinzufügen
+            featureList.push(_feature);
         });
-
-        // prepare parameter for the feature list
-        {% set properties = map.getPropertiesFromData(data.id) %}
-        properties = JSON.parse('{{ properties|raw }}');
+        // Parameter für die Generierung der Liste bereitstellen
+        properties = JSON.parse('{{ map.getPropertiesFromData(data.id)|raw }}');
         dispFields = [];
         sortFields = [];
         // build sort- and display fields
@@ -27,69 +24,50 @@
             if(property.enable==1) dispFields.push(property.property);
             if(property.sortBy!='none') sortFields.push({property: property.property, sortBy: property.sortBy});
         })
-console.log(dispFields);
-        // sort
+        // jetzt sortieren ToDo: zurzeit ist nur das Sortieren nach einem Feld möglich
         if(sortFields.length > 0) {
-
-            const prop = sortFields[0].property;
-            const dir = sortFields[0].sortBy; // 'asc' oder 'desc'
+            const prop  = sortFields[0].property;   // Name des zu sortierenden Feldes
+            const dir   = sortFields[0].sortBy;     // 'asc' oder 'desc'
 
             featureList.sort((a, b) => {
                 const av = a[prop];
                 const bv = b[prop];
 
-                const aNum = typeof av === 'number'
-                    ? av
-                    : (typeof av === 'string' && av.trim() !== '' ? Number(av) : NaN);
-
-                const bNum = typeof bv === 'number'
-                    ? bv
-                    : (typeof bv === 'string' && bv.trim() !== '' ? Number(bv) : NaN);
+                const aNum = typeof av === 'number' ? av : (typeof av === 'string' && av.trim() !== '' ? Number(av) : NaN);
+                const bNum = typeof bv === 'number' ? bv : (typeof bv === 'string' && bv.trim() !== '' ? Number(bv) : NaN);
 
                 let res;
+
                 if (!Number.isNaN(aNum) && !Number.isNaN(bNum)) {
-console.log('numerisch');
                     res = aNum - bNum; // numerisch
                 } else {
-console.log('string');
                     res = String(av ?? '').localeCompare(String(bv ?? '')); // string
                 }
 
                 return dir === 'desc' ? -res : res;
             });
-
         }
+        // liste aus Elementen zusammenbauen
+        const isEmpty = s => s == null || String(s).trim() === '';
+        featureList.forEach(function (listItem) {
+            const listElement = document.createElement('div');
 
-        // build list
-        featureList.forEach(function (h)
-        {
-            const hsli = document.createElement('div');
-            // ToDo: hier die Liste frei konfigurierbar machen
-            hsli.dataset.featureId = h.id;
-            hsli.classList.add(`map-{{ map.id }}-feature-${h.id}`);
-            hsli.setAttribute('title', 'Klick Zoom auf Objekt');
-
-            //console.log(properties);
-
-            //hsli.innerHTML = `${h.name}`;
-
-console.log(dispFields.map(f => h?.[f]));
+            listElement.dataset.featureId = listItem.id;
+            listElement.classList.add(`map-{{ map.id }}-feature-${listItem.id}`);
+            listElement.setAttribute('title', 'Klick zoomt auf Objekt');
 
             const text = dispFields
-                .map(f => h?.[f])
+                .map(f => listItem?.[f])
                 .filter(v => v !== null && v !== undefined && String(v).trim() !== '')
                 .join(' ');
 
-            hsli.textContent = text; // oder: el.textContent = text; (sicherer gegen HTML)
+            listElement.textContent = isEmpty(text) ? '?' : text;
 
-            if(panel) panel.appendChild(hsli)
+            if(panel) panel.appendChild(listElement)
         });
-
         //------------------------------------
-
-        //const source = new VectorSource({ features });
         const source = layer_{{ data.featureSourceLayer }}.getSource();
-        // 2) Layer & Standard Style
+        // Layer & Standard Style
         const defaultStyle = new ol.style.Style({
             image: new ol.style.Circle({
                 radius: 6,
@@ -101,8 +79,7 @@ console.log(dispFields.map(f => h?.[f]));
             source,
             style: defaultStyle
         });
-
-        // 4) Highlight layer (separater VectorLayer für Markierung)
+        // ein highlight layer bauen (separater VectorLayer für Markierung)
         const highlightSource = new ol.source.Vector();
         const highlightStyle = new ol.style.Style({
             image: new ol.style.Circle({

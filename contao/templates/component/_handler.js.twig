@@ -4,9 +4,8 @@
     unterscheidet dabei zwischen Handlern für das Back- und Fronend
     der Aufrufer muss für das Backend scope = true setzen
 #}
-
 {% block handler_component %}
-//-- begin handler scope: {{ scope ? 'backend':'frontend' }} ---------------------------------------------
+//-- _handler.js.twig scope: {{ scope ? 'backend':'frontend' }} ---------------
 {# set handler = layer.getAllFeaturesAsJson()|raw #}
 
 {% if(scope) %}

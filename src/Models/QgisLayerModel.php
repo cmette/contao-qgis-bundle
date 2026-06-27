@@ -170,7 +170,7 @@ class QgisLayerModel extends Model
             \"id\": {$objFeature->id},
             \"type\": \"Feature\",
             \"name\": \"$_name\",
-            \"styleId\": \"$_styleId\",
+            \"styleId\": $_styleId,
             \"properties\": {$properties},
             \"geometry\": {
                 \"type\": \"{$objFeature->geometry_type}\",

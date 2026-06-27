@@ -6,17 +6,15 @@
 {% use '@Contao/component/_styles.js.twig' %}
 
 {% block map_component %}
-    //-- Map target: olmap-{{ map.id }} const: map_{{ map.id }} -----------------------------------------------
+    //-- _map.js.twig: target: olmap-{{ map.id }} const: map_{{ map.id }} -----
 
     //var size = 0;
     //var placement = 'point';
 
     {# konstruiert alle Style-Objekte der Map und fügt nötige Code-Teile hinzu #}
     {{ block('styles_component') }}
-
     {# konstruiert Layers #}
     {{ block('layers_component') }}
-
     map_{{ map.id }} = new ol.Map({
         target: 'olmap-{{- map.id -}}',
         layers: ol_layers_{{- map.id -}},
@@ -26,24 +24,25 @@
         //]),
 
         view: new ol.View({
+            projection: 'EPSG:3857',
             zoom: {{ map.getZoom()|raw }},
             //minZoom: 13,
             //maxZoom: 19,
             //center: [51.42844665110317, 13.858214471317353],
-            center: {{ map.getCenter()|raw }},   // epsg:3857
+            center: {{ map.getCenter()|raw }}, // epsg:3857
         })
     });
-
+    //-- zoom berechnen -------------------------------------------------------
     {% set extent = map.getExtent() %}
     {%- if extent.mode == 'params' -%}
     {%- elseif extent.mode == 'layer' -%}
         {%- if extent.source == 'Tile' -%}
         {%- elseif extent.source == 'Vector' -%}
-    extent = {{ extent.var }}.getSource().getExtent();
+    if(typeof {{ extent.var }} !== "undefined") extent = {{ extent.var }}.getSource().getExtent();
     map_{{- map.id -}}.getView().fit(extent,
         {
             size: map_{{ map.id }}.getSize(),
-            padding: [50, 50, 50, 50], // pixel add to [top, right, bottom, left]
+            padding: [50, 50, 50, 50], // pixel add to [top, right, bottom, left] ToDo:
             duration: 1000, // ms
             easing: ol.easing.easeOut,
         }
@@ -59,7 +58,6 @@
                 easing: ol.easing.easeOut,
             }
         );
-    {% endif %}
-
-    //-- end Map -------------------------------------------------------------------------
+{%- endif -%}
+//-- _map.js.twig end -----------------------------------------------------
 {% endblock %}
