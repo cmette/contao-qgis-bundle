@@ -64,18 +64,6 @@
             li.ol-header {
                 display: none !important;
             }
-            #map_{{ map.id }}_coords {
-                position: absolute;
-                top: 1rem;
-                left: 1rem;
-                z-index: 1;
-            }
-            #map_{{ map.id }}_scope {
-                position: absolute;
-                top: 1rem;
-                right: 6rem;
-                z-index: 1;
-            }
         </style>
         {% if map %}
             <p>Halten Sie Shift + Alt gedrückt und ziehen Sie die Maus über die Karte, um die Karte zu drehen. {# {page::alias} #}</p>
@@ -93,8 +81,8 @@
                 <div class="list">
                     {% set cond1 = data.addFeatureList %}
                     {% set cond2 = featureLayer.published %}
-                    {% set cond3 = map.getLayer(featureLayer.id)._enable %}
-                    {% set cond = (cond1 and cond2 and cond3) %}
+                    {# set cond3 = map.getLayer(featureLayer.id)._enable #}
+                    {% set cond = (data.addFeatureList and featureLayer.published and map.getLayer(featureLayer.id)._enable) %}
                     {% if (cond) %}
                     <div id="map-{{ map.id }}-feature-list">
                         {{ listHeadline|raw }}

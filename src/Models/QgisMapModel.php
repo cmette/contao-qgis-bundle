@@ -38,7 +38,7 @@ class QgisMapModel extends Model
      */
     protected static $strTable = 'tl_qgis_map';
 
-    public function getCenter()
+    public function getCenter():string
     {
         return ($this->tstamp && !empty($this->center)) ? (string)$this->center : '[0.0, 0.0]'; // ToDo: configurable center
     }
@@ -51,7 +51,7 @@ class QgisMapModel extends Model
     /**
      * liefert das angefragte Layer aus map.layers oder null
      *
-     * @param $layerId
+     * @param int $layerId
      * @return QgisLayerModel|null
      */
     public function getLayer(int $layerId):QgisLayerModel|null
@@ -62,18 +62,14 @@ class QgisMapModel extends Model
         // suche nach layerId
         $arrLayer = array_filter($arrLayers, function ($item) use ($layerId) { return ((int)$item['layer'] === $layerId); });
         // kein passendes Layer gefunden, zurück
-dump($arrLayer);
         if(count($arrLayer)===0) return null;
-        // hole erstes Element - es kann das layer nur einmal geben
+        // hole erstes Element - es kann dieses layer nur einmal geben
         $layer = reset($arrLayer);
-dump($layer);
         /* @var QgisLayerModel $objLayer */
         $objLayer = QgisLayerModel::findById($layer['layer']);
-dump($layer['enable']==='1');
         //
         if(!is_null($objLayer)) $objLayer->_enable = ($layer['enable']==='1');
 
-dump($objLayer);
         return $objLayer;
     }
 

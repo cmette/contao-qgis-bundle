@@ -63,7 +63,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
         'Image' =>
             '{title_legend},title,style;' .
             '{type_legend},type;' .
-            '{source_legend},image_source,attribution,image_source_singleSRC,image_extent;' .
+            '{source_legend},image_source,attribution,image_source_singleSRC,image_extent,opacity;' .
             '',
         'Tile' =>
             '{title_legend},title,style;' .

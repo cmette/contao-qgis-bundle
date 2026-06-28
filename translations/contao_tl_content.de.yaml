@@ -5,7 +5,7 @@ tl_content:
     - Wählen Sie hier eine vorkonfigurierte Karte für die Darstellung am Frontend
   addFeatureList:
     - eine Liste aus Features generieren (experimentell)
-    - Wenn Sie diese Option wählen, wird zusätzlich zur Kartendarsellung eine Liste aus bestimmten Features eines Layers generiert.
+    - Wenn Sie diese Option wählen, wird zusätzlich zur Kartendarstellung eine Liste aus bestimmten Features eines Layers generiert.
   featureSourceLayer:
     - Quell-Ebene für die Feature-Liste
     - Wählen Sie hier eine Ebene, der die Features für die Liste entnommen werden sollen.

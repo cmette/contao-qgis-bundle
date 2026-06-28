@@ -20,13 +20,14 @@
 var source_{{ layer.type }}_{{ layer.id }} = new ol.source.{{ layer.source }}({attributions: '{{ layer.attribution|raw }}',});
     source_{{ layer.type }}_{{ layer.id }}.setUrl('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
     {% elseif layer.type == 'Image' %}{# ------------------------ #}
-    var source_{{ layer.type }}_{{ layer.id }} = new ol.source.{{ layer.source }}(
+    var source_{{ layer.type }}_{{ layer.id }} = new ol.source.{{ layer.image_source }}(
         {
             attributions: '{{ layer.attribution|raw }}',
             url: '{{ layer.getImageSourceUrl()|raw }}',
             projection: 'EPSG:3857',
             //extent: ol.proj.transformExtent(extent, 'EPSG:3857','EPSG:4326'),
             imageExtent: {{ layer.image_extent|raw }},
+            opacity: {{ layer.opacity }},
         }
     );
     {% endif %}
