@@ -1,0 +1,226 @@
+/*
+ *  global
+ */
+#tl_navigation a.group-qgis {
+  background: url("../img/map.svg") 3px 2px no-repeat;
+  background-size: 13px 13px;
+}
+
+.tl_tip {
+  color: #2f9f00;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  height: auto;
+  white-space: normal;
+}
+
+[id$=_coords] {
+  position: absolute;
+  top: 0.5em;
+  left: 3em;
+  z-index: 1;
+}
+
+[id$=_scope] {
+  position: absolute;
+  top: 0.5em;
+  right: 7em;
+  z-index: 1;
+}
+
+/***********************************************************************************/
+/*--------------------------------------------------------------------------
+  Frontend map
+ --------------------------------------------------------------------------*/
+.map-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.map-wrapper .map {
+  flex: 0 0 75%;
+  position: relative;
+  aspect-ratio: 1.3;
+  border: 3px solid #e0e0e0;
+  border-radius: 0.5rem;
+}
+.map-wrapper .list {
+  flex: 0 1 25%;
+  border: 3px solid #e0e0e0;
+  border-radius: 0.5rem;
+  overflow: scroll;
+  padding: 1rem;
+}
+.map-wrapper [id$=-feature-list] div {
+  font-size: 0.8rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  padding: 2px 4px 0 4px;
+  margin-bottom: 2px;
+  cursor: pointer;
+}
+.map-wrapper [id$=-feature-list] div::first-letter {
+  font-weight: bold;
+}
+.map-wrapper [id$=-feature-list] div:hover {
+  background: #e0e0e0;
+}
+
+/*--------------------------------------------------------------------------
+  Backend
+ --------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------
+  edit mode tl_qgis_map
+ --------------------------------------------------------------------------*/
+form#tl_qgis_map table#ctrl_layers tbody {
+  vertical-align: top;
+}
+form#tl_qgis_map table#ctrl_layers tbody tr td select {
+  border: none;
+}
+form#tl_qgis_map table#ctrl_layers tbody tr td.layer {
+  width: auto;
+}
+form#tl_qgis_map table#ctrl_layers tbody tr td.layer select {
+  background-color: #e5fbff;
+}
+form#tl_qgis_map table#ctrl_layers tbody tr td.style {
+  width: 20%;
+}
+form#tl_qgis_map table#ctrl_layers tbody tr td.style .choices__list {
+  background-color: #ffe9cb;
+}
+form#tl_qgis_map table#ctrl_layers tbody tr td.zoom {
+  width: 10%;
+}
+form#tl_qgis_map table#ctrl_layers tbody tr td.zoom select {
+  background-color: #e7fbd6;
+}
+form#tl_qgis_map .olmap_widget {
+  background-color: var(--form-bg);
+  border: 1px solid var(--form-border);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+  margin: 3px 0;
+  padding: 5px 6px 6px;
+  aspect-ratio: 1;
+  width: 100%;
+}
+form#tl_qgis_map .olmap_widget [id^=olmap-] {
+  aspect-ratio: 1;
+}
+
+/*--------------------------------------------------------------------------
+  edit mode tl_qgis_layer
+ --------------------------------------------------------------------------*/
+form#tl_qgis_layer .tl_tip {
+  color: #2f9f00;
+  margin-top: 0.5rem;
+}
+form#tl_qgis_layer table#ctrl_features tbody {
+  vertical-align: top;
+}
+form#tl_qgis_layer table#ctrl_features tbody tr td select {
+  border: none;
+}
+form#tl_qgis_layer table#ctrl_features tbody tr td.feature {
+  width: auto;
+}
+form#tl_qgis_layer table#ctrl_features tbody tr td.feature .choices__list {
+  background-color: #e5fbff;
+}
+form#tl_qgis_layer table#ctrl_features tbody tr td.style {
+  width: 20%;
+}
+form#tl_qgis_layer table#ctrl_features tbody tr td.style .choices__list {
+  background-color: #ffe9cb;
+}
+form#tl_qgis_layer table#ctrl_features tbody tr td.zoom {
+  width: 10%;
+}
+form#tl_qgis_layer table#ctrl_features tbody tr td.zoom select {
+  background-color: #e7fbd6;
+}
+
+/*--------------------------------------------------------------------------
+  edit mode tl_qgis_feature
+ --------------------------------------------------------------------------*/
+form#tl_qgis_feature .tl_tip {
+  color: #2f9f00;
+  margin-top: 0.5rem;
+}
+form#tl_qgis_feature .drop-widget {
+  grid-column: 7/span 6;
+}
+form#tl_qgis_feature .drop-widget .drop-target {
+  display: flex;
+  align-content: space-between;
+  align-items: flex-start;
+  float: left;
+  width: 25%;
+  background-color: var(--form-bg);
+  border: 1px solid var(--form-border);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+  margin: 3px 0;
+  padding: 5px 6px 6px;
+}
+form#tl_qgis_feature .drop-widget .drop-target img {
+  flex: 0 0 25%;
+}
+form#tl_qgis_feature .drop-widget .drop-target #drop-state {
+  flex: 1 1 75%;
+  align-self: center;
+  text-align: center;
+  font-weight: bold;
+}
+form#tl_qgis_feature .drop-widget .drop-target .drop-await {
+  color: darkorange;
+}
+form#tl_qgis_feature .drop-widget .drop-target .drop-ok {
+  color: green;
+}
+form#tl_qgis_feature .drop-widget .drop-target .drop-error {
+  color: red;
+}
+form#tl_qgis_feature .drop-widget .drop-target.over {
+  border: 1px solid red;
+}
+form#tl_qgis_feature .drop-widget p {
+  padding-left: 1rem;
+}
+form#tl_qgis_feature .drop-widget p span {
+  counter-reset: item;
+  padding-left: 0;
+  list-style: none;
+}
+form#tl_qgis_feature .drop-widget p span span {
+  display: inline-block;
+  counter-increment: item;
+  margin-right: 8px; /* optional */
+}
+form#tl_qgis_feature .drop-widget p span::before {
+  content: counter(item) ". ";
+}
+form#tl_qgis_feature table#ctrl_geometry tbody {
+  vertical-align: top;
+}
+form#tl_qgis_feature table#ctrl_geometry *[id^=ctrl_type],
+form#tl_qgis_feature table#ctrl_geometry *[id^=ctrl_coordinates] {
+  border: none;
+  background-color: #F6F6F8;
+}
+form#tl_qgis_feature table#ctrl_geometry td:has(> [id$="[type]"]) {
+  width: 15%;
+}
+form#tl_qgis_feature table#ctrl_geometry td:has(> [id$="[type]"]) select {
+  background-color: #ecf4ff;
+}
+form#tl_qgis_feature table#ctrl_geometry td:has(> [id$="[coordinates]"]) {
+  width: 85%;
+}
+form#tl_qgis_feature table#ctrl_geometry td:has(> [id$="[coordinates]"]) textarea {
+  background-color: #ffecec;
+}
+
+/*# sourceMappingURL=qgis.css.map */
