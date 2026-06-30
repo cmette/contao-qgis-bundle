@@ -69,9 +69,8 @@
             <p>Halten Sie Shift + Alt gedrückt und ziehen Sie die Maus über die Karte, um die Karte zu drehen. {# {page::alias} #}</p>
             <div class="map-wrapper">
                 <div{{- map_attributes -}}>
-                    <div id="map_{{ map.id }}_coords"></div>
-                    <div id="map_{{ map.id }}_scope">[{{ scope ? 'backend':'frontend' }}]</div>
-
+                    {% if map.showCrsFE %}<div id="map_{{ map.id }}_coords"></div>{% endif %}
+                    {% if map.showScopeFE %}<div id="map_{{ map.id }}_scope">[{{ scope ? 'backend':'frontend' }}]</div>{% endif %}
                     {# {- block('popup_component') -} #}
                     <div id="popup" class="ol-popup">
                         <!-- a href="#" id="popup-closer" class="ol-popup-closer"></a -->

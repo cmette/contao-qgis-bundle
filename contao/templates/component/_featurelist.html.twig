@@ -132,7 +132,7 @@
             map_{{- map.id -}}.getView().fit(extent,
                 {
                     size: map_{{ map.id }}.getSize(),
-                    padding: [50, 50, 50, 50], // pixel add to [top, right, bottom, left]
+                    padding: {{ map.mapPadding|raw }},
                     duration: 1000, // ms
                     easing: ol.easing.easeOut,
                 }

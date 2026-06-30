@@ -7,8 +7,6 @@
     <h3>{{ label|raw }}{{ this.xlabel|default|raw }}</h3>
 {% endif %}
 
-{#  { dump(this.record) } #}
-
 {% set widget   = this %}
 {% set map      = this.record %}
 {% if scope is not defined %}
@@ -16,12 +14,10 @@
 {% endif %}
 {% set olMapId = "olmap-#{widget.record.id}" %}
 
-{#   { dump(widget.center) } #}
-
 <div id="ctrl_{{ this.id }}" name="{{ this.name }}" class="olmap_widget{{ this.class }}">
     <div id="{{ olMapId }}">
-        <div id="map_{{ map.id }}_coords"></div>
-        <div id="map_{{ map.id }}_scope">[{{ this.scope ? 'backend':'frontend' }}]</div>
+        {% if map.showCrsBE %}<div id="map_{{ map.id }}_coords"></div>{% endif %}
+        {% if map.showScopeBE %}<div id="map_{{ map.id }}_scope">[{{ this.scope ? 'backend':'frontend' }}]</div>{% endif %}
     </div>
 </div>
 <p class='tl_help tl_tip' data-contao--tooltips-target='tooltip'>{{ this.label }}</p>

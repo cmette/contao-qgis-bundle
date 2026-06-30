@@ -58,9 +58,10 @@ $GLOBALS['TL_DCA'][$strTable] = [
 		'__selector__'  =>  ['addOpenLayers','addOpenLayersExt'],
 		'default'       =>
             '{type_legend},title;' .
-            '{mapconfig_legend},addOpenLayers,addOpenLayersExt;' .
+            '{olconfig_legend},addOpenLayers,addOpenLayersExt;' .
+            '{mapconfig_legend},showCrsFE,showScopeFE,showCrsBE,showScopeBE,;' .
             '{layers_legend},layers;' .
-            '{parameters_legend},map,center,extent,zoom,mapCrs;' .
+            '{parameters_legend},map,center,extent,zoom,mapCrs,mapPadding;' .
             '',
 	],
 
@@ -96,7 +97,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             ]
         ],
         /**********************************************************************
-         * globalconfig_legend
+         * olconfig_legend
          **********************************************************************/
         // switch add open layers
         'addOpenLayers'     => DcaUtils::buildAddField(true),
@@ -197,6 +198,13 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'default'   => false
             ],
         ],
+        /**********************************************************************
+         * mapconfig_legend
+         **********************************************************************/
+        'showCrsFE'   => DcaUtils::buildAddField(false,false),
+        'showScopeFE' => DcaUtils::buildAddField(false,false),
+        'showCrsBE'   => DcaUtils::buildAddField(false,false),
+        'showScopeBE' => DcaUtils::buildAddField(false,false),
         /**********************************************************************
          * layers_legend
          **********************************************************************/
@@ -338,6 +346,24 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'length'    => 20,
                 'fixed'     => true,
                 'default'   => 'EPSG:3857',
+            ]
+        ],
+        # padding
+        'mapPadding' => [
+            'inputType'     => 'text',
+            'eval'          => [
+                'mandatory' => true,
+                'unique'    => false,
+                'tl_class'  => 'w25',
+                #'rgxp'      => 'custom',
+                #'customRgxp'=> "/^\[(?:-?\d+(?:\.\d+)?), (?:-?\d+(?:\.\d+)?), (?:-?\d+(?:\.\d+)?), (?:-?\d+(?:\.\d+)?)\]$/iu",
+                #'errorMsg'  => "Bitte geben Sie hier nur vier Koordinaten  der Form: [x1,x2,x3,x4] ein.",
+            ],
+            'sql'       => [
+                'type'      => 'string',
+                'length'    => 255,
+                'fixed'     => true,
+                'default'   => '[20,20,20,20]',
             ]
         ],
 	],

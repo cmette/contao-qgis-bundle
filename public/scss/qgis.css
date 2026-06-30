@@ -14,16 +14,22 @@
   white-space: normal;
 }
 
-[id$=_coords] {
+[id$=_coords], [id$=_scope] {
   position: absolute;
   top: 0.5em;
+  background-color: white;
+  color: black;
+  opacity: 0.5;
+  padding: 0 4px;
+  border-radius: 6px;
+}
+
+[id$=_coords] {
   left: 3em;
   z-index: 1;
 }
 
 [id$=_scope] {
-  position: absolute;
-  top: 0.5em;
   right: 7em;
   z-index: 1;
 }
@@ -97,6 +103,7 @@ form#tl_qgis_map table#ctrl_layers tbody tr td.zoom select {
   background-color: #e7fbd6;
 }
 form#tl_qgis_map .olmap_widget {
+  position: relative;
   background-color: var(--form-bg);
   border: 1px solid var(--form-border);
   border-radius: var(--border-radius);
@@ -140,6 +147,9 @@ form#tl_qgis_layer table#ctrl_features tbody tr td.zoom {
 }
 form#tl_qgis_layer table#ctrl_features tbody tr td.zoom select {
   background-color: #e7fbd6;
+}
+form#tl_qgis_layer table#ctrl_features tbody tr td.zoom select:has(option[selected][value=combine]) {
+  background-color: #ffbaba;
 }
 
 /*--------------------------------------------------------------------------

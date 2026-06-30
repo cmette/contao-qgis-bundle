@@ -119,7 +119,7 @@ class ContentElementListener
             // map is available
             if($layers = $objMap->getLayers()) {
                 foreach ($layers as $layer) {
-                    if ($layer->features) $options[$layer->id] = "{$layer->title} ({$layer->type})";
+                    if ($layer->features) $options[$layer->id] = "{$layer->title} [{$layer->type}-Layer]";
                 }
             }
         } else {

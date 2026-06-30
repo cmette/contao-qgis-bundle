@@ -20,15 +20,20 @@ $gqis-zoom-color: #e7fbd6;
   height: auto;
   white-space: normal;
 }
-[id$="_coords"] {
+[id$="_coords"], [id$="_scope"] {
   position: absolute;
   top: 0.5em;
+  background-color: white;
+  color: black;
+  opacity: 0.5;
+  padding: 0 4px;
+  border-radius: 6px;
+}
+[id$="_coords"] {
   left: 3em;
   z-index: 1;
 }
 [id$="_scope"] {
-  position: absolute;
-  top: 0.5em;
   right: 7em;
   z-index: 1;
 }
@@ -110,6 +115,7 @@ form#tl_qgis_map {
   }
 
   .olmap_widget {
+    position: relative;
     background-color: var(--form-bg);
     border: 1px solid var(--form-border);
     border-radius: var(--border-radius);
@@ -148,7 +154,13 @@ form#tl_qgis_layer {
 
         td.feature  {  width: auto; .choices__list { background-color: $gqis-layers-color; }}
         td.style    {  width: 20%; .choices__list { background-color: $gqis-styles-color; }}
-        td.zoom     {  width: 10%; select { background-color: $gqis-zoom-color; }}
+        td.zoom     {
+          width: 10%;
+          select {
+            background-color: $gqis-zoom-color;
+            &:has(option[selected][value="combine"]) { background-color: #ffbaba; }
+          }
+        }
       }
     }
   }

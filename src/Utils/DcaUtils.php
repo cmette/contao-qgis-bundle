@@ -32,7 +32,7 @@ class DcaUtils
         ];
     }
 
-    public static function buildAddField(bool $default = false, bool $submitOnChange = true): array
+    public static function buildAddField(bool $default = false, bool $submitOnChange = true, string $tl_class = 'w16'): array
     {
         return [
             'inputType' => 'checkbox',
@@ -41,7 +41,7 @@ class DcaUtils
             'sorting'   => true,
             'eval' => [
                 'submitOnChange' => $submitOnChange,
-                'tl_class'  => ''
+                'tl_class'  => $tl_class,
             ],
             'sql' => [
                 'type' => 'boolean',

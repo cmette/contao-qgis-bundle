@@ -33,7 +33,7 @@
 
         // evt.coordinate ist in der View-Projektion (meist EPSG:3857)
         const coord = evt.coordinate;
-        console.log('map-proj coordinate:', coord);
+
         if (ctrl_center) ctrl_center.value = `[${coord.join(', ')}]`;
 
         // in Lon/Lat (EPSG:4326) verwandeln
@@ -73,6 +73,24 @@
     map_{{ map.id }}.on('pointerdrag', () => updateParameters(map_{{ map.id }}));
     map_{{ map.id }}.getView().on('change:resolution', () => updateParameters(map_{{ map.id }}));
     map_{{ map.id }}.on('moveend', () => updateParameters(map_{{ map.id }}));
+
+    /**
+     *
+     */
+    map_{{ map.id }}.on('pointermove', function(evt) {
+        if (!evt.dragging) {
+            const mapCoord = evt.coordinate; // [x, y] in Kartenprojektion (z.B. EPSG:3857)
+            const lonLat = ol.proj.toLonLat(mapCoord); // [lon, lat] in Grad (EPSG:4326)
+
+            // Formatierung (z. B. 5 Dezimalstellen)
+            const fmtMap = mapCoord.map(c => c.toFixed(2)).join(', ');
+            const fmtLonLat = lonLat.map(c => c.toFixed(5)).join(', ');
+
+            const crs= map_{{ map.id }}.getView().getProjection();
+
+            map_{{ map.id }}_coords.innerText = `${crs.getCode()}: [${fmtMap}]  EPSG:4346: [${fmtLonLat}]`;
+        }
+    });
 
 {% else %}
     {#- code für frontend scope #}
