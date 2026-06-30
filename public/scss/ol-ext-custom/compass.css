@@ -1,0 +1,19 @@
+/* Define the size and position in the css */
+.ol-compassctrl.top {
+  top: 1rem;
+  right: 1rem;
+  width: 150px;
+  height: 150px;
+}
+.ol-compassctrl.bottom {
+  top: auto;
+  left: auto;
+  bottom: 30px;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  -webkit-transform: none;
+  transform: none;
+}
+
+/*# sourceMappingURL=compass.css.map */

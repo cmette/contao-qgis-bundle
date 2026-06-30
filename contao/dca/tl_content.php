@@ -95,7 +95,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['listProperties']     = [
             #'options'       => ['useTitle', 'useProperty', '2rwf', '3rw'],
             'reference'     => &$GLOBALS['TL_LANG']['tl_content']['listProperties_fields'],
             'eval'      => [
-                // wenn addSeries true, dann muss eine Reihe angegeben werden!
                 'mandatory' => true,
                 'includeBlankOption'=> false,
                 #'blankOptionLabel'  => 'kein/unbekannt',
@@ -111,7 +110,6 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['listProperties']     = [
             'options'   => ['none', 'asc', 'desc'],
             'reference' => &$GLOBALS['TL_LANG']['tl_content']['listProperties_sortBy_options'],
             'eval'      => [
-                // wenn addSeries true, dann muss eine Reihe angegeben werden!
                 'mandatory' => false,
                 'includeBlankOption'=> false,
                 'multiple' => false,
