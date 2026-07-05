@@ -11,21 +11,6 @@
     map_{{ map.id }}_coords = document.getElementById('map_{{ map.id }}_coords');
 
     /**
-     *
-     */
-    map_{{ map.id }}.on('pointermove', function(evt) {
-        if (!evt.dragging) {
-            const mapCoord = evt.coordinate; // [x, y] in Kartenprojektion (z.B. EPSG:3857)
-            const lonLat = ol.proj.toLonLat(mapCoord); // [lon, lat] in Grad (EPSG:4326)
-
-            // Formatierung (z. B. 5 Dezimalstellen)
-            const fmtMap = mapCoord.map(c => c.toFixed(2)).join(', ');
-            const fmtLonLat = lonLat.map(c => c.toFixed(5)).join(', ');
-
-            map_{{ map.id }}_coords.innerText = `Map: [${fmtMap}]  LonLat: [${fmtLonLat}]`;
-        }
-    });
-    /**
      * / Handler: Koordinate in Kartenprojektion (map view proj) und als Lon/Lat (EPSG:4326)
      */
     map_{{ map.id }}.on('singleclick', function(evt) {
@@ -88,7 +73,7 @@
 
             const crs= map_{{ map.id }}.getView().getProjection();
 
-            map_{{ map.id }}_coords.innerText = `${crs.getCode()}: [${fmtMap}]  EPSG:4346: [${fmtLonLat}]`;
+            if(map_{{ map.id }}_coords) map_{{ map.id }}_coords.innerText = `${crs.getCode()}: [${fmtMap}]  EPSG:4346: [${fmtLonLat}]`;
         }
     });
 
@@ -97,6 +82,7 @@
     /**
      *
      */
+
     map_{{ map.id }}.on('pointermove', function(evt) {
         if (!evt.dragging) {
             const mapCoord = evt.coordinate; // [x, y] in Kartenprojektion (z.B. EPSG:3857)

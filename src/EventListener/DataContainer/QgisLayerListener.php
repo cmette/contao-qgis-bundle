@@ -62,7 +62,7 @@ class QgisLayerListener
         $title  = $row['title'];
         $type   = $row['type'];
 
-        return $this->buildLabelWithCounter($row, "{$title}{$type}");
+        return $this->buildLabelWithCounter($row, "{$title} [{$type}-Layer]");
     }
 
     /**

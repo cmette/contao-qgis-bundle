@@ -151,7 +151,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             'sorting'   => true,
             'eval'          => [
                 'mandatory' => true,
-                'unique'    => true,
+                'unique'    => false,
                 'tl_class'  =>'w50'
             ],
             'sql' => [
