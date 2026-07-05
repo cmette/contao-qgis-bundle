@@ -73,7 +73,7 @@
 
             const crs= map_{{ map.id }}.getView().getProjection();
 
-            if(map_{{ map.id }}_coords != null) map_{{ map.id }}_coords.innerText = `${crs.getCode()}: [${fmtMap}]  EPSG:4346: [${fmtLonLat}]`;
+            if(typeof map_{{ map.id }}_coords !== "undefined" && map_{{ map.id }}_coords) map_{{ map.id }}_coords.innerText = `${crs.getCode()}: [${fmtMap}]  EPSG:4346: [${fmtLonLat}]`;
         }
     });
 
@@ -94,7 +94,7 @@
 
             const crs= map_{{ map.id }}.getView().getProjection();
 
-            if(map_{{ map.id }}_coords != null) map_{{ map.id }}_coords.innerText = `${crs.getCode()}: [${fmtMap}]  EPSG:4346: [${fmtLonLat}]`;
+            if(typeof map_{{ map.id }}_coords !== "undefined" && map_{{ map.id }}_coords) map_{{ map.id }}_coords.innerText = `${crs.getCode()}: [${fmtMap}]  EPSG:4346: [${fmtLonLat}]`;
         }
     });
 {% endif %}
