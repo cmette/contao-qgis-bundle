@@ -5,6 +5,7 @@ use Cmette\ContaoQgisBundle\Models\QgisStyleModel;
 use Cmette\ContaoQgisBundle\Models\QgisLayerModel;
 use Cmette\ContaoQgisBundle\Models\QgisMapModel;
 
+use Cmette\ContaoQgisBundle\Models\QgisTagModel;
 use Cmette\ContaoQgisBundle\Widget\Backend\OlMapWidget;
 use Contao\ArrayUtil;
 use Contao\System;
@@ -68,6 +69,7 @@ $GLOBALS['TL_MODELS']['tl_qgis_map']     = QgisMapModel::class;
 $GLOBALS['TL_MODELS']['tl_qgis_layer']   = QgisLayerModel::class;
 $GLOBALS['TL_MODELS']['tl_qgis_feature'] = QgisFeatureModel::class;
 $GLOBALS['TL_MODELS']['tl_qgis_style']   = QgisStyleModel::class;
+$GLOBALS['TL_MODELS']['tl_qgis_tag']     = QgisTagModel::class;
 
 // Style sheet
 $GLOBALS['TL_CSS'][] = "$assetsDir/scss/qgis.css";

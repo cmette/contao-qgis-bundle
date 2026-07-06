@@ -31,5 +31,5 @@ class QgisTagModel extends Model
      *
      * @var string
      */
-    protected static $strTable = 'tl_qgis_tags';
+    protected static $strTable = 'tl_qgis_tag';
 }

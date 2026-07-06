@@ -38,6 +38,65 @@ $gqis-zoom-color: #e7fbd6;
   z-index: 1;
 }
 
+.tags {
+  $height: 22px;
+  margin-left: 1rem;
+
+  a {
+    display: inline-block;
+    height: $height;
+    line-height: $height;
+    position: relative;
+    margin: 0 16px 8px 0;
+    padding: 0 5px 0 ($height / 2);
+    background: #fcb76a;
+
+    -webkit-border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+
+    -webkit-border-top-right-radius: 3px;
+    border-top-right-radius: 3px;
+
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+    color: #454545;
+    font-size: $height / 2;
+    //font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif;
+    text-decoration: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    transform: rotate(4deg);
+
+    &:before {
+      content: "";
+      position: absolute;
+      top:0;
+      left: -($height / 2 );
+      width: 0;
+      height: 0;
+      border-color: transparent #fcb76a transparent transparent;
+      border-style: solid;
+      border-width: ($height / 2) ($height / 2) ($height / 2) 0;
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 10px;
+      left: 1px;
+      float: left;
+      width: 5px;
+      height: 5px;
+      -webkit-border-radius: 50%;
+      border-radius: 50%;
+      background: #fff;
+      -webkit-box-shadow: -1px -1px 2px rgba(0,0,0,0.4);
+      box-shadow: -1px -1px 2px rgba(0,0,0,0.4);
+    }
+  }
+}
+
 /***********************************************************************************/
 
 // Test zum formatieren ganzer Tabellenzeilen mit Elementen mit Status 'used'

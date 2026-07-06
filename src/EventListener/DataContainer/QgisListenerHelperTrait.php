@@ -4,6 +4,7 @@ namespace Cmette\ContaoQgisBundle\EventListener\DataContainer;
 
 use Contao\CoreBundle\DataContainer\DataContainerOperation;
 use Contao\Model;
+use Contao\StringUtil;
 
 trait QgisListenerHelperTrait
 {
@@ -16,11 +17,19 @@ trait QgisListenerHelperTrait
     public function buildLabelWithCounter(array $row, string $label, string $style = ''): array|string
     {
 
-        $model = Model::getClassFromTable(self::STR_TABLE)::findById($row['id']);
+        $model  = Model::getClassFromTable(self::STR_TABLE)::findById($row['id']);
+        $tags   = '';
+
+        if($model->tags)
+            if($collTags = $model->getRelated('tags') ) {
+                $arrTags = $collTags->fetchEach('name');
+                asort($arrTags);
+                $tags = '<span class="tags"><a>' . implode('</a><a>', $arrTags) . '</a></span>';
+            };
 
         return ($model && (int)(($count = $model->countUsage()) > 0)) ?
-            "<span class='used'>$label ({$count} mal verwendet)</span>$style" :
-            "<span class='unused'>$label (nicht verwendet)</span>$style";
+            "<span class='used'>$label ({$count} mal verwendet)</span>{$style}{$tags}" :
+            "<span class='unused'>$label (nicht verwendet)</span>{$style}{$tags}";
     }
 
     /**
