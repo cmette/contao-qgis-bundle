@@ -22,6 +22,7 @@ trait QgisListenerHelperTrait
 
         if($model->tags)
             if($collTags = $model->getRelated('tags') ) {
+dump($model->tags);
                 $arrTags = $collTags->fetchEach('name');
                 asort($arrTags);
                 $tags = '<span class="tags"><a>' . implode('</a><a>', $arrTags) . '</a></span>';

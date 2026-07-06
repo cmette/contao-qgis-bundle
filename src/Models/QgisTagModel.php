@@ -32,4 +32,21 @@ class QgisTagModel extends Model
      * @var string
      */
     protected static $strTable = 'tl_qgis_tag';
+
+    /**
+     * @return int
+     */
+    public function countUsage(): int
+    {
+        $id = $this->id;
+        $len = \strlen((string) $id);
+
+        #$inMaps    = QgisMapModel::countBy(["layers LIKE '%\"style\";s:$len:\"$id\"%'"], []);
+        #$inLayers  = QgisLayerModel::countBy(["features LIKE '%\"style\";s:$len:\"$id\"%'"], []);
+        $inFeatures = QgisFeatureModel::countBy(["tags LIKE '%;s:$len:\"$id\"%'"], []);
+        #$inStyles  = QgisFeatureModel::countBy('style', $this  ->id);
+
+#dump("in Maps: {$inMaps} in Layers: {$inLayers} in Styles: {$inStyles}");
+        return $inFeatures;
+    }
 }

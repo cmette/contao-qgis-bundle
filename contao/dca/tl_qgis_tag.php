@@ -42,20 +42,7 @@ $GLOBALS['TL_DCA'][$strTableName] = [
 		],
 		'operations' =>  [
 			'edit',
-			#'children',
-			#'copy',
-			#'cut',
 			'delete',
-			#'toggle' =>  [
-			#	'href'                => 'act=toggle&amp;field=published',
-			#	'icon'                => 'visible.svg',
-			#	'showInHeader'        => true
-			#],
-			#'feature' =>  [
-			#	'href'                => 'act=toggle&amp;field=featured',
-			#	'icon'                => 'featured.svg',
-			#],
-			#'show'
 		]
 	],
 
