@@ -42,7 +42,7 @@ $GLOBALS['TL_DCA'][$strTableName] = [
 		],
 		'operations' =>  [
 			'edit',
-			'delete',
+			'!delete',
 		]
 	],
 
