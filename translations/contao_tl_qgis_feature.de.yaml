@@ -9,6 +9,17 @@ tl_qgis_feature:
   properties:
     - Eigenschaften (Properties)
     - "Geben Sie hier einen String im Javascript Objekt-Literal-Format ein. z.B. {\"id\": \"10\", \"label\": \"Stadtpark\"}"
+  tags:
+    - Tags
+    - Hier können Sie dem Feature ein oder mehrere Tags zuweisen. Die Tags können Sie im Menü links, unter Tags definieren.
+  style_legend: Style
+  style:
+    - Stil (den dieses Feature verwendet)
+    - Wenn Sie hier einen Stil (ol.style) auswählen, so wird dieses Feature immer mit diesem Stil gezeichnet.
+  label_legend: Label (experimentell)
+  useAsLabel:
+    - verwende als Label
+    - Hier können Sie wählen, welche Daten als Label auf der Karte verwendet werden sollen.
   geometry_legend: Geometrie-Objekt (geometry:)
   geometry:
     - Geometrie (geometry:)

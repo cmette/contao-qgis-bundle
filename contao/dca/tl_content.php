@@ -5,7 +5,8 @@ use Doctrine\DBAL\Platforms\MySQLPlatform;
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['qgis_map'] =
     '{type_legend},type,headline,title;' .
-    '{map_legend},qgis_map,addFeatureList;' .
+    '{map_legend},qgis_map;' .
+    '{featurelist_legend},addFeatureList;' .
     '{text_legend},text;' .
     '{template_legend:hide},customTpl;' .
     '{protected_legend:hide},protected;' .
@@ -18,7 +19,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'addActiveList'
 
 $GLOBALS['TL_DCA']['tl_content']['subpalettes']['addFeatureList'] = 'featureSourceLayer,listHeadline,isSortedList,addActiveList';
 $GLOBALS['TL_DCA']['tl_content']['subpalettes']['isSortedList']   = 'listProperties';
-$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addActiveList']  = 'zoomExtentOnHover,zoomExtentOnClick';
+$GLOBALS['TL_DCA']['tl_content']['subpalettes']['addActiveList']  = 'zoomExtentOnClick,zoomExtentOnHover';
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
 [
@@ -42,7 +43,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['qgis_map'] =
     ]
 ];
 
-$GLOBALS['TL_DCA']['tl_content']['fields']['addFeatureList'] = DcaUtils::buildAddField();
+$GLOBALS['TL_DCA']['tl_content']['fields']['addFeatureList'] = DcaUtils::buildAddField(tl_class: "w75");
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['featureSourceLayer'] =
 [
@@ -83,21 +84,19 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['listHeadline'] =
     ]
 ];
 
-$GLOBALS['TL_DCA']['tl_content']['fields']['addActiveList']      = DcaUtils::buildAddField(true, true);
+$GLOBALS['TL_DCA']['tl_content']['fields']['addActiveList']      = DcaUtils::buildAddField(default:true, tl_class: "w75");
 
-$GLOBALS['TL_DCA']['tl_content']['fields']['isSortedList']       = DcaUtils::buildAddField(true, true);
+$GLOBALS['TL_DCA']['tl_content']['fields']['isSortedList']       = DcaUtils::buildAddField(default:true, tl_class: "w75");
 $GLOBALS['TL_DCA']['tl_content']['fields']['listProperties']     = [
     'inputType' => 'rowWizard',
     'fields' => [
         'property' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['listProperties_fields']['property'],
             'inputType' => 'select',
-            #'options'       => ['useTitle', 'useProperty', '2rwf', '3rw'],
             'reference'     => &$GLOBALS['TL_LANG']['tl_content']['listProperties_fields'],
             'eval'      => [
                 'mandatory' => false,
                 'includeBlankOption'=> false,
-                #'blankOptionLabel'  => 'kein/unbekannt',
                 'multiple'  => false,
                 'unique'    => true,
                 'chosen'    => false,
@@ -137,5 +136,5 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['listProperties']     = [
     ],
 ];
 
-$GLOBALS['TL_DCA']['tl_content']['fields']['zoomExtentOnClick']  = DcaUtils::buildAddField(true, false);
-$GLOBALS['TL_DCA']['tl_content']['fields']['zoomExtentOnHover']  = DcaUtils::buildAddField(false, false);
+$GLOBALS['TL_DCA']['tl_content']['fields']['zoomExtentOnClick']  = DcaUtils::buildAddField(default:true, tl_class: "w50", submitOnChange: false);
+$GLOBALS['TL_DCA']['tl_content']['fields']['zoomExtentOnHover']  = DcaUtils::buildAddField(default:false, tl_class: "w50", submitOnChange: false);

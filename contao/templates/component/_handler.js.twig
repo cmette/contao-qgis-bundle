@@ -79,10 +79,10 @@
 
 {% else %}
     {#- code für frontend scope #}
+
     /**
      *
      */
-
     map_{{ map.id }}.on('pointermove', function(evt) {
         if (!evt.dragging) {
             const mapCoord = evt.coordinate; // [x, y] in Kartenprojektion (z.B. EPSG:3857)

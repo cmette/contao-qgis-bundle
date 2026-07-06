@@ -3,15 +3,32 @@ tl_content:
   qgis_map:
     - folgende Karte darstellen
     - Wählen Sie hier eine vorkonfigurierte Karte für die Darstellung am Frontend
+
+  featurelist_legend: Feature-Liste (experimentell)
   addFeatureList:
     - eine Liste aus Features generieren (experimentell)
-    - Wenn Sie diese Option wählen, wird zusätzlich zur Kartendarstellung eine Liste aus bestimmten Features eines Layers generiert.
+    - Wenn Sie diese Option wählen, wird neben der Karte eine Liste aus ausgewählten Features eines ausgewählten Layers generiert.
   featureSourceLayer:
-    - Quell-Ebene für die Feature-Liste
+    - Welche Ebene soll als Quelle für die Feature-Liste verwendet werden?
     - Wählen Sie hier eine Ebene, der die Features für die Liste entnommen werden sollen.
   listHeadline:
     - Überschrift Feature-Liste
     - Hier können Sie der Feature-Liste eine eigene Überschrift geben. Lassen Sie das Feld einfach leer, wenn keine Überschrift dargestellt werden soll.
-  isActiveList:
+  isSortedList:
+    - Liste sortieren (experimentell)
+    - Sie können die Liste nach bestimmten Eigenschaften (properties) der Ebene (Layer) sortieren lassen.
+  listProperties:
+    - Wonach soll sortiert werden? (experimentell)
+    - Wählen Sie hier die Felder aus den feature.properties aus, die angezeigt und sortiert werden sollen. Dabei ist zurzeit nur eine einfache Sortierung und eine Anzeige möglich. Sie können jedoch nach einem Feld sortieren und ein anderes anzeigen lassen. Vergessen Sie bitte nicht, das Property zu publizieren (grünes Auge). Andernfalls wird in der Liste nichts angezeigt.
+  listProperties_fields:
+    property: Eigenschaft
+    sortBy: Sortierung
+  addActiveList:
     - Feature-Liste als aktive Liste generieren
-    - Wenn Sie die Funktionen Click und Hover der Listenelemente verwenden möchten, so aktivieren Sie diese Option.
+    - Wenn die Liste auf Benutzereingaben reagieren soll, so aktivieren Sie diese Option.
+  zoomExtentOnClick:
+    - Zoom bei Klick.
+    - In der Karte auf dieses Objekt zoomen, wenn das zugehörige Listenelement angeklickt wird.
+  zoomExtentOnHover:
+    - Zoom bei Hover.
+    - In der Karte auf dieses Objekt zoomen, wenn der Mauszeiger über dem zugehörigen Listenelement schwebt.

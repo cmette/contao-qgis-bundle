@@ -92,7 +92,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
 		'__selector__'  =>  [],
 		'default'       =>
             '{name_legend},name,import;' .
-            '{properties_legend},properties;' .
+            '{properties_legend},properties,tags;' .
             '{style_legend},style;' .
             '{label_legend},useAsLabel;' .
             '{geometry_legend},geometry_type,geometry_coordinates;' .
@@ -159,6 +159,17 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'length' => MySQLPlatform::LENGTH_LIMIT_BLOB,
                 'notnull' => false
             ],
+        ],
+        # Tags
+        'tags' => [
+            'search'    => true,
+            'filter'    => true,
+            #'sorting' => true,
+            'inputType' => 'select',
+            'foreignKey' => 'tl_qgis_tag.name',
+            'relation'  => ['type'  => 'hasMany', 'load'  => 'lazy'],
+            'eval'      => ['includeBlankOption' => true, 'tl_class' => '', 'multiple' => true, 'chosen' => true],
+            'sql'       => "longblob NULL default NULL",
         ],
         /**********************************************************************
          * style_legend

@@ -19,14 +19,29 @@ tl_qgis_layer:
       - Wählen Sie hier die gewünschte Ebene.
     opacity:
       - Transparenz
-
   source_legend: Datenquelle
-  source_type:
-    - Source-Type
-    - Art der Quelle.
+  source:
+    - Typ der Datenquelle
+    - Wählen Sie hier den Typ der Datenquelle.
+  attribution:
+    - Urheber
+    - Attribution der Quelle. Bitte geben sie möglichst immer einen Urheber an.
+  format:
+    - Datenformat
+    - Wählen Sie hier ein Datenformat. Zurzeit wird nur GeoJSON verarbeitet.
+  features_legend: Eigenschaften (features)(experimentell)
   source_name:
-    - Source-Name
-    - Name der Quelle.
+    - Name der Quelle
+    - Der Name ist frei wählbar und wird auf der Karte oder dem ol-ext.layerswitcher angezeigt.
+  data_projection:
+    - Koordinatensystem der Quelle
+    - Das ist in der Regel die Projektion, die OSM standardmäßig verwendet. In der Regel ist es EPSG:4326. Features in dieser Projektion werden auf der Karte in Deutschland aber nicht korrekt dargestellt.
+  feature_projection:
+    - Koordinatensystem des Ziels
+    - In der Regel ist es das Ziel-Koordinatensystem, in dem die Vektor-Daten dargestellt werden sollen. Für Deutschland ist EPSG:3857 gebräuchlich.
+  source_type:
+    - Typ der Vektor-Quelle
+    - Hier ist nur ein Feature oder eine Feature-Collection möglich.
   features:
     - Eigenschaften
     - Geben Sie hier die Liste der Eigenschaften ein.

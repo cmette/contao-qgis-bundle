@@ -15,3 +15,6 @@ MOD:
   qgis_styles:
     - Stile (Styles)
     - Register der definierten Stile
+  qgis_tags:
+    - Tags
+    - Register der Tags

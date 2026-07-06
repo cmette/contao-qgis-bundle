@@ -6,7 +6,50 @@ tl_qgis_map:
     - Titel der Karte
     - Geben Sie hier einen Titel für die Karten-Definition ein.
 
-  layers_legend: Ebenen (Layers)
+  olconfig_legend: OpenLayers-Konfiguration
+  addOpenLayers:
+    - OpenLayers automatisch laden (experimentell)
+    - Aktivieren Sie diese Funktion, wenn OpenLayers automatisch geladen werden soll. Hinweis Sie sollten OpenLayers immer automatisch laden lassen. Diese Option ist dafür gedacht, das Laden zu deaktivieren, insofern Sie eine eigene Version von OpenLayers manuell laden möchten.
+  olDistVersion:
+    - Welche Version laden?
+    - Hier können Sie zurzeit zwischen zwei Versionen wählen. Sie können auch im Ordner files eine eigene abweichende Version installieren und hier dann auswählen.
+  loadOpenLayersJs:
+    - Javascript-Bibliothek laden?
+    - Nur die Javascript-Komponente laden?
+  loadOpenLayersCss:
+    - CSS-Bibliothek laden?
+    - Nur die CSS-Komponente laden?
+  addOpenLayersExt:
+    - OpenLayers-Erweiterung olext laden?
+  olExtDistVersion:
+    - Welche Version laden?
+    - Hier können Sie zurzeit nur eine Version wählen. Sie können auch im Ordner files eine eigene abweichende Version installieren und hier dann auswählen.
+  loadOpenLayersExtJs:
+    - Javascript-Bibliothek laden?
+    - Nur die Javascript-Komponente laden?
+  loadOpenLayersExtCss:
+    - CSS-Bibliothek laden?
+    - Nur die CSS-Komponente laden?
+  useCompass:
+    - olext-Kompass laden
+    - Lädt und aktiviert den Kompass (olext.compass).
+
+  mapconfig_legend: Karten-Overlay-Konfiguration
+  showCrsFE:
+    - Cursor-Koordinaten am Frontend anzeigen
+    - Aktiviert die Anzeige der aktuellen Koorinaten unter dem Mauscrusor.
+  showScopeFE:
+    - Scope am Frontend anzeigen
+    - Aktiviert die Anzeige des aktuellen Scopes zu Testzwecken.
+  showCrsBE:
+    - Cursor-Koordinaten am Backend anzeigen
+    - Aktiviert die Anzeige der aktuellen Koorinaten unter dem Mauscrusor.
+  showScopeBE:
+    - Scope am Backend anzeigen
+    - Aktiviert die Anzeige des aktuellen Scopes zu Testzwecken.
+
+
+  layers_legend: Welche Ebenen (Layer) sollen auf der Karte dargestellt werden?
   layers:
     - Ebenen
     - Wählen Sie hier alle Ebenen, die auf der Karte dargestellt werden sollen.
@@ -46,3 +89,12 @@ tl_qgis_map:
     - Bounding Box (Extent)
     - Die Bounding Box über alle Kartenelemente.
     - Zoom to Extent
+  zoom:
+    - Aktueller Zoom-Level
+    - Dieser Wert wird automatisch gesetzt, wenn Sie die Kartenansicht ändern.
+  mapCrs:
+    - Koordinatensystem der Karte
+    - Hier können Sie das Koordinatensystem der Karte setzen. Diese Einstellung hat Vorrang vor allen anderen Koordinaten-Einstellungen untergeordneter Objekte.
+  mapPadding:
+    - Rahmenbereich um die BoundingBox (extent padding)
+    - Geben Sie hier ein Array der Form [oben, rechts, unten, links] in Pixeln ein.

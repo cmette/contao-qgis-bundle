@@ -100,7 +100,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
          * olconfig_legend
          **********************************************************************/
         // switch add open layers
-        'addOpenLayers'     => DcaUtils::buildAddField(true),
+        'addOpenLayers'     => DcaUtils::buildAddField(default:true, tl_class: ''),
         // select open layers versions
         'olDistVersion'   => [
             'inputType' => 'select',
@@ -108,7 +108,6 @@ $GLOBALS['TL_DCA'][$strTable] = [
             'filter'    => false,
             'sorting'   => true,
             'options'   => ['10.8.0','10.9.0'],
-            #'reference' => &$GLOBALS['TL_LANG'][$strTable]['lineCap_options'],
             'eval'          => [
                 'mandatory' => false,
                 'unique'    => false,
@@ -201,10 +200,10 @@ $GLOBALS['TL_DCA'][$strTable] = [
         /**********************************************************************
          * mapconfig_legend
          **********************************************************************/
-        'showCrsFE'   => DcaUtils::buildAddField(false,false),
-        'showScopeFE' => DcaUtils::buildAddField(false,false),
-        'showCrsBE'   => DcaUtils::buildAddField(false,false),
-        'showScopeBE' => DcaUtils::buildAddField(false,false),
+        'showCrsFE'   => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
+        'showScopeFE' => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
+        'showCrsBE'   => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
+        'showScopeBE' => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
         /**********************************************************************
          * layers_legend
          **********************************************************************/

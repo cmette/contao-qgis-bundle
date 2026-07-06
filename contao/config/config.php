@@ -41,6 +41,10 @@ $moduleQgis = [
             'tables'        => ['tl_qgis_style'],
             'stylesheet'    => ["$assetsDir/scss/qgis.css"],
         ],
+        'qgis_tags' => [
+            'tables'        => ['tl_qgis_tag'],
+            'stylesheet'    => ["$assetsDir/scss/qgis.css"],
+        ],
     ],
 ];
 
