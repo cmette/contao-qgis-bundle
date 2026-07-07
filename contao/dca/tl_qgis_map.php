@@ -100,7 +100,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
          * olconfig_legend
          **********************************************************************/
         // switch add open layers
-        'addOpenLayers'     => DcaUtils::buildAddField(default:true, tl_class: ''),
+        'addOpenLayers'     => DcaUtils::buildAddField(default:true),
         // select open layers versions
         'olDistVersion'   => [
             'inputType' => 'select',
@@ -121,27 +121,9 @@ $GLOBALS['TL_DCA'][$strTable] = [
             ]
         ],
         // load open layers js
-        'loadOpenLayersJs' => [
-            'inputType'     => 'checkbox',
-            'eval'          => [
-                'tl_class'  => 'w16'
-            ],
-            'sql'   => [
-                'type'      => 'boolean',
-                'default'   => true
-            ],
-        ],
+        'loadOpenLayersJs' => DcaUtils::buildAddField(default:false, tl_class: 'w16', submitOnChange: false),
         // load open layers css
-        'loadOpenLayersCss' => [
-            'inputType'     => 'checkbox',
-            'eval'          => [
-                'tl_class'  => 'w16'
-            ],
-            'sql'   => [
-                'type'      => 'boolean',
-                'default'   => true
-            ],
-        ],
+        'loadOpenLayersCss' => DcaUtils::buildAddField(default:false, tl_class: 'w16', submitOnChange: false),
         // load ol-ext library
         'addOpenLayersExt'  => DcaUtils::buildAddField(true),
         // select between versions
@@ -165,38 +147,11 @@ $GLOBALS['TL_DCA'][$strTable] = [
             ]
         ],
         // load open layers extensions js
-        'loadOpenLayersExtJs' => [
-            'inputType'     => 'checkbox',
-            'eval'          => [
-                'tl_class'  => 'w16'
-            ],
-            'sql'   => [
-                'type'      => 'boolean',
-                'default'   => true
-            ],
-        ],
+        'loadOpenLayersExtJs' => DcaUtils::buildAddField(default:false, tl_class: 'w16', submitOnChange: false),
         // load open layers extensions css
-        'loadOpenLayersExtCss' => [
-            'inputType'     => 'checkbox',
-            'eval'          => [
-                'tl_class'  => 'w16'
-            ],
-            'sql'   => [
-                'type'      => 'boolean',
-                'default'   => true
-            ],
-        ],
+        'loadOpenLayersExtCss' => DcaUtils::buildAddField(default:false, tl_class: 'w16', submitOnChange: false),
         // load open layers extensions css
-        'useCompass' => [
-            'inputType'     => 'checkbox',
-            'eval'          => [
-                'tl_class'  => 'w16 clr'
-            ],
-            'sql'   => [
-                'type'      => 'boolean',
-                'default'   => false
-            ],
-        ],
+        'useCompass' => DcaUtils::buildAddField(default:false, tl_class: 'w16 clr', submitOnChange: false),
         /**********************************************************************
          * mapconfig_legend
          **********************************************************************/

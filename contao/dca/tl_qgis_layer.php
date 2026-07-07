@@ -357,7 +357,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
                 'type'      => 'string',
                 'length'    => 20,
                 'fixed'     => true,
-                'default'   => 'EPSG:4326',
+                'default'   => 'EPSG:3857',
             ]
         ],
 

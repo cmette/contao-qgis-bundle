@@ -32,13 +32,28 @@ class DcaUtils
         ];
     }
 
-    public static function buildAddField(bool $default = false, bool $submitOnChange = true, string $tl_class = 'w16'): array
+    /**
+     * @param bool $search
+     * @param bool $filter
+     * @param bool $sorting
+     * @param bool $submitOnChange
+     * @param string $tl_class
+     * @param bool $default
+     * @return array
+     */
+    public static function buildAddField(
+        bool $search = false,
+        bool $filter = false,
+        bool $sorting = false,
+        bool $submitOnChange = true,
+        string $tl_class = 'w16',
+        bool $default = false): array
     {
         return [
             'inputType' => 'checkbox',
-            'search'    => false,
-            'filter'    => true,
-            'sorting'   => true,
+            'search'    => $search,
+            'filter'    => $filter,
+            'sorting'   => $sorting,
             'eval' => [
                 'submitOnChange' => $submitOnChange,
                 'tl_class'  => $tl_class,

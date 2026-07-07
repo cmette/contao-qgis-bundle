@@ -67,7 +67,12 @@ $GLOBALS['TL_DCA'][$strTableName] = [
         'name'      => [
             'search'    => true,
             'inputType' => 'text',
-            'eval'      =>  ['mandatory' => true, 'maxlength' => 100, 'tl_class' => 'w25', 'unique' => true],
+            'eval'      =>  [
+                'mandatory' => true,
+                'maxlength' => 100,
+                'tl_class'  => 'w25',
+                'unique'    => true
+            ],
             'sql'       => "varchar(100) NOT NULL default ''"
         ],
 	]
