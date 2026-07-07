@@ -21,6 +21,7 @@ tl_qgis_map:
     - Nur die CSS-Komponente laden?
   addOpenLayersExt:
     - OpenLayers-Erweiterung olext laden?
+    - Aktivieren Sie diese Funktion, wenn olExt automatisch geladen werden soll. Hinweis Sie sollten OpenLayers immer zuerst automatisch laden, bevor Sie olExt aktivieren. Diese Option ist dafür gedacht, das Laden zu deaktivieren, insofern Sie eine eigene Version von olExt manuell laden möchten.
   olExtDistVersion:
     - Welche Version laden?
     - Hier können Sie zurzeit nur eine Version wählen. Sie können auch im Ordner files eine eigene abweichende Version installieren und hier dann auswählen.
