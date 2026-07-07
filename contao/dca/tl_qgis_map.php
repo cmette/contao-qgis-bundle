@@ -100,7 +100,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
          * olconfig_legend
          **********************************************************************/
         // switch add open layers
-        'addOpenLayers'     => DcaUtils::buildAddField(default:true),
+        'addOpenLayers'     => DcaUtils::buildAddField(default:true, tl_class: ''),
         // select open layers versions
         'olDistVersion'   => [
             'inputType' => 'select',
