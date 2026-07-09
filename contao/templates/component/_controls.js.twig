@@ -1,0 +1,41 @@
+{% trans_default_domain "tl_qgis_map" %}
+{#
+    maganged das Laden von ol-ext Komponenten
+#}
+
+{% block controls_component %}
+//-- begin controls ---------------------------------------------
+{% if(map.addMapControls) %}
+map_{{ map.id }}_controls = [];
+
+{% if(map.activateOlScaleBar) %}
+    // „Lineal“/Maßstab
+    map_{{ map.id }}_controls.push(
+        new ol.control.ScaleLine({
+            units: 'metric',        // 'metric', 'imperial', oder 'degrees'
+            bar: true,              // Balken statt nur Text
+            steps: 8,               // Anzahl Teilstriche
+            text: true,             // Text anzeigen
+            minWidth: 200           // Mindestbreite (px)
+        })
+    );
+{% endif %}
+
+{% if(map.activateOlOverviewMap) %}
+    map_{{ map.id }}_controls.push(
+        new ol.control.OverviewMap({
+            collapsed: false,       // true|false (startet eingeklappt)
+            collapsible: true,      // true|false (ein-/ausklappbar)
+            collapseLabel: 'collapselabel',      // string und/oder label: string (Beschriftungen)
+            tipLabel: 'tiplabel',           // string (Tooltip-Text)
+            layers: ol_layers_{{- map.id -}}, // [...] (welche Layer in der Übersichts-Karte gezeigt werden)
+            // view: ol/View (View der Overview, meist gleiche Projektion wie die Hauptkarte)
+            // rotateWithView: true|false (mit der Hauptkarte mitdrehen)
+            // target: HTMLElement | string (wo gerendert wird, falls nicht im Map-Container)
+        })
+    );
+{% endif %}
+
+{% endif %}
+//-- end controls -----------------------------------------------
+{% endblock %}

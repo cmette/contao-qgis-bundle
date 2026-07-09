@@ -4,6 +4,7 @@
 {% trans_default_domain "tl_qgis_map" %}
 {% use '@Contao/component/_layers.js.twig' %}
 {% use '@Contao/component/_styles.js.twig' %}
+{% use '@Contao/component/_controls.js.twig' %}
 
 {% block map_component %}
     //-- _map.js.twig: target: olmap-{{ map.id }} const: map_{{ map.id }} -----
@@ -15,13 +16,14 @@
     {{ block('styles_component') }}
     {# konstruiert Layers #}
     {{ block('layers_component') }}
+    {# konstruiert Controls #}
+    {{ block('controls_component') }}
+
     map_{{ map.id }} = new ol.Map({
         target: 'olmap-{{- map.id -}}',
         layers: ol_layers_{{- map.id -}},
         renderer: 'canvas',
-        //controls: ol.control.default({ attribution: false, zoom: false, rotate: false }).extent([
-        //    new ol.control.ScaleLine()
-        //]),
+        controls: map_{{ map.id }}_controls,
 
         view: new ol.View({
             projection: 'EPSG:3857',

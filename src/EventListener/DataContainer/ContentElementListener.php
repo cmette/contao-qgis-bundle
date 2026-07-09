@@ -113,6 +113,9 @@ class ContentElementListener
         $options = [];
 
         $arrContent = $dc->getCurrentRecord();
+
+        if(is_null($arrContent)) { return $options; }
+
         $mapId      = $arrContent['qgis_map'];
 
         if($objMap     = QgisMapModel::findById($mapId)) {

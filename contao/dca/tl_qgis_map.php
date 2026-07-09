@@ -55,22 +55,22 @@ $GLOBALS['TL_DCA'][$strTable] = [
 
 	// Palettes
 	'palettes' =>  [
-		'__selector__'  =>  ['addOpenLayers','addOpenLayersExt'],
+		'__selector__'  =>  ['addOpenLayers','addOpenLayersExt','addMapControls'],
 		'default'       =>
             '{type_legend},title;' .
             '{olconfig_legend},addOpenLayers,addOpenLayersExt;' .
-            '{mapconfig_legend},showCrsFE,showScopeFE,showCrsBE,showScopeBE,;' .
+            '{mapconfig_legend},showCrsFE,showScopeFE,showCrsBE,showScopeBE;' .
+            '{mapcontrols_legend},addMapControls;' .
             '{layers_legend},layers;' .
             '{parameters_legend},map,center,extent,zoom,mapCrs,mapPadding;' .
             '',
 	],
-
 	// Subpalettes
 	'subpalettes' =>  [
         'addOpenLayers'     => 'olDistVersion,loadOpenLayersJs,loadOpenLayersCss',
-        'addOpenLayersExt'  => 'olExtDistVersion,loadOpenLayersExtJs,loadOpenLayersExtCss,useCompass;',
+        'addOpenLayersExt'  => 'olExtDistVersion,loadOpenLayersExtJs,loadOpenLayersExtCss,useCompass',
+        'addMapControls'    => 'activateOlScaleBar,loadOlScaleBarUserCss,activateOlOverviewMap',
     ],
-
 	// Fields
 	'fields' => [
         /**********************************************************************
@@ -125,7 +125,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
         // load open layers css
         'loadOpenLayersCss' => DcaUtils::buildAddField(default:false, tl_class: 'w16', submitOnChange: false),
         // load ol-ext library
-        'addOpenLayersExt'  => DcaUtils::buildAddField(true),
+        'addOpenLayersExt'  => DcaUtils::buildAddField(default:false, tl_class: '', submitOnChange: false),
         // select between versions
         'olExtDistVersion'   => [
             'inputType' => 'select',
@@ -159,6 +159,15 @@ $GLOBALS['TL_DCA'][$strTable] = [
         'showScopeFE' => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
         'showCrsBE'   => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
         'showScopeBE' => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
+        /**********************************************************************
+         * mapcontrols_legend
+         **********************************************************************/
+        // switch to add ol.controls
+        'addMapControls'        => DcaUtils::buildAddField(default:false, tl_class: ''),
+        'activateOlScaleBar'    => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
+        'loadOlScaleBarUserCss' => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
+
+        'activateOlOverviewMap' => DcaUtils::buildAddField(default:false, tl_class: 'w50', submitOnChange: false),
         /**********************************************************************
          * layers_legend
          **********************************************************************/
