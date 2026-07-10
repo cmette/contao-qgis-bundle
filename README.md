@@ -75,20 +75,25 @@ Die Edit-Ansicht für eine exemplarische Karte (hier eine nicht mehr existierend
 
 <kbd>![edit-map-1.png](docs/edit-map-1.png)</kbd>
 Geben Sie unter "Titel der Karte" einen aussagefähigen Namen ein.
-![edit-map-2.png](docs/edit-map-2.png)
+
+<kbd>![edit-map-2.png](docs/edit-map-2.png)</kbd>
 Im Abschnitt "OpenLayers-Basiskonfiguration" können Sie zurzeit das Laden der nötigen 
 Javascript-Bibliotheken beeinflussen. Ob diese Funktion so bestehen bleibt, ist noch offen. 
 
 Sie können OpenLayers und OlExt gesondert laden. Wenn OlExt geladen ist, so können Sie als exemplarische 
 Komponente olext-compass hinzuladen. Sie können Compass durch ein extra Stylesheet gesondert formatieren. 
-Diese Funktion wird noch erweitert und gesondert beschrieben. 
-![edit-map-3.png](docs/edit-map-3.png)
+Diese Funktion wird noch erweitert und gesondert beschrieben.
+
+<kbd>![edit-map-3.png](docs/edit-map-3.png)</kbd>
+
 Sie sollten OpenLayers immer automatisdch laden. Es sei denn, Sie möchten mit dem Bundle experimentieren. 
 Dann können Sie hier das Laden von ol.js und ol.css unterbinden. Dabei müssen Sie dann im betreffenden 
 Artikel, indem Sie die Karte platzieren möchten, die nötigen Bibliotheken selbst laden.
 Im Abschnitt "Overlay-Konfiguration" können Sie "benutzerdefinierte Karten-Overlays" konfigurieren. Hier 
 sollen später weitere Overlays hinzukommen. Implementiert sind zurzeit folgende Overlays:
-![edit-map-4.png](docs/edit-map-4.png)
+
+<kbd>![edit-map-4.png](docs/edit-map-4.png)</kbd>
+
 Sie können die Anzeige von Cursor-Koordinaten am Frontend und am Backend gesondert aktivieren. Weiterhin
 können Sie zu Testzwecken den Scope (frontend|backend) im Widget mit anzeigen lassen. Diese Fuktion ist nur
 zum Debugging gedacht und wird wohl später entfernt werden.
