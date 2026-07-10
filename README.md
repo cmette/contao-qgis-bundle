@@ -140,8 +140,8 @@ Das eröffnet die Möglichkeit, die Karte am Frontend so darzustellen, dass der 
 Schwerpunkt auf einem speziell ausgewählten und untypischen Element liegt. Beispielsweise 
 einem Baum, einer Wegekreuzung oder einem namenlosen Felsen etc.
 
-_Dieser Modus hat folgende Wirkung. Das Beispiel aus der Kontrollansicht am Backend zeigt den Brunnen
-der nörlichen &raquo;neuen Schäferei&laquo; als ein untypisches Element, auf das die Karte zentriert
+_Dieser Modus hat folgende Wirkung. Das Beispiel (Bild unten) aus der Kontrollansicht am Backend zeigt den
+Brunnen der nörlichen &raquo;neuen Schäferei&laquo; als ein untypisches Element, auf das die Karte zentriert
 werden soll. Hier werden alle Parameter neben der Karte zur Darstellung herangezogen._ 
 
 <kbd>![edit-map-7.png](docs/edit-map-7.png)</kbd>
@@ -153,7 +153,7 @@ mitting auf der Karte zu liegen kommt. Dazu wird noch der Rand des Umfanges (bes
 Erst wenn diese Daten vorliegen, wird die Karte gerendert.  
 
 _Dieser Modus hat folgende Wirkung: Das Widget berechnet den Extent + Padding und rendert danach die Karte. Dieser 
-Modus gewährleistet eine optimale Darstellung aller Kartenelemente. Im Beispiel unten werden alle Vektor-Daten, die zur 
+Modus gewährleistet eine optimale Darstellung aller Kartenelemente. Im Beispiel (Bild unten) werden alle Vektor-Daten, die zur 
 Schäferei erfasst sind, mittig auf der Karte platziert._
 
 <kbd>![edit-map-8.png](docs/edit-map-8.png)</kbd>
@@ -174,15 +174,15 @@ Objekts (bei mehreren Objekten, dieser Gruppe) berechnet und an den View überge
 > dazu unter **Ebenen**.
 
 _Dieser Modus hat folgende Wirkung: Das Widget durchläuft alle Features aller Layer und ermittelt dabei, bei 
-welchem Feature diese Eigenschaft "kombinieren" aktiviert ist. Findet es eine Eigenschaft mit dem Modus
-"kombinieren", so berechnet es den Extent dieses Features und speichert ihn zwischen. Findet es eine
+welchem Feature die Eigenschaft "kombinieren" aktiviert ist. Findet es eine Eigenschaft mit dem Modus
+"kombinieren", so berechnet es den Extent dieser Eigenschaft (Feature) und speichert ihn zwischen. Findet es eine
 weitere Eigenschaft mit dem Modus "kombinieren", so erweitert es den zuvor gefundenen Extent um den
-Extent dieses Feature. Auf diese Weise lassen sich Gruppen von Objekten bilden, auf deren Extent der
-View rendert. Dieser Modus gewährleistet eine optimale Darstellung heterogener Kartenelemente, 
-wie beispielsweise einem See und dem nahe gelegenen Haus. Beide Elemente werden optimal im View
+Extent dieser zweiten Eigenschaft - uns so fort. Auf diese Weise lassen sich Gruppen von Objekten bilden,
+dessen Extent der View letztendlich rendert. Dieser Modus gewährleistet eine optimale Darstellung heterogener Kartenelemente, 
+wie beispielsweise einem See und einem nahe gelegenen Haus. Nur diese beiden Elemente werden optimal im View
 positioniert. (diese Funktion ist noch experimentell!)_
 
-_Im Beispiel wurden alle Elmente des Innanhofes der &raquo;Alten Schäferei&laquo; aus dem Vektor-Layer ausgewählt.
+_Im Beispiel (Bild unten) wurden alle Elmente des Innanhofes der &raquo;Alten Schäferei&laquo; aus dem Vektor-Layer ausgewählt.
 Alle anderen Elemente bleiben im View sekundär. Nur der Innenhof wird zentriert und mit Padding dargestellt._
 
 <kbd>![edit-map-9.png](docs/edit-map-9.png)</kbd>
