@@ -182,7 +182,7 @@ dessen Extent der View letztendlich rendert. Dieser Modus gewährleistet eine op
 wie beispielsweise einem See und einem nahe gelegenen Haus. Nur diese beiden Elemente werden optimal im View
 positioniert. (diese Funktion ist noch experimentell!)_
 
-_Im Beispiel (Bild unten) wurden alle Elmente des Innanhofes der &raquo;Alten Schäferei&laquo; aus dem Vektor-Layer ausgewählt.
+_Im Beispiel (Bild unten) wurden nur die Objekte im Innenhof der &raquo;Alten Schäferei&laquo; aus dem Vektor-Layer ausgewählt.
 Alle anderen Elemente bleiben im View sekundär. Nur der Innenhof wird zentriert und mit Padding dargestellt._
 
 <kbd>![edit-map-9.png](docs/edit-map-9.png)</kbd>
