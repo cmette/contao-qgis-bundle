@@ -72,6 +72,7 @@ So können Sie die Anzeige auf Flüsse einschränken.
 
 ### 1. Anlegen einer Karte
 Die Edit-Ansicht für eine exemplarische Karte (hier eine nicht mehr existierende Schäferei) enthält folgende (experimentelle) Legenden:
+
 <kbd>![edit-map-1.png](docs/edit-map-1.png)</kbd>
 Geben Sie unter "Titel der Karte" einen aussagefähigen Namen ein.
 ![edit-map-2.png](docs/edit-map-2.png)
