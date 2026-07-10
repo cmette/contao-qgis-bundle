@@ -64,17 +64,28 @@ die Karten-Quelle. Danach sollte die Karte am Frontend sichtbar sein.
 Das Bundle-Menü ist wie folgt aufgebaut:  
 <kbd>![bundle-menu.png](docs/bundle-menu.png)</kbd>
 
-Die einzelnen Menüpunkte sind soweit selbsterklärend. Unter dem Menüpunkt **&raquo;Tags&laquo;** können
+Die einzelnen Menüpunkte sind so weit selbsterklärend. Unter dem Menüpunkt **&raquo;Tags&laquo;** können
 Sie Stichworte erfassen, mit deren Hilfe Sie nach ausgewählten (getaggten) Objekten filtern können.
 Beispielsweise kommen schnell sehr viele Features zusammen, so dass man die Übersicht verliert. 
 Sie können nun ein Tag **Flüsse** anlegen und dieses bestimmten Styles oder Features zuweisen. 
 So können Sie die Anzeige auf Flüsse einschränken.
 
+> [!CAUTION]
+> Im Folgenden wird die Funktionsweise in der Reihenfolge der Menüpunkte erklärt. Das entspricht prinzipiell
+> nicht der eigentlichen Arbeitsweise und Struktur von OpenLayers.   
+> Eine Karten-Darstellung arbeitet genaugenommen
+> in umgekehrter Reihenfolge. 
+> Da eine Karte streng hierarchisch aufgebaut ist, müsste diese Bescheibung eigentlich von "unten nach oben"
+> verfasst sein. Sie müsste also mit den niedrigsten/kleinsten Objekten (Feature, Style etc.) beginnen und
+> sich dann zum "Gesamtwerk" einer Karte "herauf-arbeiten".  
+> Ich habe hier aber die Beschreibung von "oben nach unten" gewählt, um dem Aufbau des o.g. Menüs zu folgen. 
+
 ### 1. Anlegen einer Karte
-Die Edit-Ansicht für eine exemplarische Karte (hier eine nicht mehr existierende Schäferei) enthält
-folgende Legenden:
+Die Edit-Ansicht für eine exemplarische Karte (hier am Beispiel einer nicht mehr existierende Schäferei aus
+dem Jahr 1797) enthält folgende Legenden:
 
 <kbd>![edit-map-1.png](docs/edit-map-1.png)</kbd>
+
 Geben Sie unter **Titel der Karte** einen aussagefähigen Namen ein.
 
 <kbd>![edit-map-2.png](docs/edit-map-2.png)</kbd>
@@ -186,6 +197,94 @@ _Im Beispiel (Bild unten) wurden nur die Objekte im Innenhof der &raquo;Alten Sc
 Alle anderen Elemente bleiben im View sekundär. Nur der Innenhof wird zentriert und mit Padding dargestellt._
 
 <kbd>![edit-map-9.png](docs/edit-map-9.png)</kbd>
+
+### 2. Anlegen von Ebenen (Layer)
+Wie bereits eingangs erwähnt, müssen Sie prinzipiell vor der Definition einer Karte, alle darauf befindlichen
+Layer definiert haben. Die hier als Beispiel dienende Karte von der &raquo;Alten Schäferei&laquo; ernthält zwei 
+Layer, die jetzt für die weitere Dokumentation herangezogen werden.
+
+Die Edit-Ansicht für eine exemplarische Ebene (Layer) enthält folgende Legenden:
+
+<kbd>![edit-layer-1.png](docs/edit-layer-1.png)</kbd>
+
+Auch hier gibt es als Erstes eine Legende zur **Benenung der Ebene**. Diese ist noch um eine Angabe zum Ebenen-Stil
+erweitert. Ob sich das auf die Dauer als sinnvoll erweist, muss sich zeigen.
+
+<kbd>![edit-layer-2.png](docs/edit-layer-2.png)</kbd>
+
+Als Nächstes muss der Ebenen-Typ angegeben werden. OpenLayers bietet folgende Typen: Image, Tile,
+Vector und VectorTile. 
+
+> [!CAUTION]
+> Zurzeit sind noch nicht alle Typen implementiert.
+
+Wählen Sie hier also eine Ebene. Um bei unserem Beispiel zu bleiben, verwende ich hier den Typ Vector.
+
+Wenn Sie den Typ ausgewählt haben, wird die nachfolgende Legende auf diesen Typ parametriert. 
+Wir fahren also mit der **Datenquelle** für den Typ **Vector** fort.
+
+<kbd>![edit-layer-3.png](docs/edit-layer-3.png)</kbd>
+
+Wählen Sie aus der Liste der Daten-Quellen-Typen, den Typ Vector aus. OpenLayers bietet insgesamt 11 Quellen-Typen an. 
+Nicht alle Quellen sind mit allen Layer-Typen kompatibel. Die korrekte Zuordnung ist hier noch nicht implementiert. 
+Das ist eine der nächsten Aufgaben.
+
+Da wir den Layer-Typ **Vector** verwenden, wählen wir nun als Typ für unsere Datenquelle evenfalls den
+Typ **Vector**. Denn nur der Typ **Vector** bietet einen Import als GeoJSON.
+
+Jede Datenquelle in OpenLayers kann mit einer **Attribution**, hier Urheber genannt, versehen werden. Bei der Base-Map ist dies
+sogar vorgeschrieben. Base-Maps ohne OSM-Attribution werden auf Dauer blockiert.
+
+Bei benutzerdefinierten Ebenen ist die Attribution optional. Sie können Ihren Namen als Urheber hier eintragen, 
+insofern Sie die Ebene selbst erstellt oder als eigenständiges Werk erarbeitet haben (beispielsweise durch eine
+aufwendige Georeferenzierung aus einer historischen Karte). Diese Attribution wird auf der Karte angezeigt.
+
+Wählen Sie dann noch das Datenformat der Quelle. Zur Auswahl stehen zurzeit GeoJSON und GML. GML ist aktuell
+noch nicht implementiert. Wählen Sie also GeoJSON.
+
+Als Nächstes bearbeiten wir nun die Zuordnungen der Eigenschaften zu diesem Layer. Dabei findet wieder der RowWizard 
+seine Anwendung. Bevor wir aber die Eigenschaften (Features) der Ebene (Layer) zuordnen, müssen wir noch einige 
+wichtige Parameter erfassen.
+
+<kbd>![edit-layer-4.png](docs/edit-layer-4.png)</kbd>
+
+Zu diesen gehört ein optionaler **Name der Datenquelle**. Sie können diese Angabe weglassen. Sie ist später 
+für die Anzeige im LayerSwitcher gedacht.  
+
+Angeben müssen Sie aber folgende Daten:
+
+Das Koordinatensystem der Quelldaten, in OpenLayers data-projection genannt, sowie das Koordinatensystem des Views,
+in OpenLayers feature-projection genannt. Es würde hier zu weit führen, die kartographischen 
+Projektionen und Koordinatensysteme aufzuführen. Voreingestellt sind die Koordinatensysteme hier so, dass
+sie eine möglichst fehlerfreie Darstellung erzeugen. Das kann aber - wie ich selbst bei Tests bemerkt habe -
+leider nicht immer gewährleistet werden. Sollten hier Probleme auftreten, so erstellen Sie bitte ein Issue!
+
+Als Koordinatensystem für die Quelle und bei für Karten in Deutschland ist EPSG:4326 vorausgewählt. Als Koordinatensystem 
+für die Feature-Projektion ist das für Deutschland gebräuchliche Koordinatensystem EPSG:3857 alias WGS84 Pseudo 
+Mercator voreingestellt.
+
+Diese Einstellungen führen in der Regel zu einer korrekten Kartendarstellung.
+
+> [!CAUTION]
+> Sollten Sie Ihre Objekte dennoch nicht auf der Karte sehen, so überprüfen Sie bitte nochmals 
+> die Koordinatensysteme. Mir ist es sehr oft passiert, dass ich die Transformationen nicht korrekt
+> vorgegeben hatte und meine Vector-Layer daher nicht am gewünschten Ort dargestellt wurden.
+> Wenn Sie das falsche Koordinatensystem gewählt haben, so erscheinen Ihre Objekte bei center [0,0]. Diese
+> Location befindet sich ca. 1000km westlich von Sao Thome! :relaxed: Dort finden Sie dann Ihre Gebäude 
+> und Flächen im Meer.
+
+Wählen Sie als Letztes den **Typ der Vector-Quelle**. Wählen Sie hier **FeatureCollection**. Diese Einstellung 
+ist etwas QGIS spezifisch. Das Bundle ist ja auf die Verwendung von QGIS-Karten ausgerichtet. QGIS stellt beim
+GeoJSON-Expoprt bestimmte Strukturen bereit. Die hier implementierte Struktur bevorzugt eine sog. 
+**FeatureCollection**. 
+
+Jetzt können Sie der zuvor definierten Ebene unter **Eigenschaften** alle gewünschten Eigenschaften
+(Features) zuordnen
+
+> [!CAUTION]
+> Natürlich haben Sie bisher noch keine Features. Diese müssen Sie noch definieren. Kehren Sie nach der Definition eines Features hierher
+> zurück, um das Feature dann der aktuellen Ebene zuzuordnen.
+
 
 
 

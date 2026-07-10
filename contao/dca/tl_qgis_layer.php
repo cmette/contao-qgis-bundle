@@ -74,7 +74,7 @@ $GLOBALS['TL_DCA'][$strTable] = [
             '{title_legend},title,style;' .
             '{type_legend},type;' .
             '{source_legend},source,attribution,format;' .
-            '{features_legend},source_name,data_projection,feature_projection;source_type;' .
+            '{features_legend},source_name,data_projection,feature_projection,source_type;' .
             '',
 	],
 
