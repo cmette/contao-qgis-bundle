@@ -180,9 +180,9 @@ weitere Eigenschaft mit dem Modus "kombinieren", so erweitert es den zuvor gefun
 Extent dieses Feature. Auf diese Weise lassen sich Gruppen von Objekten bilden, auf deren Extent der
 View rendert. Dieser Modus gewährleistet eine optimale Darstellung heterogener Kartenelemente, 
 wie beispielsweise einem See und dem nahe gelegenen Haus. Beide Elemente werden optimal im View
-positioniert. (diese Funktion ist noch experimentell!)
+positioniert. (diese Funktion ist noch experimentell!)_
 
-Im Beispiel wurden alle Elmente des Innanhofes der &raquo;Alten Schäferei&laquo; aus dem Vektor-Layer ausgewählt.
+_Im Beispiel wurden alle Elmente des Innanhofes der &raquo;Alten Schäferei&laquo; aus dem Vektor-Layer ausgewählt.
 Alle anderen Elemente bleiben im View sekundär. Nur der Innenhof wird zentriert und mit Padding dargestellt._
 
 <kbd>![edit-map-9.png](docs/edit-map-9.png)</kbd>
