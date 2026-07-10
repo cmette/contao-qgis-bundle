@@ -76,6 +76,7 @@ class QgisMapController extends AbstractContentElementController
         $template->set('map', $map);
         $template->set('image', $figure);
         $template->set('featureLayer', QgisLayerModel::findById($model->featureSourceLayer));
+
         $arrListHeadline = StringUtil::deserialize($model->listHeadline, true);
         $template->set('listHeadline', !empty($arrListHeadline['value']) ? "<{$arrListHeadline['unit']}>{$arrListHeadline['value']}</{$arrListHeadline['unit']}>" : '');
 

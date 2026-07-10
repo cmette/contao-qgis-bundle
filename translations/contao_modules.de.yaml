@@ -2,7 +2,7 @@
 # Backend modules
 #
 MOD:
-  qgis: QGis-Bridge
+  qgis: QGis-Bundle
   qgis_maps:
     - Karten (Maps)
     - Register der definierten Karten

@@ -128,6 +128,13 @@
 /*--------------------------------------------------------------------------
   edit mode tl_qgis_map
  --------------------------------------------------------------------------*/
+form#tl_qgis_map .widget-group:has(.olmap_widget) {
+  display: block;
+  column-count: 2;
+}
+form#tl_qgis_map .widget:has(.olmap_widget) {
+  break-inside: avoid;
+}
 form#tl_qgis_map table#ctrl_layers tbody {
   vertical-align: top;
 }

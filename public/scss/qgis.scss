@@ -158,6 +158,14 @@ tr.hover-row:has(span.used) {
  --------------------------------------------------------------------------*/
 form#tl_qgis_map {
 
+  .widget-group:has(.olmap_widget) {
+    display: block;
+    column-count: 2;
+  }
+  .widget:has(.olmap_widget) {
+    break-inside: avoid;
+  }
+
   // rowWizard layers = Ebenen
   table#ctrl_layers {
       tbody {

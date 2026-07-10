@@ -6,7 +6,7 @@ tl_qgis_map:
     - Titel der Karte
     - Geben Sie hier einen Titel für die Karten-Definition ein.
 
-  olconfig_legend: OpenLayers-Konfiguration
+  olconfig_legend: OpenLayers-Basiskonfiguration
   addOpenLayers:
     - OpenLayers automatisch laden (experimentell)
     - Aktivieren Sie diese Funktion, wenn OpenLayers automatisch geladen werden soll. Hinweis Sie sollten OpenLayers immer automatisch laden lassen. Diese Option ist dafür gedacht, das Laden zu deaktivieren, insofern Sie eine eigene Version von OpenLayers manuell laden möchten.
@@ -35,7 +35,7 @@ tl_qgis_map:
     - olext-Kompass laden
     - Lädt und aktiviert den Kompass (olext.compass).
 
-  mapconfig_legend: Karten-Overlay-Konfiguration
+  mapconfig_legend: Overlay-Konfiguration
   showCrsFE:
     - Cursor-Koordinaten am Frontend anzeigen
     - Aktiviert die Anzeige der aktuellen Koorinaten unter dem Mauscrusor.
@@ -49,6 +49,25 @@ tl_qgis_map:
     - Scope am Backend anzeigen
     - Aktiviert die Anzeige des aktuellen Scopes zu Testzwecken.
 
+  mapcontrols_legend: OpenLayers Steuerelemente (Controls)
+  addMapControls:
+    - Steuerelemente verwenden (experimentell)
+    - Aktiviert die Verwendung von Steuerelementen
+  activateOlScaleBar:
+    - Karten-Maßstab anzeigen (ScaleBar)
+    - Aktiviert die Anzeige des dynamischen Karten-Maßstabes
+  loadOlScaleBarUserCss:
+    - Eigene CSS-Datei für den Maßstab laden (noch nicht implementiert)
+    - Aktivieren Sie diese Funktion, um eine eigene CSS-Datei zu laden, die die Einstellungen des mitgelieferten Maßstabes überschreibt.
+      Sie können die CSS-Datei selbst anpassen, indem Sie Datei unter /files/libs/openlayers/custom/scalebar.css ablegen.
+  activateOlOverviewMap:
+    - Übersichrskarte anzeigen (OverviewMap)
+    - Aktiviert die Übersichtskarte.
+  loadOlOverviewMapCss:
+    - Eigene CSS-Datei für die Übersichtskarte laden (noch nicht implementiert)
+    - Aktivieren Sie diese Funktion, um eine eigene CSS-Datei zu laden, die die Einstellungen für die mitgelieferte Übersichtskarte überschreibt.
+      Das ist in der Regel nur dann sinnvoll, wenn man die Übersichtskarte neu positionieren möchte. Sie können die CSS-Datei selbst anpassen,
+      indem Sie Datei unter /files/libs/openlayers/custom/overview.css ablegen.
 
   layers_legend: Welche Ebenen (Layer) sollen auf der Karte dargestellt werden?
   layers:
@@ -82,7 +101,7 @@ tl_qgis_map:
   parameters_legend: Karten-Parameter
   map:
     - Kartenansicht
-    - Verwenden Sie den Mausziger auf der  Karte, um die Parameter automatisch zu setzen.
+    - Verwenden Sie den Mausziger auf der Karte, um die Parameter automatisch zu setzen.
   center:
     - Mittelpunkt der Karte EPSG:3857
     - Beim Verschieben der Karte wird hier der aktuelle Mittelpunkt angezeigt.
