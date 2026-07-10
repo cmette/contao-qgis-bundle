@@ -72,13 +72,19 @@ So können Sie die Anzeige auf Flüsse einschränken.
 
 > [!CAUTION]
 > Im Folgenden wird die Funktionsweise in der Reihenfolge der Menüpunkte erklärt. Das entspricht prinzipiell
-> nicht der eigentlichen Arbeitsweise und Struktur von OpenLayers.   
-> Eine Karten-Darstellung arbeitet genaugenommen
-> in umgekehrter Reihenfolge. 
-> Da eine Karte streng hierarchisch aufgebaut ist, müsste diese Bescheibung eigentlich von "unten nach oben"
-> verfasst sein. Sie müsste also mit den niedrigsten/kleinsten Objekten (Feature, Style etc.) beginnen und
-> sich dann zum "Gesamtwerk" einer Karte "herauf-arbeiten".  
-> Ich habe hier aber die Beschreibung von "oben nach unten" gewählt, um dem Aufbau des o.g. Menüs zu folgen. 
+> nicht der eigentlichen Arbeitsweise und Struktur von OpenLayers.  
+> 
+> Eine OpenLayers-Karten-Darstellung arbeitet genaugenommen in umgekehrter Reihenfolge. 
+> 
+> 1. Zu oberst befindet sich die Karte.  
+> 2. Jede Karte kann ein oder mehrere Ebenen enthalten.  
+> 3. Jede Ebene besteht aus einem oder mehreren Objekten.
+> 
+> Da eine Karte somit eine abhängige Entität darstellt, müsste diese Bescheibung eigentlich von "unten nach oben"
+> verfasst sein. Sie müsste also mit den unabhängigen Entitäten (Feature, Style etc.) beginnen und
+> dann der schrittweisen logischen Konstruktion des Kartenobjekts folgen.  
+> 
+> Ich habe hier aber die Beschreibung von "oben nach unten" gewählt, um dem Aufbau des Menüs zu folgen. 
 
 ### 1. Anlegen einer Karte
 Die Edit-Ansicht für eine exemplarische Karte (hier am Beispiel einer nicht mehr existierende Schäferei aus
@@ -268,10 +274,15 @@ Diese Einstellungen führen in der Regel zu einer korrekten Kartendarstellung.
 > [!CAUTION]
 > Sollten Sie Ihre Objekte dennoch nicht auf der Karte sehen, so überprüfen Sie bitte nochmals 
 > die Koordinatensysteme. Mir ist es sehr oft passiert, dass ich die Transformationen nicht korrekt
-> vorgegeben hatte und meine Vector-Layer daher nicht am gewünschten Ort dargestellt wurden.
-> Wenn Sie das falsche Koordinatensystem gewählt haben, so erscheinen Ihre Objekte bei center [0,0]. Diese
-> Location befindet sich ca. 1000km westlich von Sao Thome! :relaxed: Dort finden Sie dann Ihre Gebäude 
-> und Flächen im Meer.
+> vorgegeben hatte und meine Vektor-Layer daher nicht am gewünschten Ort dargestellt wurden.
+> Wenn Sie versehentlich das falsche Koordinatensystem gewählt haben, so erscheinen Ihre Objekte bei
+> EPSG:4326 center [0,0]. Diese Location befindet sich ca. 1000 km westlich von Sao Thome! :relaxed: 
+> Dort finden Sie dann Ihre Gebäude und Flächen im Meer.
+
+> [!NOTE]
+> Auf den ersten BLick erkennen Sie Koordinaten des Systems EPSG:4326 an dem für Deutschland üblichen 
+> ungefähren Extent von [7,53,14,47]. Koordinatern des Systems EPSG:3857 liegen grob im Extent von 
+> [626946,6088070,1692956,7154081].  
 
 Wählen Sie als Letztes den **Typ der Vector-Quelle**. Wählen Sie hier **FeatureCollection**. Diese Einstellung 
 ist etwas QGIS spezifisch. Das Bundle ist ja auf die Verwendung von QGIS-Karten ausgerichtet. QGIS stellt beim
@@ -285,7 +296,43 @@ Jetzt können Sie der zuvor definierten Ebene unter **Eigenschaften** alle gewü
 > Natürlich haben Sie bisher noch keine Features. Diese müssen Sie noch definieren. Kehren Sie nach der Definition eines Features hierher
 > zurück, um das Feature dann der aktuellen Ebene zuzuordnen.
 
+Die Liste der Eigenschaften auf einer Ebene ähnelt der Liste der Layer auf einer Karte. Im ersten Feld wählen Sie
+eine Eigenschaft. Der ausgewählten Eigenschaft können Sie hier noch einen Zeichen-Stil (Style) zuordnen. Als drittes
+können Sie wieder einen Zoom-Modus wählen.
 
+Hier finden Sie auch die unter **1. Karten** bereits angesprochenen Modi **übergeordnet** und **kombinieren**. 
+Beim Modus **übergeordnet** darf irgendeine der übergeordneten Instanzen, das sind Layer und Karte, entscheiden, 
+wie der Extent berechnet wird. im Modus **kombinieren** werden die Extents aller Eigenschaften des Layers
+mit dem Modus **kombinieren** zu einem Extent "addiert". Das Ergebnis hat immer Vorrang beim Rendern der Karte.  
+
+Gehen wir nun noch eine Ebene tiefer und erstellen einzelne Eigenschaften (Features) aus GeoJSON-Daten.
+
+### 2. Eigenschaften erfassen
+Wie bereits angemerkt, ist das Bundle entwickelt worden, um Karten, die bereits mit QGIS vorbereitet wurden, 
+möglichst einfach und effizient auf eine Website zu bringen. Da QGIS sehr leistungsfähig ist, war es wünschenswert,
+diese Leistungsfähigkeit auch irgendwie nach Contao zu portieren.  
+
+Das ist möglich, erfordert aber noch viel Anstrengung und Überlegung.
+
+Neben den Stilen (die im nächsten Abschnitt behandelt werden) stellen die Eigenschaften (Features) unabhängige 
+Entitäten dar. Das Konzept hinter dieser Ordnung besteht darin, Eigenschaften beliebig oft auf 
+verschiedenen Ebenen wiederzuverwenden.  
+
+Werden diese Eigenschaften auf den Ebenen (Layern) mit festen Stilen und Zoom-Modi versehen, so werden sie auf
+allen Karten einheitlich dargestellt. Werden die Eigenschaften auf einer höheren ebene mit Stilen und Zoom-Modi 
+verknüpft, so werden sie nur auf der entsprechenden thematischen Karte jeweils anders dargestellt.  
+
+Das ist das angestrebte Konzept. Es ist aber noch nicht konsequent durchgesetzt. Daran wird also noch gearbeitet.
+
+Die Auflistung der Eigenschaften sieht so aus:
+
+<kbd>![edit-feature-1.png](docs/edit-feature-1.png)</kbd>
+
+Jeder Datensatz repräsentiert ein QGIS-Feature gemäß OGC-Standard „Simple Features“ (Open Geospatial Consortium, OGC)
+bzw. den daraus abgeleiteten GIS-/Geo-Software-Spezifikationen wie z.B. ISO/OGC 13249 bzw. „SQL/MM Spatial“ 
+(hier aber bei weitem noch nicht implementiert).
+
+wird fortgesetzt...
 
 
 
